@@ -71,115 +71,84 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
   <!-- End of Theme Mode -->
   <!-- Page -->
   <style>
-   .branded-bg {
-			background-image:url('assets/media/images/2600x1600/1.png');
-		}
-		.dark .branded-bg {
-			background-image: url('assets/media/images/2600x1600/1-dark.png');
-		}
+   .radial-bg {
+            background: radial-gradient(circle at center, #f3f7fb 0%, #eef4f8 40%, #e6eef5 100%);
+        }
+        .login-card {
+            max-width: 520px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(26,38,47,0.08);
+            overflow: hidden;
+        }
+        .login-card .kt-card-content {padding:36px}
+        .login-logo {width:56px;height:56px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:#274b56;margin:0 auto 12px}
+        .login-title {font-size:28px;font-weight:700;text-align:center;margin-bottom:6px}
+        .login-sub {text-align:center;color:#6b7a86;font-size:14px;margin-bottom:4px}
+        .login-caption {text-align:center;letter-spacing:2px;color:#9aa6b0;font-size:12px;margin-bottom:18px}
+        .kt-input {padding:12px 14px}
+        .kt-btn-primary {background:#274b56;border-color:#274b56}
   </style>
-  <div class="grid lg:grid-cols-2 grow">
-   <div class="flex justify-center items-center p-8 lg:p-10 order-2 lg:order-1">
-    <div class="kt-card max-w-[370px] w-full">
-     <form action="#" class="kt-card-content flex flex-col gap-5 p-10" id="sign_in_form" method="get">
-      <div class="text-center mb-2.5">
-       <h3 class="text-lg font-medium text-mono leading-none mb-2.5">
-        Sign in
-       </h3>
-       <div class="flex items-center justify-center font-medium">
-        <span class="text-sm text-secondary-foreground me-1.5">
-         Need an account?
-        </span>
-        <a class="text-sm link" href="html/demo1/authentication/branded/sign-up.html">
-         Sign up
-        </a>
-       </div>
+  <div class="relative flex flex-col items-center justify-center grow radial-bg min-h-[100vh] p-6 gap-6">
+   <div class="kt-card login-card bg-white">
+    <form action="#" class="kt-card-content flex flex-col gap-4" id="sign_in_form" method="get">
+     <div class="text-center">
+      <div class="login-logo">
+       <img alt="" src="assets/media/brand-logos/linkedin-2.svg" style="width:28px;height:28px;filter:brightness(0) invert(1) opacity(.95)"/>
       </div>
-      <div class="grid grid-cols-2 gap-2.5">
-       <a class="kt-btn kt-btn-outline justify-center" href="#">
-        <img alt="" class="size-3.5 shrink-0" src="assets/media/brand-logos/google.svg"/>
-        Use Google
-       </a>
-       <a class="kt-btn kt-btn-outline justify-center" href="#">
-        <img alt="" class="size-3.5 shrink-0 dark:hidden" src="assets/media/brand-logos/apple-black.svg"/>
-        <img alt="" class="size-3.5 shrink-0 light:hidden" src="assets/media/brand-logos/apple-white.svg"/>
-        Use Apple
-       </a>
-      </div>
-      <div class="flex items-center gap-2">
-       <span class="border-t border-border w-full">
-       </span>
-       <span class="text-xs text-muted-foreground font-medium uppercase">
-        Or
-       </span>
-       <span class="border-t border-border w-full">
-       </span>
-      </div>
-      <div class="flex flex-col gap-1">
-       <label class="kt-form-label font-normal text-mono">
-        Email
-       </label>
-       <input class="kt-input" placeholder="email@email.com" type="text" value=""/>
-      </div>
-      <div class="flex flex-col gap-1">
-       <div class="flex items-center justify-between gap-1">
-        <label class="kt-form-label font-normal text-mono">
-         Password
-        </label>
-        <a class="text-sm kt-link shrink-0" href="html/demo1/authentication/branded/reset-password/enter-email.html">
-         Forgot Password?
-        </a>
-       </div>
-       <div class="kt-input" data-kt-toggle-password="true">
-        <input name="user_password" placeholder="Enter Password" type="password" value=""/>
-        <button class="kt-btn kt-btn-sm kt-btn-ghost kt-btn-icon bg-transparent! -me-1.5" data-kt-toggle-password-trigger="true" type="button">
-         <span class="kt-toggle-password-active:hidden">
-          <i class="ki-filled ki-eye text-muted-foreground">
-          </i>
-         </span>
-         <span class="hidden kt-toggle-password-active:block">
-          <i class="ki-filled ki-eye-slash text-muted-foreground">
-          </i>
-         </span>
-        </button>
-       </div>
-      </div>
-      <label class="kt-label">
-       <input class="kt-checkbox kt-checkbox-sm" name="check" type="checkbox" value="1"/>
-       <span class="kt-checkbox-label">
-        Remember me
-       </span>
-      </label>
-      <button class="kt-btn kt-btn-primary flex justify-center grow">
-       Sign In
-      </button>
-     </form>
-    </div>
-   </div>
-   <div class="lg:rounded-xl lg:border lg:border-border lg:m-5 order-1 lg:order-2 bg-top xxl:bg-center xl:bg-cover bg-no-repeat branded-bg">
-    <div class="flex flex-col p-8 lg:p-16 gap-4">
-     <a href="html/demo1.html">
-      <img class="h-[28px] max-w-none" src="assets/media/app/mini-logo.svg"/>
-     </a>
-     <div class="flex flex-col gap-3">
-      <h3 class="text-2xl font-semibold text-mono">
-       Secure Access Portal
-      </h3>
-      <div class="text-base font-medium text-secondary-foreground">
-       A robust authentication gateway ensuring
-       <br/>
-       secure
-       <span class="text-mono font-semibold">
-        efficient user access
-       </span>
-       to the Metronic
-       <br/>
-       Dashboard interface.
+      <div class="login-title">VediTech</div>
+      <div class="login-sub">Survey Records Portal</div>
+      <div class="login-caption uppercase">Enterprise Land Record Management</div>
+     </div>
+     <div class="flex flex-col gap-1">
+      <label class="kt-form-label font-normal text-mono text-[12px]">Email address</label>
+      <div class="kt-input flex items-center gap-2">
+       <i class="ki-filled ki-mail text-muted-foreground"></i>
+       <input class="grow bg-transparent border-0 p-0" placeholder="name@company.com" type="email" value=""/>
       </div>
      </div>
-    </div>
+     <div class="flex flex-col gap-1">
+      <div class="flex items-center justify-between">
+       <label class="kt-form-label font-normal text-mono text-[12px]">Password</label>
+       <a class="text-sm kt-link" href="html/demo1/authentication/branded/reset-password/enter-email.html">Forgot?</a>
+      </div>
+      <div class="kt-input flex items-center justify-between" data-kt-toggle-password="true">
+       <div class="flex items-center gap-2">
+        <i class="ki-filled ki-lock text-muted-foreground"></i>
+        <input name="user_password" placeholder="********" type="password" class="border-0 p-0 bg-transparent" value=""/>
+       </div>
+       <button class="kt-btn kt-btn-sm kt-btn-ghost kt-btn-icon bg-transparent! -me-1.5" data-kt-toggle-password-trigger="true" type="button">
+        <i class="ki-filled ki-eye text-muted-foreground"></i>
+       </button>
+      </div>
+     </div>
+     <label class="kt-label flex items-center gap-2">
+      <input class="kt-checkbox kt-checkbox-sm" name="check" type="checkbox" value="1"/>
+      <span class="kt-checkbox-label">Keep me signed in for 30 days</span>
+     </label>
+     <button class="kt-btn kt-btn-primary py-3 text-white rounded-md">Sign In</button>
+     <div class="border-t border-border mt-4 pt-4 text-center text-sm text-secondary-foreground">Need a enterprise account? <a class="kt-link" href="#">Contact Sales</a></div>
+    </form>
    </div>
-  </div>
+    <!-- Footer -->
+    <div class="flex flex-col items-center gap-2">
+     <div style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #e3eaf0;border-radius:999px;padding:6px 16px;font-size:11px;font-weight:600;letter-spacing:1.5px;color:#3d5a66;text-transform:uppercase;">
+      <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+      All Systems Operational
+     </div>
+     <div style="font-size:12px;color:#9aa6b0;text-align:center;">
+      © 2024 VediTech Systems Inc. All rights reserved.
+     </div>
+     <div style="font-size:12px;color:#9aa6b0;text-align:center;">
+      <a href="#" style="color:#9aa6b0;text-decoration:none;" onmouseover="this.style.color='#274b56'" onmouseout="this.style.color='#9aa6b0'">Privacy Policy</a>
+      &nbsp;·&nbsp;
+      <a href="#" style="color:#9aa6b0;text-decoration:none;" onmouseover="this.style.color='#274b56'" onmouseout="this.style.color='#9aa6b0'">Support Portal</a>
+      &nbsp;·&nbsp;
+      <a href="#" style="color:#9aa6b0;text-decoration:none;" onmouseover="this.style.color='#274b56'" onmouseout="this.style.color='#9aa6b0'">Terms of Service</a>
+     </div>
+    </div>
+    <!-- End Footer -->
+   </div>
   <!-- End of Page -->
   <!-- Scripts -->
   <script src="assets/js/core.bundle.js">
