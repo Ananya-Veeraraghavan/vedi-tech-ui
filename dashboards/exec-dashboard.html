@@ -19,6 +19,31 @@ Version: v9.4.14
        ========================================= */
 
     /* ---- SIDEBAR ---- */
+    .vt-global-search {
+    width: 650px;
+    height: 42px;
+ 
+    display: flex;
+    align-items: center;
+ 
+    position: relative;
+}
+ 
+.vt-global-search i {
+    position: absolute;
+    left: 16px;
+ 
+    color: #99A1B7;
+    font-size: 18px;
+    z-index: 2;
+}
+ 
+.vt-global-search .kt-input {
+    width: 100%;
+    height: 100%;
+    padding-left: 48px;
+    border-radius: 10px;
+}
     .kt-sidebar {
       width: 260px;
       transition: width 0.25s ease, transform 0.25s ease;
@@ -76,7 +101,8 @@ Version: v9.4.14
     /* ---- CONTENT TOP PADDING (accounts for fixed header ~64px) ---- */
    /* TEMP TEST */
         main#content {
-        padding-top: 0 !important;
+        margin-top: 24!important;
+        /* background-color: aqua; */
         }
 
     /* ---- CONTAINER FIXED ---- */
@@ -469,11 +495,7 @@ Version: v9.4.14
     <!-- Wrapper -->
     <div class="kt-wrapper flex grow flex-col">
       <!-- Header -->
-      <header class="kt-header fixed top-0 z-10 start-0 end-0 flex items-stretch shrink-0 bg-background"
-              data-kt-sticky="true"
-              data-kt-sticky-class="border-b border-border"
-              data-kt-sticky-name="header"
-              id="header">
+     <header class="kt-header fixed top-0 z-10 start-0 end-0 flex items-stretch shrink-0 bg-background border-b border-border">
         <div class="kt-container-fixed flex justify-between items-stretch lg:gap-4" id="headerContainer">
           <!-- Mobile Logo + Hamburger -->
           <div class="flex gap-2.5 lg:hidden items-center -ms-1">
@@ -488,27 +510,23 @@ Version: v9.4.14
               </button>
             </div>
           </div>
-          <!-- Desktop brand text -->
-          <div class="hidden lg:flex items-center">
-            <span class="text-sm font-semibold text-mono">Executive Dashboard</span>
-          </div>
 
           <!-- Topbar -->
-          <div class="flex items-center gap-1.5 sm:gap-2.5">
-            <!-- Search -->
-            <button class="group kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-modal-toggle="#search_modal">
-              <i class="ki-filled ki-magnifier text-lg group-hover:text-primary"></i>
-            </button>
-            <!-- Notifications -->
-            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-drawer-toggle="#notifications_drawer">
-              <i class="ki-filled ki-notification-status text-lg"></i>
-            </button>
-            <!-- Chat -->
-            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-drawer-toggle="#chat_drawer">
-              <i class="ki-filled ki-messages text-lg"></i>
-            </button>
+          <div class="flex items-cente justify-between grow gap-4">
+            <div class="flex items-center">
+              <div class="vt-global-search">
+                  <i class="ki-filled ki-magnifier"></i>
+
+                  <input
+                      type="text"
+                      class="kt-input"
+                      placeholder="Global Search"
+                  />
+              </div>
+          </div>
+            
             <!-- User -->
-            <div class="shrink-0 flex items-center gap-2" data-kt-dropdown="true" data-kt-dropdown-offset="10px, 10px" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+            <div class="shrink-0 flex items-center gap-2 ms-auto" data-kt-dropdown="true" data-kt-dropdown-offset="10px, 10px" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
               <div class="hidden sm:flex flex-col items-end leading-none">
                 <span class="text-sm font-semibold text-mono">Executive User</span>
                 <span class="text-xs text-secondary-foreground">Application Owner</span>
@@ -620,7 +638,6 @@ Version: v9.4.14
               </div>
             </div>
             <div class="vedi-actions">
-              <a class="kt-btn kt-btn-outline" href="#">Export Report</a>
               <a class="kt-btn kt-btn-primary" href="#">New Job</a>
             </div>
           </div>
