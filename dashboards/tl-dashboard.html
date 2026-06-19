@@ -1,0 +1,603 @@
+<!--
+Product: Metronic (Tailwind) — adapted for VediTech Survey Jobs
+Page: Team Lead Dashboard
+Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
+       multi-tab notifications drawer since they were generic template filler
+       unrelated to VediTech. Kept the same kt-* component classes and asset
+       paths so it still matches the original theme. See job-details.html for
+       the dedicated per-job chat thread.
+-->
+<!DOCTYPE html>
+<html class="h-full" data-kt-theme="true" data-kt-theme-mode="light" dir="ltr" lang="en">
+<head>
+  <base href="./">
+  <title>VediTech - Team Lead Dashboard</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="../assets/media/app/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="../assets/vendors/apexcharts/apexcharts.css" rel="stylesheet"/>
+  <link href="../assets/vendors/keenicons/styles.bundle.css" rel="stylesheet"/>
+  <link href="../assets/css/styles.css" rel="stylesheet"/>
+</head>
+<body class="antialiased flex h-full text-base text-foreground bg-background demo1 kt-sidebar-fixed kt-header-fixed">
+  <!-- Theme Mode -->
+  <script>
+    const defaultThemeMode = 'light';
+    let themeMode;
+    if (document.documentElement) {
+      if (localStorage.getItem('kt-theme')) {
+        themeMode = localStorage.getItem('kt-theme');
+      } else if (document.documentElement.hasAttribute('data-kt-theme-mode')) {
+        themeMode = document.documentElement.getAttribute('data-kt-theme-mode');
+      } else {
+        themeMode = defaultThemeMode;
+      }
+      if (themeMode === 'system') {
+        themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.classList.add(themeMode);
+    }
+  </script>
+
+  <div class="flex grow">
+    <!-- Sidebar -->
+    <div class="kt-sidebar bg-background border-e border-e-border fixed top-0 bottom-0 z-20 hidden lg:flex flex-col items-stretch shrink-0" id="sidebar">
+      <div class="kt-sidebar-header hidden lg:flex items-center px-3 lg:px-6 shrink-0 h-[70px]" id="sidebar_header">
+        <a class="flex items-center gap-2.5 min-w-0" href="dashboard.html">
+          <span class="flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+            <i class="ki-filled ki-abstract-26 text-white text-base"></i>
+          </span>
+          <span class="flex flex-col leading-none min-w-0">
+            <span class="text-sm font-bold text-mono truncate">VediTech</span>
+            <span class="text-[10px] tracking-[1.5px] text-muted-foreground uppercase truncate">Survey Jobs</span>
+          </span>
+        </a>
+      </div>
+      <div class="kt-sidebar-content flex grow shrink-0 py-5 pe-2" id="sidebar_content">
+        <div class="kt-menu flex flex-col grow gap-1 ps-2 lg:ps-5 pe-1 lg:pe-3" data-kt-menu="true" id="sidebar_menu">
+          <div class="kt-menu-item active">
+            <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="dashboard.html">
+              <span class="kt-menu-icon items-start text-muted-foreground w-[20px] kt-menu-item-active:text-primary"><i class="ki-filled ki-element-11 text-lg"></i></span>
+              <span class="kt-menu-title text-sm font-medium text-foreground kt-menu-item-active:text-primary kt-menu-item-active:font-semibold">Dashboard</span>
+            </a>
+          </div>
+          <div class="kt-menu-item">
+            <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] hover:bg-accent/60 hover:rounded-lg" href="dashboard.html#job-pool">
+              <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-briefcase text-lg"></i></span>
+              <span class="kt-menu-title text-sm font-medium text-foreground">Job Pool</span>
+            </a>
+          </div>
+          <div class="kt-menu-item">
+            <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] hover:bg-accent/60 hover:rounded-lg" href="users.html">
+              <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-people text-lg"></i></span>
+              <span class="kt-menu-title text-sm font-medium text-foreground">User Management</span>
+            </a>
+          </div>
+          <div class="kt-menu-item">
+            <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] hover:bg-accent/60 hover:rounded-lg" href="config.html">
+              <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-setting-2 text-lg"></i></span>
+              <span class="kt-menu-title text-sm font-medium text-foreground">Configuration</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="shrink-0 px-5 py-4 border-t border-border/20">
+        <a class="flex items-center gap-[10px] text-sm font-medium text-muted-foreground hover:text-primary" href="sign-in.html">
+          <i class="ki-filled ki-exit-up text-lg"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+    <!-- End of Sidebar -->
+
+    <div class="kt-wrapper flex grow flex-col lg:ps-[280px]">
+      <!-- Header -->
+      <header class="kt-header fixed top-0 z-10 start-0 end-0 lg:start-[280px] flex items-stretch shrink-0 bg-background border-b border-border" id="header">
+        <div class="kt-container-fixed flex justify-between items-stretch h-[70px]">
+          <div class="flex items-center gap-2.5 lg:hidden">
+            <button class="kt-btn kt-btn-icon kt-btn-ghost" data-kt-drawer-toggle="#sidebar">
+              <i class="ki-filled ki-menu"></i>
+            </button>
+            <span class="text-sm font-bold text-mono">VediTech</span>
+          </div>
+
+          <div class="flex items-center gap-2.5 ms-auto">
+            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-modal-toggle="#search_modal">
+              <i class="ki-filled ki-magnifier text-lg"></i>
+            </button>
+
+            <!-- Notifications -->
+            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary relative" data-kt-drawer-toggle="#notifications_drawer">
+              <i class="ki-filled ki-notification-status text-lg"></i>
+              <span class="absolute top-1.5 end-1.5 size-2 rounded-full bg-red-500"></span>
+            </button>
+            <div class="hidden kt-drawer kt-drawer-end card flex-col max-w-[90%] w-[400px] top-5 bottom-5 end-5 rounded-xl border border-border" data-kt-drawer="true" data-kt-drawer-container="body" id="notifications_drawer">
+              <div class="flex items-center justify-between gap-2.5 text-sm text-mono font-semibold px-5 py-3.5 border-b border-b-border">
+                Team Lead Alerts
+                <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-dim shrink-0" data-kt-drawer-dismiss="true"><i class="ki-filled ki-cross"></i></button>
+              </div>
+              <div class="px-5 py-4 border-b border-b-border bg-muted/30">
+                <div class="grid gap-2.5">
+                  <div class="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2.5">
+                    <div class="flex items-center gap-2.5">
+                      <span class="flex items-center justify-center size-7 rounded-full bg-red-50 dark:bg-red-950/40"><i class="ki-filled ki-shield-cross text-red-500 text-base"></i></span>
+                      <div class="flex flex-col"><span class="text-sm font-semibold text-mono">5 blocked jobs</span><span class="text-xs text-secondary-foreground">Require team lead review today</span></div>
+                    </div>
+                    <a class="kt-btn kt-btn-sm kt-btn-outline" href="dashboard.html#job-pool">View</a>
+                  </div>
+                  <div class="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2.5">
+                    <div class="flex items-center gap-2.5">
+                      <span class="flex items-center justify-center size-7 rounded-full bg-yellow-50 dark:bg-yellow-950/40"><i class="ki-filled ki-notepad-edit text-yellow-500 text-base"></i></span>
+                      <div class="flex flex-col"><span class="text-sm font-semibold text-mono">3 jobs waiting assignment</span><span class="text-xs text-secondary-foreground">No operator mapped yet</span></div>
+                    </div>
+                    <a class="kt-btn kt-btn-sm kt-btn-outline" href="dashboard.html#job-pool">Assign</a>
+                  </div>
+                </div>
+              </div>
+              <div class="grow kt-scrollable-y-auto" data-kt-scrollable="true" data-kt-scrollable-dependencies="#header" data-kt-scrollable-max-height="auto" data-kt-scrollable-offset="220px">
+                <div class="flex flex-col gap-5 py-4">
+                  <div class="flex grow gap-2.5 px-5">
+                    <img alt="" class="rounded-full size-8" src="../assets/media/avatars/300-5.png"/>
+                    <div class="flex flex-col gap-1">
+                      <div class="text-sm"><a class="hover:text-primary text-mono font-semibold" href="job-details.html">Emily Chen</a> <span class="text-secondary-foreground">uploaded the final report for</span> <a class="hover:text-primary text-primary font-semibold" href="job-details.html">#SR-2036</a></div>
+                      <span class="text-xs font-medium text-muted-foreground">28 mins ago · Ready for your approval</span>
+                    </div>
+                  </div>
+                  <div class="border-b border-b-border"></div>
+                  <div class="flex grow gap-2.5 px-5">
+                    <img alt="" class="rounded-full size-8" src="../assets/media/avatars/300-1.png"/>
+                    <div class="flex flex-col gap-1">
+                      <div class="text-sm"><a class="hover:text-primary text-mono font-semibold" href="job-details.html">Mark Taylor</a> <span class="text-secondary-foreground">flagged a missing document on</span> <a class="hover:text-primary text-primary font-semibold" href="job-details.html">#SR-2032</a></div>
+                      <span class="text-xs font-medium text-muted-foreground">1 hr ago · Needs client clarification</span>
+                    </div>
+                  </div>
+                  <div class="border-b border-b-border"></div>
+                  <div class="flex grow gap-2.5 px-5">
+                    <span class="flex items-center justify-center size-8 rounded-full bg-blue-50 dark:bg-blue-950/40 shrink-0"><i class="ki-filled ki-arrow-down-left text-blue-500"></i></span>
+                    <div class="flex flex-col gap-1">
+                      <div class="text-sm"><span class="text-mono font-semibold">New job received</span> <span class="text-secondary-foreground">from Nexus Property Group</span></div>
+                      <span class="text-xs font-medium text-muted-foreground">2 hrs ago · Unassigned</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End of Notifications -->
+
+            <!-- Team Channel (general chat — not job-specific) -->
+            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-drawer-toggle="#chat_drawer">
+              <i class="ki-filled ki-messages text-lg"></i>
+            </button>
+            <div class="hidden kt-drawer kt-drawer-end card flex-col max-w-[90%] w-[400px] top-5 bottom-5 end-5 rounded-xl border border-border" data-kt-drawer="true" data-kt-drawer-container="body" id="chat_drawer">
+              <div class="flex items-center justify-between gap-2.5 px-5 py-3.5 border-b border-b-border">
+                <div class="flex flex-col">
+                  <span class="text-sm text-mono font-semibold">Team Channel</span>
+                  <span class="text-xs text-secondary-foreground">General — not tied to a specific job</span>
+                </div>
+                <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-dim shrink-0" data-kt-drawer-dismiss="true"><i class="ki-filled ki-cross"></i></button>
+              </div>
+              <div class="kt-scrollable-y-auto grow" data-kt-scrollable="true" data-kt-scrollable-dependencies="#header" data-kt-scrollable-max-height="auto" data-kt-scrollable-offset="230px">
+                <div class="flex flex-col gap-5 py-5">
+                  <div class="flex items-end gap-3.5 px-5">
+                    <img alt="" class="rounded-full size-8" src="../assets/media/avatars/300-1.png"/>
+                    <div class="flex flex-col gap-1.5">
+                      <div class="kt-card shadow-none flex flex-col bg-accent/60 gap-2.5 p-3 rounded-bs-none text-2sm">Heads up — City Council wants all reports as PDF going forward, not docx.</div>
+                      <span class="text-xs font-medium text-muted-foreground">9:14 AM</span>
+                    </div>
+                  </div>
+                  <div class="flex items-end justify-end gap-3.5 px-5">
+                    <div class="flex flex-col gap-1.5">
+                      <div class="kt-card shadow-none flex bg-primary flex-col gap-2.5 p-3 rounded-be-none">
+                        <p class="text-2sm font-medium text-primary-foreground">Got it, I'll mention it on the next job for them.</p>
+                      </div>
+                      <span class="text-xs font-medium text-secondary-foreground text-end">9:16 AM</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="m-5 rounded-lg bg-muted/40 border border-border px-3 py-2.5 text-xs text-secondary-foreground">
+                Looking for a conversation about a specific job? Open that job from the Job Pool — each job has its own chat thread.
+              </div>
+              <div class="px-5 pb-5">
+                <div class="relative">
+                  <input class="kt-input h-auto py-3" placeholder="Message the team..." type="text"/>
+                  <a class="kt-btn kt-btn-mono kt-btn-sm absolute end-1.5 top-1/2 -translate-y-1/2" href="#">Send</a>
+                </div>
+              </div>
+            </div>
+            <!-- End of Team Channel -->
+
+            <!-- User -->
+            <div class="shrink-0 flex items-center gap-2.5" data-kt-dropdown="true" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+              <div class="hidden sm:flex flex-col items-end leading-none">
+                <span class="text-sm font-semibold text-mono">Team Lead User</span>
+                <span class="text-xs text-secondary-foreground">Team Lead</span>
+              </div>
+              <div class="cursor-pointer shrink-0" data-kt-dropdown-toggle="true">
+                <img alt="" class="size-9 rounded-full border-2 border-green-500 shrink-0" src="../assets/media/avatars/300-2.png"/>
+              </div>
+              <div class="kt-dropdown-menu w-[230px]" data-kt-dropdown-menu="true">
+                <div class="flex items-center gap-2 px-2.5 py-2">
+                  <img alt="" class="size-9 shrink-0 rounded-full border-2 border-green-500" src="../assets/media/avatars/300-2.png"/>
+                  <div class="flex flex-col gap-0.5">
+                    <span class="text-sm text-foreground font-semibold leading-none">Team Lead User</span>
+                    <span class="text-xs text-secondary-foreground leading-none">tl@veditech.com</span>
+                  </div>
+                </div>
+                <ul class="kt-dropdown-menu-sub">
+                  <li><div class="kt-dropdown-menu-separator"></div></li>
+                  <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-profile-circle"></i> My Profile</a></li>
+                  <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-setting-2"></i> Account Settings</a></li>
+                  <li><div class="kt-dropdown-menu-separator"></div></li>
+                </ul>
+                <div class="px-2.5 pt-1.5 pb-2.5 flex flex-col gap-3.5">
+                  <div class="flex items-center gap-2 justify-between">
+                    <span class="flex items-center gap-2"><i class="ki-filled ki-moon text-base text-muted-foreground"></i><span class="font-medium text-2sm">Dark Mode</span></span>
+                    <input class="kt-switch" data-kt-theme-switch-state="dark" data-kt-theme-switch-toggle="true" type="checkbox" value="1"/>
+                  </div>
+                  <a class="kt-btn kt-btn-outline justify-center w-full" href="sign-in.html">Log out</a>
+                </div>
+              </div>
+            </div>
+            <!-- End of User -->
+          </div>
+        </div>
+      </header>
+      <!-- End of Header -->
+
+      <main class="grow pt-[90px] pb-10" id="content" role="content">
+        <div class="kt-container-fixed">
+          <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+              <h1 class="text-xl font-medium leading-none text-mono">Team Lead Dashboard</h1>
+              <div class="flex items-center gap-2 text-sm font-normal text-secondary-foreground">
+                Manage configured client jobs, team workload, approvals, chats, email intake, and client clarifications
+              </div>
+            </div>
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <a class="kt-btn kt-btn-outline" href="#email-intake">Create from Email</a>
+              <a class="kt-btn kt-btn-outline" href="#assignment-control">Assignment Settings</a>
+              <a class="kt-btn kt-btn-primary" href="#job-pool">View Job Pool</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="kt-container-fixed">
+          <div class="grid gap-5 lg:gap-7.5">
+
+            <!-- TL Overview -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-7.5">
+              <div class="kt-card flex-col gap-3 p-5">
+                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Pool Jobs</span>
+                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">42</span><span class="flex items-center justify-center size-8 rounded-lg bg-accent"><i class="ki-filled ki-element-11 text-foreground text-base"></i></span></div>
+              </div>
+              <div class="kt-card flex-col gap-3 p-5">
+                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Received</span>
+                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">6</span><span class="flex items-center justify-center size-8 rounded-lg bg-blue-50 dark:bg-blue-950/40"><i class="ki-filled ki-arrow-down-left text-blue-500 text-base"></i></span></div>
+              </div>
+              <div class="kt-card flex-col gap-3 p-5">
+                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">In Progress</span>
+                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">16</span><span class="flex items-center justify-center size-8 rounded-lg bg-primary/10"><i class="ki-filled ki-time text-primary text-base"></i></span></div>
+              </div>
+              <div class="kt-card flex-col gap-3 p-5">
+                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Pending Review</span>
+                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">7</span><span class="flex items-center justify-center size-8 rounded-lg bg-yellow-50 dark:bg-yellow-950/40"><i class="ki-filled ki-file-up text-yellow-500 text-base"></i></span></div>
+              </div>
+              <div class="kt-card flex-col gap-3 p-5">
+                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Clarifications</span>
+                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">4</span><span class="flex items-center justify-center size-8 rounded-lg bg-red-50 dark:bg-red-950/40"><i class="ki-filled ki-message-question text-red-500 text-base"></i></span></div>
+              </div>
+              <div class="kt-card flex-col gap-3 p-5">
+                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Completed</span>
+                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">13</span><span class="flex items-center justify-center size-8 rounded-lg bg-green-50 dark:bg-green-950/40"><i class="ki-filled ki-check-circle text-green-500 text-base"></i></span></div>
+              </div>
+            </div>
+            <!-- End TL Overview -->
+
+            <!-- Assignment Control + Workload -->
+            <div class="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch" id="assignment-control">
+              <div class="kt-card h-full">
+                <div class="kt-card-header">
+                  <h3 class="kt-card-title">Assignment Control</h3>
+                  <span class="kt-badge kt-badge-sm kt-badge-success kt-badge-outline">Round-robin ON</span>
+                </div>
+                <div class="kt-card-content flex flex-col gap-4">
+                  <div class="flex items-center justify-between rounded-lg border border-border p-3">
+                    <div class="flex flex-col gap-1">
+                      <span class="text-sm font-medium text-mono">Auto assignment</span>
+                      <span class="text-xs text-secondary-foreground">Assign new jobs by lowest active workload</span>
+                    </div>
+                    <input checked="" class="kt-switch" type="checkbox" value="1"/>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <a class="kt-btn kt-btn-primary justify-center" href="#job-pool">Assign Manually</a>
+                    <a class="kt-btn kt-btn-outline justify-center" href="#team-workload">View Workload</a>
+                  </div>
+                  <div class="rounded-lg bg-muted/40 border border-border p-3">
+                    <div class="text-xs text-secondary-foreground mb-1">Next round-robin pick</div>
+                    <div class="flex items-center gap-2.5">
+                      <img alt="" class="rounded-full size-8" src="../assets/media/avatars/300-12.png"/>
+                      <div class="flex flex-col"><span class="text-sm font-medium text-mono">Priya Nair</span><span class="text-xs text-secondary-foreground">3 active jobs · 1 pending review</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="kt-card h-full lg:col-span-2" id="team-workload">
+                <div class="kt-card-header flex-wrap gap-3">
+                  <h3 class="kt-card-title">Team Workload</h3>
+                  <span class="text-xs text-secondary-foreground">Managed employee group</span>
+                </div>
+                <div class="kt-card-table">
+                  <div class="kt-scrollable-x-auto">
+                    <table class="kt-table kt-table-border table-fixed">
+                      <thead>
+                        <tr><th class="min-w-[170px]">Employee</th><th class="w-[110px]">Active</th><th class="w-[110px]">Blocked</th><th class="w-[130px]">Review Queue</th><th class="w-[160px]">Workload</th><th class="w-[130px]">Action</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><div class="flex items-center gap-2.5"><img alt="" class="rounded-full size-7" src="../assets/media/avatars/300-2.png"/><span class="text-sm font-medium text-mono">Sarah Jenkins</span></div></td>
+                          <td>6</td><td>1</td><td>2</td>
+                          <td><div class="flex items-center gap-2"><div class="h-1.5 grow rounded-full bg-accent overflow-hidden"><div class="h-full rounded-full bg-yellow-500" style="width:72%"></div></div><span class="text-xs text-secondary-foreground">72%</span></div></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="#job-pool">Assign</a></td>
+                        </tr>
+                        <tr>
+                          <td><div class="flex items-center gap-2.5"><img alt="" class="rounded-full size-7" src="../assets/media/avatars/300-5.png"/><span class="text-sm font-medium text-mono">Emily Chen</span></div></td>
+                          <td>5</td><td>0</td><td>3</td>
+                          <td><div class="flex items-center gap-2"><div class="h-1.5 grow rounded-full bg-accent overflow-hidden"><div class="h-full rounded-full bg-green-500" style="width:58%"></div></div><span class="text-xs text-secondary-foreground">58%</span></div></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="#job-pool">Assign</a></td>
+                        </tr>
+                        <tr>
+                          <td><div class="flex items-center gap-2.5"><img alt="" class="rounded-full size-7" src="../assets/media/avatars/300-12.png"/><span class="text-sm font-medium text-mono">Priya Nair</span></div></td>
+                          <td>3</td><td>0</td><td>1</td>
+                          <td><div class="flex items-center gap-2"><div class="h-1.5 grow rounded-full bg-accent overflow-hidden"><div class="h-full rounded-full bg-green-500" style="width:43%"></div></div><span class="text-xs text-secondary-foreground">43%</span></div></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-primary" href="#job-pool">Assign</a></td>
+                        </tr>
+                        <tr>
+                          <td><div class="flex items-center gap-2.5"><img alt="" class="rounded-full size-7" src="../assets/media/avatars/300-1.png"/><span class="text-sm font-medium text-mono">Mark Taylor</span></div></td>
+                          <td>7</td><td>2</td><td>1</td>
+                          <td><div class="flex items-center gap-2"><div class="h-1.5 grow rounded-full bg-accent overflow-hidden"><div class="h-full rounded-full bg-red-500" style="width:86%"></div></div><span class="text-xs text-secondary-foreground">86%</span></div></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="#job-pool">Rebalance</a></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Assignment Control + Workload -->
+
+            <!-- Jobs from Configured Clients -->
+            <div class="kt-card" id="job-pool">
+              <div class="kt-card-header flex-wrap gap-3">
+                <div class="flex flex-col gap-1">
+                  <h3 class="kt-card-title">Jobs from Configured Clients</h3>
+                  <span class="text-xs text-secondary-foreground">Team Lead pool with current status and assignment controls. Open a job number to view its details, documents, and chat thread.</span>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <select class="kt-select kt-select-sm w-44" data-kt-select="true" name="client-filter">
+                    <option>All Configured Clients</option><option>Nexus Property Group</option><option>Northwood Dev</option><option>City Council</option><option>Green Acres</option>
+                  </select>
+                  <select class="kt-select kt-select-sm w-36" data-kt-select="true" name="status-filter">
+                    <option>All Statuses</option><option>Received</option><option>In Progress</option><option>Pending Review</option><option>Blocked</option>
+                  </select>
+                </div>
+              </div>
+              <div class="kt-card-table">
+                <div class="kt-scrollable-x-auto">
+                  <table class="kt-table kt-table-border table-fixed">
+                    <thead>
+                      <tr><th class="min-w-[130px]">Job No.</th><th class="min-w-[190px]">Client</th><th class="min-w-[230px]">Job / Address</th><th class="min-w-[150px]">Status</th><th class="min-w-[160px]">Assigned To</th><th class="min-w-[150px]">Due</th><th class="w-[170px]">Action</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2042">#SR-2042</a></td>
+                        <td><span class="text-sm text-mono">Nexus Property Group</span></td>
+                        <td><span class="text-sm text-secondary-foreground">4822 Magnolia Dr, Austin</span></td>
+                        <td><span class="kt-badge kt-badge-sm kt-badge-info kt-badge-outline">Received</span></td>
+                        <td><span class="text-sm italic text-secondary-foreground">Unassigned</span></td>
+                        <td><span class="text-sm text-mono">Today, 6:00 PM</span></td>
+                        <td><a class="kt-btn kt-btn-sm kt-btn-primary" href="#assignment-control">Assign</a></td>
+                      </tr>
+                      <tr>
+                        <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2039">#SR-2039</a></td>
+                        <td><span class="text-sm text-mono">Northwood Dev</span></td>
+                        <td><span class="text-sm text-secondary-foreground">123 Maple St, Northwood</span></td>
+                        <td><span class="kt-badge kt-badge-sm kt-badge-primary kt-badge-outline">In Progress</span></td>
+                        <td><span class="text-sm text-mono">Sarah Jenkins</span></td>
+                        <td><span class="text-sm text-mono">Tomorrow</span></td>
+                        <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2039">Open Chat</a></td>
+                      </tr>
+                      <tr>
+                        <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2036">#SR-2036</a></td>
+                        <td><span class="text-sm text-mono">City Council</span></td>
+                        <td><span class="text-sm text-secondary-foreground">789 Pine Rd inspection pack</span></td>
+                        <td><span class="kt-badge kt-badge-sm kt-badge-warning kt-badge-outline">Pending Review</span></td>
+                        <td><span class="text-sm text-mono">Emily Chen</span></td>
+                        <td><span class="text-sm text-mono">Today</span></td>
+                        <td><a class="kt-btn kt-btn-sm kt-btn-primary" href="job-details.html?job=SR-2036#review">Review</a></td>
+                      </tr>
+                      <tr>
+                        <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2032">#SR-2032</a></td>
+                        <td><span class="text-sm text-mono">Green Acres</span></td>
+                        <td><span class="text-sm text-secondary-foreground">101 Birch Ln survey update</span></td>
+                        <td><span class="kt-badge kt-badge-sm kt-badge-destructive kt-badge-outline">Clarification Needed</span></td>
+                        <td><span class="text-sm text-mono">Mark Taylor</span></td>
+                        <td><span class="text-sm text-mono">Overdue</span></td>
+                        <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2032#client">Contact Client</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- End Jobs from Configured Clients -->
+
+            <!-- Review Queue + Email Intake -->
+            <div class="grid lg:grid-cols-2 gap-5 lg:gap-7.5 items-stretch">
+              <div class="kt-card h-full" id="review-queue">
+                <div class="kt-card-header">
+                  <div class="flex flex-col gap-1"><h3 class="kt-card-title">Final Document Review</h3><span class="text-xs text-secondary-foreground">Approve before submission to client</span></div>
+                </div>
+                <div class="kt-card-content flex flex-col gap-4">
+                  <div class="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                      <span class="flex items-center justify-center size-9 rounded-lg bg-yellow-50 dark:bg-yellow-950/40 shrink-0"><i class="ki-filled ki-document text-yellow-500"></i></span>
+                      <div class="flex flex-col min-w-0">
+                        <a class="text-sm font-medium text-mono truncate hover:text-primary" href="job-details.html?job=SR-2036#documents">#SR-2036 Final survey report.pdf</a>
+                        <span class="text-xs text-secondary-foreground">City Council · Emily Chen · Submitted 28 mins ago</span>
+                      </div>
+                    </div>
+                    <div class="flex gap-2 shrink-0"><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2036">Reject</a><a class="kt-btn kt-btn-sm kt-btn-primary" href="job-details.html?job=SR-2036">Approve</a></div>
+                  </div>
+                  <div class="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                      <span class="flex items-center justify-center size-9 rounded-lg bg-yellow-50 dark:bg-yellow-950/40 shrink-0"><i class="ki-filled ki-document text-yellow-500"></i></span>
+                      <div class="flex flex-col min-w-0">
+                        <a class="text-sm font-medium text-mono truncate hover:text-primary" href="job-details.html?job=SR-2035">#SR-2035 Boundary notes.docx</a>
+                        <span class="text-xs text-secondary-foreground">Nexus Property Group · Priya Nair · Submitted 1 hr ago</span>
+                      </div>
+                    </div>
+                    <div class="flex gap-2 shrink-0"><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2035">Reject</a><a class="kt-btn kt-btn-sm kt-btn-primary" href="job-details.html?job=SR-2035">Approve</a></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="kt-card h-full" id="email-intake">
+                <div class="kt-card-header">
+                  <div class="flex flex-col gap-1"><h3 class="kt-card-title">Create Jobs from Client Emails</h3><span class="text-xs text-secondary-foreground">Parsed requests waiting for Team Lead confirmation</span></div>
+                  <span class="kt-badge kt-badge-sm kt-badge-info kt-badge-outline">5 emails</span>
+                </div>
+                <div class="kt-card-content flex flex-col gap-4">
+                  <div class="rounded-lg border border-border p-3 flex flex-col gap-2">
+                    <div class="flex items-center justify-between gap-2"><span class="text-sm font-medium text-mono">New survey request - Magnolia Dr</span><span class="text-xs text-secondary-foreground">client@nexus.com</span></div>
+                    <p class="text-xs text-secondary-foreground">Detected client, address, attachments, and requested due date.</p>
+                    <div class="flex gap-2"><a class="kt-btn kt-btn-sm kt-btn-primary" href="#">Create Job</a><a class="kt-btn kt-btn-sm kt-btn-outline" href="#">Preview</a></div>
+                  </div>
+                  <div class="rounded-lg border border-border p-3 flex flex-col gap-2">
+                    <div class="flex items-center justify-between gap-2"><span class="text-sm font-medium text-mono">Additional plots for Green Acres</span><span class="text-xs text-secondary-foreground">ops@greenacres.com</span></div>
+                    <p class="text-xs text-secondary-foreground">Missing site plan attachment. Flagged for clarification before creating job.</p>
+                    <div class="flex gap-2"><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2032#client">Ask Client</a><a class="kt-btn kt-btn-sm kt-btn-outline" href="#">Link to Existing</a></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Review Queue + Email Intake -->
+
+            <!-- Activity + Clarifications -->
+            <div class="grid lg:grid-cols-2 gap-5 lg:gap-7.5 items-stretch">
+              <div class="kt-card h-full" id="activity-pool">
+                <div class="kt-card-header">
+                  <div class="flex flex-col gap-1">
+                    <h3 class="kt-card-title">Recent Activity</h3>
+                    <span class="text-xs text-secondary-foreground">A summary feed across the pool. Each job has its own full chat thread — open the job to read or reply.</span>
+                  </div>
+                </div>
+                <div class="kt-card-content flex flex-col gap-4">
+                  <div class="flex gap-3">
+                    <span class="flex items-center justify-center size-8 rounded-full bg-primary/10 shrink-0"><i class="ki-filled ki-messages text-primary"></i></span>
+                    <div class="flex flex-col gap-1 min-w-0">
+                      <span class="text-sm font-medium text-mono">Sarah commented on <a class="text-primary hover:underline" href="job-details.html?job=SR-2039#chat">#SR-2039</a></span>
+                      <span class="text-xs text-secondary-foreground">"Client asked for updated boundary dimensions." · 12 mins ago</span>
+                      <a class="text-xs font-medium text-primary hover:underline w-fit" href="job-details.html?job=SR-2039#chat">Open job chat →</a>
+                    </div>
+                  </div>
+                  <div class="border-b border-border"></div>
+                  <div class="flex gap-3">
+                    <span class="flex items-center justify-center size-8 rounded-full bg-green-50 dark:bg-green-950/40 shrink-0"><i class="ki-filled ki-check-circle text-green-500"></i></span>
+                    <div class="flex flex-col gap-1 min-w-0">
+                      <span class="text-sm font-medium text-mono">Emily uploaded final document for <a class="text-primary hover:underline" href="job-details.html?job=SR-2036#documents">#SR-2036</a></span>
+                      <span class="text-xs text-secondary-foreground">Ready for Team Lead approval · 28 mins ago</span>
+                      <a class="text-xs font-medium text-primary hover:underline w-fit" href="job-details.html?job=SR-2036#chat">Open job chat →</a>
+                    </div>
+                  </div>
+                  <div class="border-b border-border"></div>
+                  <div class="flex gap-3">
+                    <span class="flex items-center justify-center size-8 rounded-full bg-red-50 dark:bg-red-950/40 shrink-0"><i class="ki-filled ki-message-question text-red-500"></i></span>
+                    <div class="flex flex-col gap-1 min-w-0">
+                      <span class="text-sm font-medium text-mono">Mark flagged missing document on <a class="text-primary hover:underline" href="job-details.html?job=SR-2032#documents">#SR-2032</a></span>
+                      <span class="text-xs text-secondary-foreground">Requires client clarification · 1 hr ago</span>
+                      <a class="text-xs font-medium text-primary hover:underline w-fit" href="job-details.html?job=SR-2032#chat">Open job chat →</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="kt-card h-full" id="client-clarifications">
+                <div class="kt-card-header">
+                  <div class="flex flex-col gap-1"><h3 class="kt-card-title">Client Clarifications</h3><span class="text-xs text-secondary-foreground">Jobs requiring Team Lead/client follow-up</span></div>
+                </div>
+                <div class="kt-card-table">
+                  <div class="kt-scrollable-x-auto">
+                    <table class="kt-table kt-table-border table-fixed">
+                      <thead><tr><th class="min-w-[120px]">Job</th><th class="min-w-[170px]">Client</th><th class="min-w-[200px]">Need</th><th class="w-[140px]">Action</th></tr></thead>
+                      <tbody>
+                        <tr>
+                          <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2032#client">#SR-2032</a></td>
+                          <td><span class="text-sm text-mono">Green Acres</span></td>
+                          <td><span class="text-sm text-secondary-foreground">Missing site plan and latest plot map</span></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2032#client">Open Thread</a></td>
+                        </tr>
+                        <tr>
+                          <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2028#client">#SR-2028</a></td>
+                          <td><span class="text-sm text-mono">City Council</span></td>
+                          <td><span class="text-sm text-secondary-foreground">Clarify document submission format</span></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2028#client">Open Thread</a></td>
+                        </tr>
+                        <tr>
+                          <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2024#client">#SR-2024</a></td>
+                          <td><span class="text-sm text-mono">Nexus Property Group</span></td>
+                          <td><span class="text-sm text-secondary-foreground">Confirm revised due date</span></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2024#client">Open Thread</a></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Activity + Clarifications -->
+
+          </div>
+        </div>
+      </main>
+
+      <footer class="kt-footer">
+        <div class="kt-container-fixed">
+          <div class="flex flex-col md:flex-row justify-center md:justify-between items-center gap-3 py-5">
+            <div class="flex order-2 md:order-1 gap-2 font-normal text-sm">
+              <span class="text-secondary-foreground">2026©</span>
+              <span class="text-secondary-foreground">VediTech Systems</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Search modal (simplified to a single result list) -->
+  <div class="kt-modal" data-kt-modal="true" id="search_modal">
+    <div class="kt-modal-content max-w-[600px] top-[15%]">
+      <div class="kt-modal-header py-4 px-5">
+        <i class="ki-filled ki-magnifier text-muted-foreground text-xl"></i>
+        <input class="kt-input kt-input-ghost" name="query" placeholder="Search jobs, clients, or employees" type="text"/>
+        <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-dim shrink-0" data-kt-modal-dismiss="true"><i class="ki-filled ki-cross"></i></button>
+      </div>
+      <div class="kt-modal-body p-0 pb-5">
+        <div class="kt-menu kt-menu-default px-2 flex-col">
+          <div class="text-xs text-secondary-foreground font-medium pt-2.5 pb-1.5 ps-3">Jobs</div>
+          <div class="kt-menu-item"><a class="kt-menu-link" href="job-details.html?job=SR-2036"><span class="kt-menu-title">#SR-2036 — City Council, 789 Pine Rd</span></a></div>
+          <div class="kt-menu-item"><a class="kt-menu-link" href="job-details.html?job=SR-2042"><span class="kt-menu-title">#SR-2042 — Nexus Property Group, 4822 Magnolia Dr</span></a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/core.bundle.js"></script>
+  <script src="../assets/vendors/ktui/ktui.min.js"></script>
+  <script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
+  <script src="../assets/js/widgets/general.js"></script>
+  <script src="../assets/js/layouts/demo1.js"></script>
+</body>
+</html>
