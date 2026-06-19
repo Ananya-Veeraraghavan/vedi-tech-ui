@@ -41,48 +41,112 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
   <link href="assets/vendors/keenicons/styles.bundle.css" rel="stylesheet"/>
   <link href="assets/css/styles.css" rel="stylesheet"/>
 <style>
-:root{
+    :root{
     --vt-primary:#274B56;
     --vt-primary-hover:#1f3d46;
     --vt-primary-light:#DCE9F1;
-    --vt-border:#D8DEE4;
+    --vt-border:#D1D5DB;
     --vt-text:#24465A;
     --vt-muted:#6B7280;
     --vt-bg:#F8FAFC;
+    }
+    body{
+    background:var(--vt-bg);
 }
 
-/* PAGE HEADER */
-.vt-page-title{
-    color:var(--vt-text);
-    font-weight:700;
-    font-size:38px;
-    line-height:1.2;
-    margin-bottom:4px;
+.vt-page-wrapper{
+    width:100%;
+    max-width:none !important;
+
+    padding-top:24px !important;
+    padding-left:48px !important;
+    padding-right:32px !important;
+}
+html,
+body{
+    height:auto !important;
+    min-height:100vh;
+    overflow-y:auto;
+}
+.vt-users-title{
+    font-size:40px;
+    font-weight:550;
+    color:var(--vt-primary);
+    line-height:1;
+    margin:0;
 }
 
 .vt-page-subtitle{
     color:#4B5563;
     font-size:16px;
-    line-height:1.5;
+    margin-top:8px;
+}
+.vt-global-search {
+    width: 650px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+
+    position: relative;
 }
 
-/* CARD */
+.vt-global-search i {
+    position: absolute;
+    left: 16px;
+
+    color: #99A1B7;
+    font-size: 18px;
+    z-index: 2;
+}
+
+.vt-global-search .kt-input {
+    width: 100%;
+    height: 100%;
+    padding-left: 48px;
+    border-radius: 10px;
+}
+.vt-add-user{
+    background:var(--vt-primary) !important;
+    color:#fff !important;
+
+    border-radius:10px !important;
+    padding:12px 22px !important;
+
+    font-weight:600;
+}
+
+.vt-add-user:hover{
+    background:var(--vt-primary-hover) !important;
+}
+.kt-card{
+    background:#fff !important;
+
+    border:1px solid var(--vt-border) !important;
+    border-radius:16px !important;
+
+    overflow:hidden !important;
+}
+
 .vt-card{
-    border:1px solid var(--vt-border);
-    border-radius:14px;
-    background:#fff;
-    box-shadow:none;
-}
+    background:#F6F8FA !important;
+    border:1px solid var(--vt-border) !important;
+    border-radius:16px !important;
 
-/* FILTERS */
+    margin-bottom:24px !important;
+}
 .vt-filter-label{
     display:block;
+
+    margin-bottom:10px;
+
     font-size:14px;
     font-weight:600;
-    color:#4B5563;
-    text-transform:uppercase;
-    margin-bottom:10px;
+
     letter-spacing:.04em;
+    text-transform:uppercase;
+
+    color:#4B5563;
 }
 
 .vt-search{
@@ -94,13 +158,10 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
     left:14px;
     top:50%;
     transform:translateY(-50%);
+
     color:#9CA3AF;
-    z-index:2;
 }
-.vt-page-wrapper{
-    padding-left:40px;
-    padding-right:40px;
-}
+
 .vt-search input{
     padding-left:42px !important;
 }
@@ -108,37 +169,52 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
 .kt-input,
 .kt-select{
     min-height:48px !important;
+
     border-radius:8px !important;
+    border:1px solid var(--vt-border) !important;
 }
 
-/* TABLE */
-.vt-table{
-    width:100%;
+.vt-card .kt-input,
+.vt-card .kt-select{
+    background:#fff !important;
 }
+.kt-table thead th{
+    height:58px;
 
-.vt-table thead th{
-    background:#F5F7FA;
-    color:#4B5563;
-    font-size:13px;
+    background:#F7F9FB;
+
+    color:#6B7280;
+
+    font-size:12px;
     font-weight:700;
-    letter-spacing:.03em;
+
+    letter-spacing:.08em;
     text-transform:uppercase;
-    border-bottom:1px solid var(--vt-border);
-    padding-top:18px;
-    padding-bottom:18px;
+
+    border-bottom:1px solid var(--vt-border) !important;
 }
 
-.vt-table tbody td{
-    padding-top:18px;
-    padding-bottom:18px;
-    border-bottom:1px solid #ECEFF3;
+.kt-table tbody tr{
+    height:76px;
+}
+
+.kt-table tbody tr:hover{
+    background:#FAFBFC;
+}
+
+.kt-table tbody td{
+    border-bottom:1px solid #E5E7EB !important;
     vertical-align:middle;
 }
 
-/* AVATAR */
+.kt-table th:not(:last-child),
+.kt-table td:not(:last-child){
+    border-right:1px solid #E5E7EB !important;
+}
 .vt-avatar{
     width:38px;
     height:38px;
+
     border-radius:999px;
     overflow:hidden;
 }
@@ -148,36 +224,31 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
     height:100%;
     object-fit:cover;
 }
-
-/* ROLE BADGES */
 .vt-role-admin{
     background:#274B56;
     color:#fff;
-    border-radius:999px;
-    padding:4px 12px;
-    font-size:11px;
-    font-weight:700;
 }
 
 .vt-role-operator{
     background:#D7DEE5;
     color:#4B5563;
-    border-radius:999px;
-    padding:4px 12px;
-    font-size:11px;
-    font-weight:700;
 }
 
 .vt-role-client{
     background:#ECECEC;
     color:#6B7280;
-    border-radius:999px;
+}
+
+.vt-role-admin,
+.vt-role-operator,
+.vt-role-client{
     padding:4px 12px;
+
+    border-radius:999px;
+
     font-size:11px;
     font-weight:700;
 }
-
-/* STATUS */
 .vt-status-active{
     color:#059669;
     font-weight:600;
@@ -191,9 +262,12 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
 .vt-dot{
     width:8px;
     height:8px;
-    border-radius:999px;
+
     display:inline-block;
+
     margin-right:6px;
+
+    border-radius:999px;
 }
 
 .vt-dot-active{
@@ -203,263 +277,83 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
 .vt-dot-inactive{
     background:#9CA3AF;
 }
-
-/* EDIT LINK */
-.vt-edit{
-    color:var(--vt-primary);
-    font-weight:600;
-    text-decoration:none;
-}
-
-/* ADD USER BUTTON */
-.vt-add-user{
-    background:var(--vt-primary) !important;
-    color:#fff !important;
-    border-radius:10px !important;
-    padding:12px 22px !important;
-    font-weight:600;
-}
-
-.vt-add-user:hover{
-    background:var(--vt-primary-hover) !important;
-}
-
-/* PAGINATION */
 .vt-pagination{
     display:flex;
     align-items:center;
     gap:8px;
 }
 
-.vt-pagination button{
-    background:#F8FAFC;
-    border:1px solid #E2E8F0;
-    color:#64748B;
-}
-
-.vt-pagination button:hover{
-    background:#EDF2F7;
-}
-
-.vt-pagination .active,
-.active-page{
-    background:#274B56 !important;
-    color:#fff !important;
-    border:none !important;
-    box-shadow:0 2px 6px rgba(39,75,86,.18);
-}
-
-/* FOOTER TEXT */
-.vt-footer-text{
-    color:#6B7280;
-    font-size:14px;
-}
-#sidebar{
-    width:280px !important;
-}
-
-.vt-page-wrapper{
-    max-width:none !important;
-    width:100%;
-}
-
-.vt-main-content{
-    margin-left:280px;
-    width:calc(100% - 280px);
-}
-.vt-table thead th{
-    background:#F7F9FB;
-    height:58px;
-    font-size:12px;
-    font-weight:700;
-    color:#6B7280;
-    letter-spacing:.08em;
-}
-.vt-table tbody tr{
-    height:76px;
-}
-
-.vt-table tbody tr:hover{
-    background:#FAFBFC;
-}
-.vt-users-title{
-    font-size:40px !important;
-    font-weight:550 !important;
-    color:#274B56 !important;
-    line-height:1 !important;
-    margin:0 !important;
-}
-.vt-global-search{
-    position:relative;
-    width:340px;
-    margin-left:-30px;
-}
-
-.vt-global-search i{
-    position:absolute;
-    left:14px;
-    top:50%;
-    transform:translateY(-50%);
-    color:#9CA3AF;
-    z-index:20;
-    pointer-events:none;
-}
-
-.vt-global-search input{
-    padding-left:42px !important;
-}
-/* Pagination buttons */
 .vt-pagination .kt-btn{
-    background:#FFFFFF !important;
+    background:#fff !important;
     border:1px solid #D1D5DB !important;
     color:#6B7280 !important;
-    box-shadow:none !important;
 }
 
 .vt-pagination .kt-btn:hover{
     background:#F9FAFB !important;
-    border-color:#CBD5E1 !important;
 }
 
-/* Active page */
 .vt-pagination .active-page{
-    background:#274B56 !important;
-    border-color:#274B56 !important;
-    color:#FFFFFF !important;
-}
-/* Toggle Switch Theme */
-
-.kt-switch input:checked,
-.kt-switch:checked {
-    accent-color: #274B56 !important;
+    background:var(--vt-primary) !important;
+    border-color:var(--vt-primary) !important;
+    color:#fff !important;
 }
 
-/* Metronic switch track */
-.kt-switch:checked,
-.kt-switch input:checked {
-    background-color: #274B56 !important;
-    border-color: #274B56 !important;
-}
-
-/* Slider version (if Metronic uses pseudo elements) */
-.kt-switch input:checked + span,
-.kt-switch input:checked + .kt-switch-label,
-.kt-switch.kt-switch-checked {
-    background-color: #274B56 !important;
-    border-color: #274B56 !important;
-}
-/* Main Users Card */
-.kt-card{
-    border:1px solid #D8DEE4 !important;
-    border-radius:16px !important;
-    overflow:hidden !important;
-    background:#fff !important;
-}
-
-/* Table Header */
-.kt-table thead th{
-    border-bottom:1px solid #E5E7EB !important;
-}
-
-/* Table Rows */
-.kt-table td{
-    border-bottom:1px solid #F1F5F9 !important;
-}
-
-/* Vertical Column Dividers */
-.kt-table th:not(:last-child),
-.kt-table td:not(:last-child){
-    border-right:1px solid #E5E7EB !important;
-}
-
-/* Pagination Section */
 .vt-pagination-container{
-    border-top:1px solid #E5E7EB !important;
     background:#fff;
+    border-top:1px solid var(--vt-border);
+}
+.vt-analytics-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:24px 32px;
+
+    background:#fff;
+
+    border:1px solid var(--vt-border);
+    border-radius:16px;
+
+    margin-bottom:24px;
 }
 
-/* Rounded corners */
-.kt-card,
-.kt-card-table,
-.kt-table-wrapper{
-    border-radius:16px !important;
-}
-.vt-card{
-    background:#F7F9FB !important;
-    border:1px solid #D8DEE4 !important;
-    border-radius:16px !important;
-}
-/* ==========================================
-   PAGE SPACING
-========================================== */
-
-.vt-page-wrapper{
-    padding-left: 48px !important;
-    padding-right: 32px !important;
-    padding-top: 24px !important;
+.vt-analytics-title{
+    font-size:20px;
+    font-weight:700;
+    color:#111827;
 }
 
-/* ==========================================
-   SPACE BETWEEN FILTERS & TABLE
-========================================== */
-
-.vt-card{
-    margin-bottom: 24px !important;
+.vt-analytics-subtitle{
+    margin-top:4px;
+    color:#6B7280;
 }
 
-/* ==========================================
-   USERS TABLE CARD
-========================================== */
-
-.kt-card{
-    border: 1px solid #D1D5DB !important;
-    border-radius: 16px !important;
-    overflow: hidden !important;
-    background: #FFFFFF !important;
+.vt-analytics-stats{
+    display:flex;
+    gap:40px;
+    margin-top:20px;
 }
 
-/* Table Outer Border */
-.kt-card-table{
-    border-top: 1px solid #D1D5DB !important;
+.vt-mini-stat{
+    display:flex;
+    flex-direction:column;
 }
 
-/* Header */
-.kt-table thead th{
-    border-bottom: 1px solid #D1D5DB !important;
+.vt-mini-value{
+    font-size:28px;
+    font-weight:700;
+    color:var(--vt-primary);
 }
 
-/* Rows */
-.kt-table tbody td{
-    border-bottom: 1px solid #E5E7EB !important;
+.vt-mini-label{
+    font-size:13px;
+    color:#6B7280;
 }
 
-/* Vertical Dividers */
-.kt-table th:not(:last-child),
-.kt-table td:not(:last-child){
-    border-right: 1px solid #E5E7EB !important;
-}
-
-/* Pagination Section */
-.vt-pagination-container{
-    border-top: 1px solid #D1D5DB !important;
-    background: #FFFFFF !important;
-}
-
-/* ==========================================
-   FILTER CARD
-========================================== */
-
-.vt-card{
-    background: #F6F8FA !important;
-    border: 1px solid #D1D5DB !important;
-    border-radius: 16px !important;
-}
-
-/* White inputs inside grey filter card */
-.vt-card .kt-input,
-.vt-card .kt-select{
-    background: #FFFFFF !important;
-    border: 1px solid #D1D5DB !important;
+#userRoleChart{
+    width:280px;
+    height:220px;
 }
 </style>
  </head>
@@ -575,7 +469,7 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
    </div>
    <!-- End of Sidebar -->
    <!-- Wrapper -->
-   <div class="kt-wrapper flex grow flex-col">
+   <div class="kt-wrapper flex grow flex-col transition-all duration-300">
     <!-- Header -->
     <header class="kt-header fixed top-0 z-10 start-0 end-0 flex items-stretch shrink-0 bg-background" data-kt-sticky="true" data-kt-sticky-class="border-b border-border" data-kt-sticky-name="header" id="header">
      <!-- Container -->
@@ -597,32 +491,284 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
        </div>
       </div>
       <!-- End of Mobile Logo -->
+        <!--Megamenu Container-->
+        <div class="flex items-stretch" id="megaMenuContainer">
+            <!--Megamenu Inner-->
+            <div class="flex items-stretch [--kt-reparent-mode:prepend] [--kt-reparent-target:body] lg:[--kt-reparent-target:#megaMenuContainer] lg:[--kt-reparent-mode:prepend]"
+                data-kt-reparent="true">
 
-<div class="bg-[#F8FAFC] min-h-screen">
+                <!--Megamenu Wrapper-->
+                <div class="hidden lg:flex lg:items-center flex-1
+                            [--kt-drawer-enable:true]
+                            lg:[--kt-drawer-enable:false]"
+                    data-kt-drawer="true"
+                    data-kt-drawer-class="kt-drawer kt-drawer-start fixed z-10 top-0 bottom-0 w-full me-5 max-w-[250px] p-5 lg:p-0 overflow-auto"
+                    id="mega_menu_wrapper">
 
-    <!-- Top Header -->
-    <div class="h-[72px] bg-white border-b border-gray-200 px-10 flex items-center justify-between">
+                    <!--Megamenu-->
+                    <div class="kt-menu flex items-center w-full"
+                        data-kt-menu="true"
+                        id="mega_menu">
 
-    <div class="vt-global-search">
+                        <!-- Global Search -->
+                        <div class="vt-global-search translate-y-[2px]">
+                            <i class="ki-filled ki-magnifier"></i>
 
-        <i class="ki-filled ki-magnifier"></i>
+                            <input
+                                type="text"
+                                class="kt-input"
+                                placeholder="Global Search"
+                            />
+                        </div>
+                        <!-- End Global Search -->
 
-        <input
-            type="text"
-            class="kt-input"
-            placeholder="Global Search..."
-        />
+                    </div>
+                    <!--End of Megamenu-->
 
-    </div>
+                </div>
+                <!--End of Megamenu Wrapper-->
 
-        <div class="w-10 h-10 rounded-full bg-[#274B56] flex items-center justify-center text-white">
-            <i class="ki-filled ki-user"></i>
+            </div>
+            <!--End of Megamenu Inner-->
         </div>
-
-    </div>
+        <!--End of Megamenu Container-->
+      <!-- Topbar -->
+      <div class="flex items-center gap-2.5">
+       <!-- User -->
+       <div class="shrink-0 flex items-center gap-2.5" data-kt-dropdown="true" data-kt-dropdown-offset="10px, 10px" data-kt-dropdown-offset-rtl="-20px, 10px" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-placement-rtl="bottom-start" data-kt-dropdown-trigger="click">
+        <div class="hidden sm:flex flex-col items-end leading-none">
+         <span class="text-sm font-semibold text-mono">Executive User</span>
+         <span class="text-xs text-secondary-foreground">Application Owner</span>
+        </div>
+        <div class="cursor-pointer shrink-0" data-kt-dropdown-toggle="true">
+         <img alt="" class="size-9 rounded-full border-2 border-green-500 shrink-0" src="assets/media/avatars/300-2.png"/>
+        </div>
+        <div class="kt-dropdown-menu w-[250px]" data-kt-dropdown-menu="true">
+         <div class="flex items-center justify-between px-2.5 py-1.5 gap-1.5">
+          <div class="flex items-center gap-2">
+           <img alt="" class="size-9 shrink-0 rounded-full border-2 border-green-500" src="assets/media/avatars/300-2.png"/>
+           <div class="flex flex-col gap-1.5">
+            <span class="text-sm text-foreground font-semibold leading-none">
+             Executive User
+            </span>
+            <a class="text-xs text-secondary-foreground hover:text-primary font-medium leading-none" href="html/demo1/account/home/get-started.html">
+             owner@veditech.com
+            </a>
+           </div>
+          </div>
+          <span class="kt-badge kt-badge-sm kt-badge-primary kt-badge-outline">
+           Owner
+          </span>
+         </div>
+         <ul class="kt-dropdown-menu-sub">
+          <li>
+           <div class="kt-dropdown-menu-separator">
+           </div>
+          </li>
+          <li>
+           <a class="kt-dropdown-menu-link" href="html/demo1/public-profile/profiles/default.html">
+            <i class="ki-filled ki-badge">
+            </i>
+            Public Profile
+           </a>
+          </li>
+          <li>
+           <a class="kt-dropdown-menu-link" href="html/demo1/account/home/user-profile.html">
+            <i class="ki-filled ki-profile-circle">
+            </i>
+            My Profile
+           </a>
+          </li>
+          <li data-kt-dropdown="true" data-kt-dropdown-placement="right-start" data-kt-dropdown-trigger="hover">
+           <button class="kt-dropdown-menu-toggle" data-kt-dropdown-toggle="true">
+            <i class="ki-filled ki-setting-2">
+            </i>
+            Executive Account
+            <span class="kt-dropdown-menu-indicator">
+             <i class="ki-filled ki-right text-xs">
+             </i>
+            </span>
+           </button>
+           <div class="kt-dropdown-menu w-[220px]" data-kt-dropdown-menu="true">
+            <ul class="kt-dropdown-menu-sub">
+             <li>
+              <a class="kt-dropdown-menu-link" href="html/demo1/account/home/get-started.html">
+               <i class="ki-filled ki-coffee">
+               </i>
+               Get Started
+              </a>
+             </li>
+             <li>
+              <a class="kt-dropdown-menu-link" href="html/demo1/account/home/user-profile.html">
+               <i class="ki-filled ki-some-files">
+               </i>
+               My Profile
+              </a>
+             </li>
+             <li>
+              <a class="kt-dropdown-menu-link" href="#">
+               <span class="flex items-center gap-2">
+                <i class="ki-filled ki-icon">
+                </i>
+                Billing
+               </span>
+               <span class="ms-auto inline-flex items-center" data-kt-tooltip="true" data-kt-tooltip-placement="top">
+                <i class="ki-filled ki-information-2 text-base text-muted-foreground">
+                </i>
+                <span class="kt-tooltip" data-kt-tooltip-content="true">
+                 Payment and subscription info
+                </span>
+               </span>
+              </a>
+             </li>
+             <li>
+              <a class="kt-dropdown-menu-link" href="html/demo1/account/security/overview.html">
+               <i class="ki-filled ki-medal-star">
+               </i>
+               Security
+              </a>
+             </li>
+             <li>
+              <a class="kt-dropdown-menu-link" href="html/demo1/account/members/teams.html">
+               <i class="ki-filled ki-setting">
+               </i>
+               Members & Roles
+              </a>
+             </li>
+             <li>
+              <a class="kt-dropdown-menu-link" href="html/demo1/account/integrations.html">
+               <i class="ki-filled ki-switch">
+               </i>
+               Integrations
+              </a>
+             </li>
+             <li>
+              <div class="kt-dropdown-menu-separator">
+              </div>
+             </li>
+             <li>
+              <a class="kt-dropdown-menu-link" href="html/demo1/account/security/overview.html">
+               <span class="flex items-center gap-2">
+                <i class="ki-filled ki-shield-tick">
+                </i>
+                Notifications
+               </span>
+               <input checked="" class="ms-auto kt-switch" name="check" type="checkbox" value="1"/>
+              </a>
+             </li>
+            </ul>
+           </div>
+          </li>
+          <li>
+           <a class="kt-dropdown-menu-link" href="https://devs.keenthemes.com">
+            <i class="ki-filled ki-message-programming">
+            </i>
+            Dev Forum
+           </a>
+          </li>
+          <li data-kt-dropdown="true" data-kt-dropdown-placement="right-start" data-kt-dropdown-trigger="hover">
+           <button class="kt-dropdown-menu-toggle py-1" data-kt-dropdown-toggle="true">
+            <span class="flex items-center gap-2">
+             <i class="ki-filled ki-icon">
+             </i>
+             Language
+            </span>
+            <span class="ms-auto kt-badge kt-badge-stroke shrink-0">
+             English
+             <img alt="" class="inline-block size-3.5 rounded-full" src="assets/media/flags/united-states.svg"/>
+            </span>
+           </button>
+           <div class="kt-dropdown-menu w-[180px]" data-kt-dropdown-menu="true">
+            <ul class="kt-dropdown-menu-sub">
+             <li class="active">
+              <a class="kt-dropdown-menu-link" href="?dir=ltr">
+               <span class="flex items-center gap-2">
+                <img alt="" class="inline-block size-4 rounded-full" src="assets/media/flags/united-states.svg"/>
+                <span class="kt-menu-title">
+                 English
+                </span>
+               </span>
+               <i class="ki-solid ki-check-circle ms-auto text-green-500 text-base">
+               </i>
+              </a>
+             </li>
+             <li class="">
+              <a class="kt-dropdown-menu-link" href="?dir=rtl">
+               <span class="flex items-center gap-2">
+                <img alt="" class="inline-block size-4 rounded-full" src="assets/media/flags/saudi-arabia.svg"/>
+                <span class="kt-menu-title">
+                 Arabic(Saudi)
+                </span>
+               </span>
+              </a>
+             </li>
+             <li class="">
+              <a class="kt-dropdown-menu-link" href="?dir=ltr">
+               <span class="flex items-center gap-2">
+                <img alt="" class="inline-block size-4 rounded-full" src="assets/media/flags/spain.svg"/>
+                <span class="kt-menu-title">
+                 Spanish
+                </span>
+               </span>
+              </a>
+             </li>
+             <li class="">
+              <a class="kt-dropdown-menu-link" href="?dir=ltr">
+               <span class="flex items-center gap-2">
+                <img alt="" class="inline-block size-4 rounded-full" src="assets/media/flags/germany.svg"/>
+                <span class="kt-menu-title">
+                 German
+                </span>
+               </span>
+              </a>
+             </li>
+             <li class="">
+              <a class="kt-dropdown-menu-link" href="?dir=ltr">
+               <span class="flex items-center gap-2">
+                <img alt="" class="inline-block size-4 rounded-full" src="assets/media/flags/japan.svg"/>
+                <span class="kt-menu-title">
+                 Japanese
+                </span>
+               </span>
+              </a>
+             </li>
+            </ul>
+           </div>
+          </li>
+          <li>
+           <div class="kt-dropdown-menu-separator">
+           </div>
+          </li>
+         </ul>
+         <div class="px-2.5 pt-1.5 mb-2.5 flex flex-col gap-3.5">
+          <div class="flex items-center gap-2 justify-between">
+           <span class="flex items-center gap-2">
+            <i class="ki-filled ki-moon text-base text-muted-foreground">
+            </i>
+            <span class="font-medium text-2sm">
+             Dark Mode
+            </span>
+           </span>
+           <input class="kt-switch" data-kt-theme-switch-state="dark" data-kt-theme-switch-toggle="true" name="check" type="checkbox" value="1"/>
+          </div>
+          <a class="kt-btn kt-btn-outline justify-center w-full" href="sign-in.html">
+           Log out
+          </a>
+         </div>
+        </div>
+       </div>
+       <!-- End of User -->
+      </div>
+      <!-- End of Topbar -->
+     </div>
+     <!-- End of Container -->
+    </header>
+    <!-- End of Header -->
+    <!-- Main Content -->
+    <div class="flex flex-col grow px-8 py-8">
 
 <!-- Page Content -->
-<div class="bg-[#F8FAFC] min-h-screen">
+<div class="w-full">
     <!-- Page Title -->
     <div class="flex items-start justify-between mb-8">
 
@@ -640,8 +786,8 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
             + Add User
         </button>
 
-    </div>
-    
+    </div> 
+
 <!-- Filters Card -->
 <div class="kt-card vt-card mb-6 w-full">
     <div class="kt-card-content p-6">
@@ -712,9 +858,9 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
 </div>
 
 <!-- Users Table Card -->
-<div class="kt-table-wrapper px-0">
+<div class="kt-card w-full">
 
-    <div class="kt-card-table">
+    <div class="kt-card-content p-0">
 
         <div class="kt-table-wrapper">
 
