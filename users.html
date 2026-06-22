@@ -360,6 +360,382 @@ body{
 #content .kt-container-fixed{
     width:100%;
 }
+/* BACKDROP */
+.vt-modal-overlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(15, 23, 42, 0.35);
+    backdrop-filter: blur(8px);
+
+    z-index: 9999;
+
+    padding: 24px;
+}
+
+/* MODAL */
+.vt-modal-container {
+    width: 100%;
+    max-width: 700px;
+
+    background: #fff;
+    border-radius: 16px;
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,.15),
+        0 10px 25px rgba(0,0,0,.08);
+
+    overflow: hidden;
+
+    animation: modalPop .25s ease-out;
+
+    max-height: 90vh;
+}
+
+/* HEADER */
+.vt-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    padding: 24px 28px;
+
+    border-bottom: 1px solid #eef2f7;
+}
+
+.vt-modal-header h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.vt-modal-header p {
+    margin-top: 4px;
+    color: #7e8299;
+    font-size: 14px;
+}
+
+/* SCROLLABLE BODY */
+.vt-modal-body {
+    padding: 28px;
+    max-height: calc(90vh - 100px);
+    overflow-y: auto;
+}
+
+/* CLOSE BUTTON */
+.vt-modal-close {
+    width: 38px;
+    height: 38px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #f5f8fa;
+
+    cursor: pointer;
+
+    transition: all .2s ease;
+
+    font-size: 18px;
+}
+
+.vt-modal-close:hover {
+    background: #e9eef3;
+    transform: rotate(90deg);
+}
+
+/* MODAL ANIMATION */
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(.95) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+.vt-modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.vt-modal-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 20px;
+}
+
+.vt-modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+/* ==========================
+   MODAL FORM STYLING
+========================== */
+
+.vt-form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.vt-form-group{
+    margin-bottom:20px;
+}
+
+.vt-form-label{
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:13px;
+    font-weight:600;
+
+    color:#3F4254;
+}
+
+.vt-required{
+    color:#F1416C;
+}
+
+/* Inputs */
+.vt-input,
+.vt-select{
+    width:100%;
+    height:48px;
+
+    border:1px solid #DCE1E8;
+    border-radius:12px;
+
+    background:#F8FAFC;
+
+    padding:0 14px;
+
+    transition:all .2s ease;
+
+    color:#181C32;
+}
+
+.vt-input:hover,
+.vt-select:hover{
+    border-color:#BFC7D1;
+}
+
+.vt-input:focus,
+.vt-select:focus{
+    outline:none;
+
+    background:#fff;
+
+    border-color:var(--vt-primary);
+
+    box-shadow:0 0 0 4px rgba(39,75,86,.12);
+}
+
+/* Textarea */
+.vt-textarea{
+    width:100%;
+    min-height:100px;
+
+    resize:vertical;
+
+    border:1px solid #DCE1E8;
+    border-radius:12px;
+
+    background:#F8FAFC;
+
+    padding:12px 14px;
+
+    transition:.2s ease;
+}
+
+.vt-textarea:focus{
+    outline:none;
+
+    background:#fff;
+
+    border-color:var(--vt-primary);
+
+    box-shadow:0 0 0 4px rgba(39,75,86,.12);
+}
+
+/* Input with icon */
+.vt-input-icon{
+    position:relative;
+}
+
+.vt-input-icon i{
+    position:absolute;
+    left:14px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#99A1B7;
+}
+
+.vt-input-icon .vt-input{
+    padding-left:42px;
+}
+
+/* Password eye */
+.vt-password{
+    position:relative;
+}
+
+.vt-password-toggle{
+    position:absolute;
+
+    right:12px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    border:none;
+    background:none;
+
+    cursor:pointer;
+
+    color:#99A1B7;
+
+    transition:.2s;
+}
+
+.vt-password-toggle:hover{
+    color:var(--vt-primary);
+}
+
+/* Section divider */
+.vt-form-section{
+    margin-bottom:28px;
+}
+
+.vt-form-section-title{
+    font-size:14px;
+    font-weight:700;
+
+    color:var(--vt-primary);
+
+    margin-bottom:16px;
+
+    text-transform:uppercase;
+    letter-spacing:.06em;
+}
+
+/* Footer */
+.vt-modal-footer{
+    display:flex;
+    justify-content:flex-end;
+    gap:12px;
+
+    margin-top:30px;
+    padding-top:24px;
+
+    border-top:1px solid #EEF2F6;
+}
+
+.vt-btn-secondary{
+    height:44px;
+
+    border:none;
+    border-radius:10px;
+
+    background:#EEF2F6;
+    color:#5E6278;
+
+    padding:0 18px;
+
+    font-weight:600;
+
+    transition:.2s;
+}
+
+.vt-btn-secondary:hover{
+    background:#E4E8EE;
+}
+
+.vt-btn-primary{
+    height:44px;
+
+    border:none;
+    border-radius:10px;
+
+    background:var(--vt-primary);
+    color:#fff;
+
+    padding:0 20px;
+
+    font-weight:600;
+
+    transition:.2s;
+}
+
+.vt-btn-primary:hover{
+    background:var(--vt-primary-hover);
+
+    transform:translateY(-1px);
+}
+
+/* Optional user avatar upload */
+.vt-avatar-upload{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    margin-bottom:28px;
+}
+
+.vt-avatar-circle{
+    width:88px;
+    height:88px;
+
+    border-radius:50%;
+
+    background:var(--vt-primary-light);
+
+    border:2px dashed var(--vt-primary);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin-bottom:10px;
+
+    color:var(--vt-primary);
+    font-size:28px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.vt-avatar-circle:hover{
+    transform:scale(1.03);
+
+    background:#E6F0F3;
+}
+
+/* Mobile */
+@media(max-width:768px){
+
+    .vt-form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .vt-modal-container{
+        max-width:100%;
+    }
+}
+#kt_modal_add_user{
+    display:none;
+}
+
+#kt_modal_add_user.show{
+    display:flex;
+}
 </style>
  </head>
 
@@ -389,6 +765,26 @@ body{
 
 				document.documentElement.classList.add(themeMode);
 			}
+function openAddUserModal() {
+    document
+        .getElementById("kt_modal_add_user")
+        .classList.add("show");
+}
+
+function closeAddUserModal() {
+    document
+        .getElementById("kt_modal_add_user")
+        .classList.remove("show");
+}
+
+function togglePassword() {
+    const password = document.getElementById("password");
+
+    password.type =
+        password.type === "password"
+        ? "text"
+        : "password";
+}
   </script>
   <!-- End of Theme Mode -->
   <!-- Page -->
@@ -788,12 +1184,17 @@ body{
             </p>
         </div>
 
-        <button class="vt-add-user mt-3">
+        <!-- <button class="vt-add-user mt-3">
+            + Add User
+        </button> -->
+        <!-- Add User Button -->
+        <button
+            type="button"
+            class="vt-add-user mt-3"
+            onclick="openAddUserModal()">
             + Add User
         </button>
-
-    </div> 
-
+    </div>
 <!-- Filters Card -->
 <div class="kt-card vt-card mb-6 w-full">
     <div class="kt-card-content p-6">
@@ -1093,6 +1494,210 @@ body{
 </div>
       </div>
     </main>
+                <!-- Modal -->
+                <div id="kt_modal_add_user" class="vt-modal-overlay " onclick="closeAddUserModal()">
+
+                
+                    <div class="vt-modal-container" onclick="event.stopPropagation()">
+
+                        <!-- Header -->
+                        <div class="vt-modal-header">
+
+                            <div>
+                                <h2>Create New User</h2>
+                                <p>Add a new user to the system</p>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="vt-modal-close"
+                                onclick="closeAddUserModal()">
+                                ✕
+                            </button>
+
+                        </div>
+
+                        <!-- Body -->
+                        <div class="vt-modal-body">
+
+                            <form id="kt_add_user_form">
+
+                                <!-- Name Row -->
+                                <div class="vt-form-grid">
+
+                                    <div class="vt-form-group">
+                                        <label class="vt-form-label">
+                                            First Name
+                                            <span class="vt-required">*</span>
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="vt-input"
+                                            placeholder="Enter first name"
+                                            name="first_name">
+                                    </div>
+
+                                    <div class="vt-form-group">
+                                        <label class="vt-form-label">
+                                            Last Name
+                                            <span class="vt-required">*</span>
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="vt-input"
+                                            placeholder="Enter last name"
+                                            name="last_name">
+                                    </div>
+
+                                </div>
+
+                                <!-- Email -->
+                                <div class="vt-form-group">
+
+                                    <label class="vt-form-label">
+                                        Email Address
+                                        <span class="vt-required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        class="vt-input"
+                                        placeholder="john.doe@example.com"
+                                        name="email">
+
+                                </div>
+
+                                <!-- Username + Role -->
+                                <div class="vt-form-grid">
+
+                                    <div class="vt-form-group">
+
+                                        <label class="vt-form-label">
+                                            Username
+                                            <span class="vt-required">*</span>
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="vt-input"
+                                            placeholder="johndoe"
+                                            name="username">
+
+                                    </div>
+
+                                    <div class="vt-form-group">
+
+                                        <label class="vt-form-label">
+                                            Role
+                                            <span class="vt-required">*</span>
+                                        </label>
+
+                                        <select class="vt-select" name="role">
+                                            <option value="">Select Role</option>
+                                            <option>Admin</option>
+                                            <option>Operator</option>
+                                            <option>Client</option>
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Phone + Status -->
+                                <div class="vt-form-grid">
+
+                                    <div class="vt-form-group">
+
+                                        <label class="vt-form-label">
+                                            Phone Number
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="vt-input"
+                                            placeholder="+91 9876543210"
+                                            name="phone">
+
+                                    </div>
+
+                                    <div class="vt-form-group">
+
+                                        <label class="vt-form-label">
+                                            Status
+                                        </label>
+
+                                        <select class="vt-select" name="status">
+                                            <option>Active</option>
+                                            <option>Inactive</option>
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Password -->
+                                <div class="vt-form-group">
+
+                                    <label class="vt-form-label">
+                                        Password
+                                        <span class="vt-required">*</span>
+                                    </label>
+
+                                    <div class="vt-password">
+
+                                        <input
+                                            type="password"
+                                            class="vt-input"
+                                            placeholder="Create password"
+                                            name="password"
+                                            id="password">
+
+                                        <button
+                                            type="button"
+                                            class="vt-password-toggle"
+                                            onclick="togglePassword()">
+
+                                            <i class="ki-filled ki-eye"></i>
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="vt-modal-footer">
+
+                                    <button
+                                        type="button"
+                                        class="vt-btn-secondary"
+                                        onclick="closeAddUserModal()">
+
+                                        Cancel
+
+                                    </button>
+
+                                    <button
+                                        type="submit"
+                                        class="vt-btn-primary">
+
+                                        Create User
+
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                
+
+                </div>
+
   <!-- Scripts -->
   <script src="assets/js/core.bundle.js">
   </script>
