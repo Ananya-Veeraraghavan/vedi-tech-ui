@@ -1,0 +1,845 @@
+<!--
+  Product: Metronic (Tailwind) — adapted for VediTech Survey Jobs
+  Page: Employee Dashboard — My Jobs
+-->
+<!DOCTYPE html>
+<html class="h-full" data-kt-theme="true" data-kt-theme-mode="light" dir="ltr" lang="en">
+<head>
+  <title>VediTech - My Jobs</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="../assets/vendors/keenicons/styles.bundle.css" rel="stylesheet"/>
+  <link href="../assets/css/styles.css" rel="stylesheet"/>
+
+  <style>
+    /* =========================================
+       VEDITECH EMPLOYEE DASHBOARD OVERRIDES
+       ========================================= */
+
+    /* ---- GLOBAL SEARCH ---- */
+    .vt-global-search {
+      width: 650px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .vt-global-search i {
+      position: absolute;
+      left: 16px;
+      color: #99A1B7;
+      font-size: 18px;
+      z-index: 2;
+    }
+    .vt-global-search .kt-input {
+      width: 100%;
+      height: 100%;
+      padding-left: 48px;
+      border-radius: 10px;
+    }
+    @media (max-width: 767px) {
+      .vt-global-search { width: min(52vw, 320px); }
+    }
+    @media (max-width: 479px) {
+      .vt-global-search { display: none; }
+    }
+
+    /* ---- SIDEBAR COLLAPSE ---- */
+    .kt-sidebar {
+      transition: width 0.2s ease;
+    }
+    .kt-wrapper {
+      padding-inline-start: 0;
+      transition: padding-inline-start 0.2s ease;
+    }
+    .kt-header {
+      inset-inline-start: 0;
+      transition: inset-inline-start 0.2s ease;
+    }
+    .kt-sidebar .small-logo {
+      display: none;
+    }
+    @media (min-width: 1024px) {
+      .kt-sidebar { width: 260px; }
+      .kt-wrapper { padding-inline-start: 260px; }
+      .kt-header { inset-inline-start: 260px; }
+
+      body.kt-sidebar-collapse .kt-sidebar { width: 72px; }
+      body.kt-sidebar-collapse .kt-wrapper { padding-inline-start: 72px; }
+      body.kt-sidebar-collapse .kt-header { inset-inline-start: 72px; }
+    }
+    body.kt-sidebar-collapse .kt-sidebar .default-logo { display: none; }
+    body.kt-sidebar-collapse .kt-sidebar .small-logo { display: flex; }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-title { display: none; }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-icon { width: auto; }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-link { justify-content: center; }
+
+    /* ---- CONTAINER ---- */
+    .kt-container-fixed {
+      width: 100%;
+      max-width: 100%;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+      margin: 0 auto;
+    }
+    @media (min-width: 640px) {
+      .kt-container-fixed {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+
+    /* ---- STAT CARDS GRID: 4 cards in a row on desktop ---- */
+    .vedi-stat-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+      transition: grid-template-columns 0.2s ease;
+    }
+    @media (min-width: 640px) {
+      .vedi-stat-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    body.kt-sidebar-collapse .vedi-stat-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    @media (max-width: 639px) {
+      body.kt-sidebar-collapse .vedi-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    /* ---- STAT CARD STYLING ---- */
+    .vedi-stat-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+    }
+    .vedi-stat-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    /* ---- FILTER BAR ---- */
+    .vedi-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* ---- TABLE ---- */
+    .kt-scrollable-x-auto { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    @media (max-width: 639px) {
+      .kt-table th, .kt-table td {
+        padding-left: 0.625rem;
+        padding-right: 0.625rem;
+        font-size: 0.75rem;
+      }
+    }
+    @media (max-width: 767px) {
+      .hide-md { display: none; }
+    }
+    @media (max-width: 479px) {
+      .hide-xs { display: none; }
+    }
+
+    /* ---- OPTIMIZATION TIP + RESOURCE LOAD GRID ---- */
+    .vedi-bottom-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 768px) {
+      .vedi-bottom-grid {
+        grid-template-columns: 1fr 300px;
+      }
+    }
+
+    /* ---- OPTIMIZATION TIP CARD ---- */
+    .vedi-tip-card {
+      background: linear-gradient(135deg, #4338CA 0%, #3730a3 100%);
+      border-radius: 12px;
+      padding: 1.5rem;
+      color: #fff;
+    }
+
+    /* ---- RESOURCE LOAD CARD ---- */
+    .vedi-resource-bar {
+      height: 6px;
+      border-radius: 99px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+    .vedi-resource-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #6366f1, #4338CA);
+    }
+
+    /* ---- PRIORITY BADGES ---- */
+    .badge-critical { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; font-weight: 600; font-size: 0.7rem; padding: 2px 8px; border-radius: 9999px; }
+    .badge-high     { background: #fff7ed; color: #f97316; border: 1px solid #fed7aa; font-weight: 600; font-size: 0.7rem; padding: 2px 8px; border-radius: 9999px; }
+    .badge-medium   { background: #eff6ff; color: #3b82f6; border: 1px solid #bfdbfe; font-weight: 600; font-size: 0.7rem; padding: 2px 8px; border-radius: 9999px; }
+    .badge-low      { background: #f0fdf4; color: #22c55e; border: 1px solid #bbf7d0; font-weight: 600; font-size: 0.7rem; padding: 2px 8px; border-radius: 9999px; }
+
+    /* ---- STATUS DOT LABELS ---- */
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+    .status-inprogress  { background: #6366f1; }
+    .status-pending     { background: #f59e0b; }
+    .status-onhold      { background: #ef4444; }
+    .status-queued      { background: #9ca3af; }
+
+    /* ---- OVERDUE DATE ---- */
+    .text-overdue { color: #ef4444; font-weight: 600; }
+
+    /* ---- ACTION BUTTONS IN TABLE ---- */
+    .tbl-action-link {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #4338CA;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .tbl-action-link:hover { text-decoration: underline; }
+
+    /* ---- PAGINATION ---- */
+    .vedi-pagination {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .vedi-page-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      border: 1px solid #e5e7eb;
+      background: transparent;
+      cursor: pointer;
+      color: inherit;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .vedi-page-btn:hover { background: #f3f4f6; }
+    .vedi-page-btn.active { background: #4338CA; color: #fff; border-color: #4338CA; }
+
+    /* ---- CARD HEADER ---- */
+    .kt-card-header { flex-wrap: wrap; gap: 0.75rem; }
+
+    /* ---- FOOTER ---- */
+    @media (max-width: 639px) {
+      .kt-footer .kt-container-fixed > div {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+    }
+
+    /* ---- HEADER: compact on mobile ---- */
+    @media (max-width: 639px) {
+      #headerContainer { padding-left: 0.875rem; padding-right: 0.875rem; }
+      .hidden.sm\:flex { display: none !important; }
+    }
+  </style>
+</head>
+<body class="antialiased flex h-full text-base text-foreground bg-background demo1 kt-sidebar-fixed kt-header-fixed">
+
+  <!-- Theme Mode Script -->
+  <script>
+    const defaultThemeMode = 'light';
+    let themeMode;
+    if (document.documentElement) {
+      if (localStorage.getItem('kt-theme')) {
+        themeMode = localStorage.getItem('kt-theme');
+      } else if (document.documentElement.hasAttribute('data-kt-theme-mode')) {
+        themeMode = document.documentElement.getAttribute('data-kt-theme-mode');
+      } else {
+        themeMode = defaultThemeMode;
+      }
+      if (themeMode === 'system') {
+        themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.classList.add(themeMode);
+    }
+  </script>
+
+  <div class="flex grow">
+    <!-- ===================== SIDEBAR ===================== -->
+    <div class="kt-sidebar bg-background border-e border-e-border fixed top-0 bottom-0 z-20 hidden lg:flex flex-col items-stretch shrink-0 [--kt-drawer-enable:true] lg:[--kt-drawer-enable:false]"
+         data-kt-drawer="true"
+         data-kt-drawer-class="kt-drawer kt-drawer-start top-0 bottom-0"
+         id="sidebar">
+
+      <!-- Sidebar Header / Logo -->
+      <div class="kt-sidebar-header hidden lg:flex items-center relative justify-between px-3 lg:px-6 shrink-0 h-[70px]" id="sidebar_header">
+        <div class="kt-sidebar-logo min-w-0 flex items-center gap-2.5">
+          <a class="flex items-center gap-2.5 min-w-0" href="#">
+            <span class="default-logo flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+              <i class="ki-filled ki-abstract-26 text-white text-base"></i>
+            </span>
+            <span class="default-logo flex flex-col leading-none min-w-0">
+              <span class="text-sm font-bold text-mono truncate">VediTech</span>
+              <span class="text-[10px] tracking-[1.5px] text-muted-foreground uppercase truncate">Survey Jobs</span>
+            </span>
+            <!-- Collapsed state: icon only -->
+            <span class="small-logo flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+              <i class="ki-filled ki-abstract-26 text-white text-base"></i>
+            </span>
+          </a>
+        </div>
+        <!-- Collapse Toggle -->
+        <div data-kt-toggle="body" data-kt-toggle-class="kt-sidebar-collapse" id="sidebar_toggle">
+          <div class="dark:hidden light">
+            <button class="kt-btn kt-btn-outline kt-btn-icon size-[30px] rounded-lg absolute start-full top-2/4 z-40 -translate-x-2/4 -translate-y-2/4 rtl:translate-x-2/4">
+              <i class="ki-filled ki-black-left-line kt-toggle-active:rotate-180 transition-all duration-300 rtl:translate rtl:rotate-180 rtl:kt-toggle-active:rotate-0"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <div class="kt-sidebar-content flex grow shrink-0 py-5 pe-2" id="sidebar_content">
+        <div class="kt-scrollable-y-hover grow shrink-0 flex ps-2 lg:ps-5 pe-1 lg:pe-3"
+             data-kt-scrollable="true"
+             data-kt-scrollable-dependencies="#sidebar_header"
+             data-kt-scrollable-height="auto"
+             data-kt-scrollable-offset="0px"
+             data-kt-scrollable-wrappers="#sidebar_content"
+             id="sidebar_scrollable">
+          <div class="kt-menu flex flex-col grow gap-1" data-kt-menu="true" data-kt-menu-accordion-expand-all="false" id="sidebar_menu">
+
+            <div class="kt-menu-item">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
+                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                  <i class="ki-filled ki-element-11 text-lg"></i>
+                </span>
+                <span class="kt-menu-title text-sm font-medium text-foreground">Dashboard</span>
+              </a>
+            </div>
+
+            <div class="kt-menu-item active">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
+                <span class="kt-menu-icon items-start text-muted-foreground w-[20px] kt-menu-item-active:text-primary">
+                  <i class="ki-filled ki-briefcase text-lg"></i>
+                </span>
+                <span class="kt-menu-title text-sm font-medium text-foreground kt-menu-item-active:text-primary kt-menu-item-active:font-semibold">My Jobs</span>
+              </a>
+            </div>
+
+            <div class="kt-menu-item">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
+                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                  <i class="ki-filled ki-verify text-lg"></i>
+                </span>
+                <span class="kt-menu-title text-sm font-medium text-foreground">Validation Center</span>
+              </a>
+            </div>
+
+            <div class="kt-menu-item">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
+                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                  <i class="ki-filled ki-check-circle text-lg"></i>
+                </span>
+                <span class="kt-menu-title text-sm font-medium text-foreground">Processing Checklist</span>
+              </a>
+            </div>
+
+            <div class="kt-menu-item">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
+                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                  <i class="ki-filled ki-messages text-lg"></i>
+                </span>
+                <span class="kt-menu-title text-sm font-medium text-foreground">Client Communication</span>
+              </a>
+            </div>
+
+            <div class="kt-menu-item">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
+                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                  <i class="ki-filled ki-people text-lg"></i>
+                </span>
+                <span class="kt-menu-title text-sm font-medium text-foreground">Team Lead Reviews</span>
+              </a>
+            </div>
+
+            <div class="kt-menu-item">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
+                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                  <i class="ki-filled ki-send text-lg"></i>
+                </span>
+                <span class="kt-menu-title text-sm font-medium text-foreground">Final Submission</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="shrink-0 px-5 py-4 border-t border-border/20 flex flex-col gap-2">
+        <a class="flex items-center gap-[10px] text-sm font-medium text-muted-foreground hover:text-primary" href="#">
+          <i class="ki-filled ki-profile-circle text-lg"></i>
+          <span class="default-logo">Profile</span>
+        </a>
+        <a class="flex items-center gap-[10px] text-sm font-medium text-muted-foreground hover:text-primary" href="#">
+          <i class="ki-filled ki-exit-up text-lg"></i>
+          <span class="default-logo">Logout</span>
+        </a>
+      </div>
+    </div>
+    <!-- End Sidebar -->
+
+    <!-- ===================== WRAPPER ===================== -->
+    <div class="kt-wrapper flex grow flex-col">
+
+      <!-- ---- HEADER ---- -->
+      <header class="kt-header fixed top-0 z-10 end-0 flex items-stretch shrink-0 bg-background border-b border-border">
+        <div class="kt-container-fixed flex justify-between items-stretch h-[70px] lg:gap-4" id="headerContainer">
+
+          <!-- Mobile Logo + Hamburger -->
+          <div class="flex gap-2.5 lg:hidden items-center -ms-1">
+            <a class="shrink-0" href="#">
+              <span class="flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+                <i class="ki-filled ki-abstract-26 text-white text-base"></i>
+              </span>
+            </a>
+            <button class="kt-btn kt-btn-icon kt-btn-ghost" data-kt-drawer-toggle="#sidebar">
+              <i class="ki-filled ki-menu"></i>
+            </button>
+          </div>
+
+          <!-- Topbar -->
+          <div class="flex items-center justify-between grow gap-4">
+            <!-- Search -->
+            <div class="flex items-center">
+              <div class="vt-global-search">
+                <i class="ki-filled ki-magnifier"></i>
+                <input type="text" class="kt-input" placeholder="Search jobs, clients, or IDs..."/>
+              </div>
+            </div>
+
+            <!-- Right: bell + help + user -->
+            <div class="flex items-center gap-3 ms-auto">
+              <!-- Notification Bell -->
+              <button class="kt-btn kt-btn-icon kt-btn-ghost relative" data-kt-drawer-toggle="#notifications_drawer">
+                <i class="ki-filled ki-notification-on text-xl"></i>
+                <span class="absolute top-1 right-1 size-2 rounded-full bg-red-500"></span>
+              </button>
+              <!-- Help -->
+              <button class="kt-btn kt-btn-icon kt-btn-ghost">
+                <i class="ki-filled ki-question-2 text-xl"></i>
+              </button>
+              <!-- User -->
+              <div class="flex items-center gap-2" data-kt-dropdown="true" data-kt-dropdown-offset="10px, 10px" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+                <div class="hidden sm:flex flex-col items-end leading-none">
+                  <span class="text-sm font-semibold text-mono">Alex Rivera</span>
+                  <span class="text-xs text-secondary-foreground">Process Specialist</span>
+                </div>
+                <div class="cursor-pointer shrink-0" data-kt-dropdown-toggle="true">
+                  <img alt="" class="size-9 rounded-full border-2 border-green-500 shrink-0" src="../assets/media/avatars/300-1.png"/>
+                </div>
+                <div class="kt-dropdown-menu w-[220px] sm:w-[250px]" data-kt-dropdown-menu="true">
+                  <div class="flex items-center justify-between px-2.5 py-1.5 gap-1.5">
+                    <div class="flex items-center gap-2">
+                      <img alt="" class="size-9 shrink-0 rounded-full border-2 border-green-500" src="../assets/media/avatars/300-1.png"/>
+                      <div class="flex flex-col gap-1.5">
+                        <span class="text-sm text-foreground font-semibold leading-none">Alex Rivera</span>
+                        <a class="text-xs text-secondary-foreground hover:text-primary font-medium leading-none" href="#">alex@veditech.com</a>
+                      </div>
+                    </div>
+                    <span class="kt-badge kt-badge-sm kt-badge-primary kt-badge-outline">Employee</span>
+                  </div>
+                  <ul class="kt-dropdown-menu-sub">
+                    <li><div class="kt-dropdown-menu-separator"></div></li>
+                    <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-profile-circle"></i> My Profile</a></li>
+                    <li><div class="kt-dropdown-menu-separator"></div></li>
+                  </ul>
+                  <div class="px-2.5 pt-1.5 mb-2.5 flex flex-col gap-3.5">
+                    <div class="flex items-center gap-2 justify-between">
+                      <span class="flex items-center gap-2">
+                        <i class="ki-filled ki-moon text-base text-muted-foreground"></i>
+                        <span class="font-medium text-2sm">Dark Mode</span>
+                      </span>
+                      <input class="kt-switch" data-kt-theme-switch-state="dark" data-kt-theme-switch-toggle="true" name="check" type="checkbox" value="1"/>
+                    </div>
+                    <a class="kt-btn kt-btn-outline justify-center w-full" href="#">Log out</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- End Header -->
+
+      <!-- ---- MAIN CONTENT ---- -->
+      <main class="grow pt-[70px]" id="content">
+        <div class="kt-container-fixed py-6 flex flex-col gap-6">
+
+          <!-- Page Title Row -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 class="text-xl font-bold text-mono">My Jobs</h1>
+              <p class="text-sm text-secondary-foreground mt-0.5">Manage and monitor your active processing workflow.</p>
+            </div>
+            <!-- Filters -->
+            <div class="vedi-filter-bar">
+              <!-- Status -->
+              <select class="kt-select kt-select-sm w-36" data-kt-select="true" data-kt-select-placeholder="All Statuses">
+                <option value="">All Statuses</option>
+                <option>In Progress</option>
+                <option>Pending Review</option>
+                <option>On Hold</option>
+                <option>Queued</option>
+              </select>
+              <!-- Priority -->
+              <select class="kt-select kt-select-sm w-36" data-kt-select="true" data-kt-select-placeholder="All Priorities">
+                <option value="">All Priorities</option>
+                <option>Critical</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+              <!-- Date Range -->
+              <div class="flex items-center gap-1">
+                <input type="date" class="kt-input kt-input-sm w-36" placeholder="dd/mm/yyyy"/>
+                <span class="text-secondary-foreground text-sm">to</span>
+                <input type="date" class="kt-input kt-input-sm w-36" placeholder="dd/mm/yyyy"/>
+              </div>
+              <!-- Reset -->
+              <button class="kt-btn kt-btn-sm kt-btn-outline gap-1.5">
+                <i class="ki-filled ki-filter-edit text-base"></i>
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- ---- STAT CARDS (4 in a row) ---- -->
+          <div class="vedi-stat-grid">
+            <!-- Active Jobs -->
+            <div class="kt-card">
+              <div class="vedi-stat-card">
+                <div class="vedi-stat-icon bg-primary/10">
+                  <i class="ki-filled ki-briefcase text-primary text-xl"></i>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-xs text-secondary-foreground font-medium">Active Jobs</span>
+                  <span class="text-2xl font-bold text-mono">24</span>
+                </div>
+              </div>
+            </div>
+            <!-- High Priority -->
+            <div class="kt-card">
+              <div class="vedi-stat-card">
+                <div class="vedi-stat-icon bg-red-50 dark:bg-red-950/30">
+                  <i class="ki-filled ki-information-2 text-red-500 text-xl"></i>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-xs text-secondary-foreground font-medium">High Priority</span>
+                  <span class="text-2xl font-bold text-mono">06</span>
+                </div>
+              </div>
+            </div>
+            <!-- Due Today -->
+            <div class="kt-card">
+              <div class="vedi-stat-card">
+                <div class="vedi-stat-icon bg-yellow-50 dark:bg-yellow-950/30">
+                  <i class="ki-filled ki-time text-yellow-500 text-xl"></i>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-xs text-secondary-foreground font-medium">Due Today</span>
+                  <span class="text-2xl font-bold text-mono">03</span>
+                </div>
+              </div>
+            </div>
+            <!-- Completed MTD -->
+            <div class="kt-card">
+              <div class="vedi-stat-card">
+                <div class="vedi-stat-icon bg-green-50 dark:bg-green-950/30">
+                  <i class="ki-filled ki-check-circle text-green-500 text-xl"></i>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-xs text-secondary-foreground font-medium">Completed (MTD)</span>
+                  <span class="text-2xl font-bold text-mono">142</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Stat Cards -->
+
+          <!-- ---- JOBS TABLE ---- -->
+          <div class="kt-card">
+            <div class="kt-card-header flex items-center justify-between py-4 px-5">
+              <h3 class="text-base font-semibold text-mono">Active Jobs</h3>
+              <span class="text-sm text-secondary-foreground">Showing 1–6 of 24 active jobs</span>
+            </div>
+            <div class="kt-card-table">
+              <div class="kt-scrollable-x-auto">
+                <table class="kt-table kt-table-border">
+                  <thead>
+                    <tr>
+                      <th class="min-w-[100px]">Job ID</th>
+                      <th class="min-w-[160px]">Client Name</th>
+                      <th class="min-w-[120px] hide-md">Assigned Date</th>
+                      <th class="min-w-[120px]">Due Date</th>
+                      <th class="min-w-[100px]">Priority</th>
+                      <th class="min-w-[150px]">Status</th>
+                      <th class="min-w-[100px] text-end">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><a class="text-sm font-semibold text-primary hover:underline" href="#">#JD-88291</a></td>
+                      <td><span class="text-sm font-medium text-mono">Initech Corp.</span></td>
+                      <td class="hide-md"><span class="text-sm text-secondary-foreground">Oct 24, 2023</span></td>
+                      <td><span class="text-sm text-overdue">Oct 28, 2023</span></td>
+                      <td><span class="badge-critical">CRITICAL</span></td>
+                      <td>
+                        <span class="flex items-center text-sm font-medium">
+                          <span class="status-dot status-inprogress"></span>In Progress
+                        </span>
+                      </td>
+                      <td class="text-end">
+                        <div class="flex items-center justify-end gap-2">
+                          <a class="tbl-action-link" href="#">Continue</a>
+                          <button class="kt-btn kt-btn-icon kt-btn-xs kt-btn-dim"><i class="ki-filled ki-dots-vertical text-sm"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><a class="text-sm font-semibold text-primary hover:underline" href="#">#JD-88295</a></td>
+                      <td><span class="text-sm font-medium text-mono">Cyberdyne Systems</span></td>
+                      <td class="hide-md"><span class="text-sm text-secondary-foreground">Oct 25, 2023</span></td>
+                      <td><span class="text-sm">Nov 02, 2023</span></td>
+                      <td><span class="badge-medium">MEDIUM</span></td>
+                      <td>
+                        <span class="flex items-center text-sm font-medium">
+                          <span class="status-dot status-pending"></span>Pending Review
+                        </span>
+                      </td>
+                      <td class="text-end">
+                        <div class="flex items-center justify-end gap-2">
+                          <a class="tbl-action-link" href="#">Open Job</a>
+                          <button class="kt-btn kt-btn-icon kt-btn-xs kt-btn-dim"><i class="ki-filled ki-dots-vertical text-sm"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><a class="text-sm font-semibold text-primary hover:underline" href="#">#JD-88301</a></td>
+                      <td><span class="text-sm font-medium text-mono">Wayne Enterprises</span></td>
+                      <td class="hide-md"><span class="text-sm text-secondary-foreground">Oct 26, 2023</span></td>
+                      <td><span class="text-sm">Oct 30, 2023</span></td>
+                      <td><span class="badge-high">HIGH</span></td>
+                      <td>
+                        <span class="flex items-center text-sm font-medium">
+                          <span class="status-dot status-inprogress"></span>In Progress
+                        </span>
+                      </td>
+                      <td class="text-end">
+                        <div class="flex items-center justify-end gap-2">
+                          <a class="tbl-action-link" href="#">Continue</a>
+                          <button class="kt-btn kt-btn-icon kt-btn-xs kt-btn-dim"><i class="ki-filled ki-dots-vertical text-sm"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><a class="text-sm font-semibold text-primary hover:underline" href="#">#JD-88310</a></td>
+                      <td><span class="text-sm font-medium text-mono">Stark Industries</span></td>
+                      <td class="hide-md"><span class="text-sm text-secondary-foreground">Oct 26, 2023</span></td>
+                      <td><span class="text-sm">Nov 05, 2023</span></td>
+                      <td><span class="badge-medium">MEDIUM</span></td>
+                      <td>
+                        <span class="flex items-center text-sm font-medium">
+                          <span class="status-dot status-onhold"></span>On Hold
+                        </span>
+                      </td>
+                      <td class="text-end">
+                        <div class="flex items-center justify-end gap-2">
+                          <a class="tbl-action-link" href="#">Open Job</a>
+                          <button class="kt-btn kt-btn-icon kt-btn-xs kt-btn-dim"><i class="ki-filled ki-dots-vertical text-sm"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><a class="text-sm font-semibold text-primary hover:underline" href="#">#JD-88322</a></td>
+                      <td><span class="text-sm font-medium text-mono">Oscorp Tech</span></td>
+                      <td class="hide-md"><span class="text-sm text-secondary-foreground">Oct 27, 2023</span></td>
+                      <td><span class="text-sm text-overdue">Oct 28, 2023</span></td>
+                      <td><span class="badge-critical">CRITICAL</span></td>
+                      <td>
+                        <span class="flex items-center text-sm font-medium">
+                          <span class="status-dot status-inprogress"></span>In Progress
+                        </span>
+                      </td>
+                      <td class="text-end">
+                        <div class="flex items-center justify-end gap-2">
+                          <a class="tbl-action-link" href="#">Continue</a>
+                          <button class="kt-btn kt-btn-icon kt-btn-xs kt-btn-dim"><i class="ki-filled ki-dots-vertical text-sm"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><a class="text-sm font-semibold text-primary hover:underline" href="#">#JD-88325</a></td>
+                      <td><span class="text-sm font-medium text-mono">LexCorp</span></td>
+                      <td class="hide-md"><span class="text-sm text-secondary-foreground">Oct 27, 2023</span></td>
+                      <td><span class="text-sm">Nov 12, 2023</span></td>
+                      <td><span class="badge-low">LOW</span></td>
+                      <td>
+                        <span class="flex items-center text-sm font-medium">
+                          <span class="status-dot status-queued"></span>Queued
+                        </span>
+                      </td>
+                      <td class="text-end">
+                        <div class="flex items-center justify-end gap-2">
+                          <a class="tbl-action-link" href="#">Assign</a>
+                          <button class="kt-btn kt-btn-icon kt-btn-xs kt-btn-dim"><i class="ki-filled ki-dots-vertical text-sm"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- Pagination -->
+            <div class="flex items-center justify-between px-5 py-4 flex-wrap gap-3">
+              <span class="text-sm text-secondary-foreground">Showing 1 to 6 of 24 active jobs</span>
+              <div class="vedi-pagination">
+                <button class="vedi-page-btn"><i class="ki-filled ki-arrow-left text-sm"></i></button>
+                <button class="vedi-page-btn active">1</button>
+                <button class="vedi-page-btn">2</button>
+                <button class="vedi-page-btn">3</button>
+                <span class="vedi-page-btn" style="border:none;cursor:default;">…</span>
+                <button class="vedi-page-btn">4</button>
+                <button class="vedi-page-btn"><i class="ki-filled ki-arrow-right text-sm"></i></button>
+              </div>
+            </div>
+          </div>
+          <!-- End Jobs Table -->
+
+          <!-- ---- BOTTOM ROW: Optimization Tip + Resource Load ---- -->
+          <div class="vedi-bottom-grid">
+            <!-- Optimization Tip -->
+            <div class="vedi-tip-card flex flex-col gap-3">
+              <div class="flex items-start gap-3">
+                <div class="flex items-center justify-center size-9 rounded-lg bg-white/20 shrink-0">
+                  <i class="ki-filled ki-rocket text-white text-lg"></i>
+                </div>
+                <div>
+                  <h4 class="text-base font-semibold text-white">Optimization Tip</h4>
+                  <p class="text-sm text-white/80 mt-1">Batching validation for "Initech Corp." can reduce processing time by 15% today. Click below to start the intelligent batch runner.</p>
+                </div>
+              </div>
+              <div>
+                <button class="kt-btn kt-btn-sm bg-white/20 hover:bg-white/30 text-white border border-white/30 gap-2">
+                  <i class="ki-filled ki-setting-3 text-base"></i>
+                  Start Batch Process
+                </button>
+              </div>
+            </div>
+
+            <!-- Resource Load -->
+            <div class="kt-card p-5 flex flex-col gap-4">
+              <div class="flex items-center gap-2">
+                <i class="ki-filled ki-chart-line-up text-primary text-lg"></i>
+                <h4 class="text-sm font-semibold text-mono">Resource Load</h4>
+              </div>
+              <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-secondary-foreground">Compute Availability</span>
+                    <span class="text-sm font-semibold text-mono">88%</span>
+                  </div>
+                  <div class="vedi-resource-bar">
+                    <div class="vedi-resource-bar-fill" style="width:88%"></div>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-secondary-foreground">Validation Queue</span>
+                  <span class="kt-badge kt-badge-sm kt-badge-success">Normal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Bottom Row -->
+
+        </div>
+      </main>
+      <!-- End Main Content -->
+
+      <!-- ---- FOOTER ---- -->
+      <footer class="kt-footer">
+        <div class="kt-container-fixed">
+          <div class="flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-2 py-5">
+            <div class="flex order-2 sm:order-1 gap-2 font-normal text-sm">
+              <span class="text-secondary-foreground">2026©</span>
+              <a class="text-secondary-foreground hover:text-primary" href="#">VediTech Systems</a>
+            </div>
+            <nav class="flex order-1 sm:order-2 gap-3 sm:gap-4 font-normal text-sm text-secondary-foreground flex-wrap justify-center">
+              <a class="hover:text-primary" href="#">Docs</a>
+              <a class="hover:text-primary" href="#">FAQ</a>
+              <a class="hover:text-primary" href="#">Support</a>
+              <a class="hover:text-primary" href="#">License</a>
+            </nav>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- End Wrapper -->
+  </div>
+
+  <!-- Notifications Drawer -->
+  <div class="hidden kt-drawer kt-drawer-end card flex-col max-w-[90%] w-[380px] top-5 bottom-5 end-5 rounded-xl border border-border"
+       data-kt-drawer="true" data-kt-drawer-container="body" id="notifications_drawer">
+    <div class="flex items-center justify-between gap-2.5 text-sm text-mono font-semibold px-5 py-2.5 border-b border-b-border">
+      Notifications
+      <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-dim shrink-0" data-kt-drawer-dismiss="true">
+        <i class="ki-filled ki-cross"></i>
+      </button>
+    </div>
+    <div class="px-5 py-4 flex flex-col gap-3">
+      <div class="flex items-start gap-3 p-3 rounded-lg border border-border bg-muted/30">
+        <span class="flex items-center justify-center size-7 rounded-full bg-red-50 dark:bg-red-950/40 shrink-0">
+          <i class="ki-filled ki-information-2 text-red-500 text-base"></i>
+        </span>
+        <div>
+          <p class="text-sm font-semibold text-mono">Critical job overdue</p>
+          <p class="text-xs text-secondary-foreground">#JD-88291 Initech Corp. — due Oct 28</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 rounded-lg border border-border bg-muted/30">
+        <span class="flex items-center justify-center size-7 rounded-full bg-yellow-50 dark:bg-yellow-950/40 shrink-0">
+          <i class="ki-filled ki-people text-yellow-500 text-base"></i>
+        </span>
+        <div>
+          <p class="text-sm font-semibold text-mono">Team Lead commented</p>
+          <p class="text-xs text-secondary-foreground">Review note on #JD-88301 Wayne Enterprises</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 p-3 rounded-lg border border-border bg-muted/30">
+        <span class="flex items-center justify-center size-7 rounded-full bg-green-50 dark:bg-green-950/40 shrink-0">
+          <i class="ki-filled ki-check-circle text-green-500 text-base"></i>
+        </span>
+        <div>
+          <p class="text-sm font-semibold text-mono">Document approved</p>
+          <p class="text-xs text-secondary-foreground">#JD-88280 has been approved for submission</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/core.bundle.js"></script>
+  <script src="../assets/vendors/ktui/ktui.min.js"></script>
+  <script src="../assets/js/layouts/demo1.js"></script>
+</body>
+</html>
