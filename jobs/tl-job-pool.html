@@ -1,0 +1,1116 @@
+<!--
+  Product : Metronic (Tailwind) — VediTech Survey Jobs
+  Page    : Team Lead — Job Pool
+  Shell   : Identical sidebar-collapse + header as job-details.html and tl-dashboard.html
+-->
+<!DOCTYPE html>
+<html class="h-full" data-kt-theme="true" data-kt-theme-mode="light" dir="ltr" lang="en">
+<head>
+  <base href="./">
+  <title>VediTech – Job Pool</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="../assets/vendors/keenicons/styles.bundle.css" rel="stylesheet"/>
+  <link href="../assets/css/styles.css" rel="stylesheet"/>
+
+  <style>
+    /* =============================================
+       SHARED SHELL (identical to job-details.html)
+       ============================================= */
+    .vt-global-search { width: 650px; height: 42px; display: flex; align-items: center; position: relative; }
+    .vt-global-search i { position: absolute; left: 16px; color: #99A1B7; font-size: 18px; z-index: 2; }
+    .vt-global-search .kt-input { width: 100%; height: 100%; padding-left: 48px; border-radius: 10px; }
+    @media (max-width: 767px) { .vt-global-search { width: min(52vw, 320px); } }
+    @media (max-width: 479px) { .vt-global-search { display: none; } }
+
+    .kt-sidebar { transition: width 0.2s ease; }
+    .kt-wrapper  { padding-inline-start: 0; transition: padding-inline-start 0.2s ease; }
+    .kt-header   { inset-inline-start: 0;   transition: inset-inline-start 0.2s ease; }
+    .kt-sidebar .small-logo { display: none; }
+
+    @media (min-width: 1024px) {
+      .kt-sidebar  { width: 280px; }
+      .kt-wrapper  { padding-inline-start: 280px; }
+      .kt-header   { inset-inline-start: 280px; }
+      body.kt-sidebar-collapse .kt-sidebar  { width: 72px; }
+      body.kt-sidebar-collapse .kt-wrapper  { padding-inline-start: 72px; }
+      body.kt-sidebar-collapse .kt-header   { inset-inline-start: 72px; }
+    }
+    body.kt-sidebar-collapse .kt-sidebar .default-logo { display: none; }
+    body.kt-sidebar-collapse .kt-sidebar .small-logo   { display: flex; }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-title { display: none; }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-icon  { width: auto; }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-link  { justify-content: center; }
+
+    .kt-container-fixed { width: 100%; max-width: 100%; padding-left: 1.5rem; padding-right: 1.5rem; margin: 0 auto; }
+
+    /* =============================================
+       JOB POOL — PAGE STYLES
+       ============================================= */
+
+    /* ---- STAT CARDS: 4 across ---- */
+    .pool-stat-grid {
+      display: grid; gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 640px)  { .pool-stat-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .pool-stat-card { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; }
+    .pool-stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    /* ---- ROUND-ROBIN TOGGLE BANNER ---- */
+    .rr-banner {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+      border-radius: 12px; padding: 1rem 1.5rem; color: #fff;
+    }
+    .rr-banner-left { display: flex; align-items: center; gap: 0.875rem; }
+    .rr-banner-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .rr-banner h4  { font-size: 0.9rem; font-weight: 700; color: #fff; margin: 0; }
+    .rr-banner p   { font-size: 0.8rem; color: rgba(255,255,255,0.8); margin: 0; }
+
+    /* Custom switch for RR */
+    .rr-switch { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
+    .rr-switch input { opacity: 0; width: 0; height: 0; }
+    .rr-slider {
+      position: absolute; inset: 0; background: rgba(255,255,255,0.3);
+      border-radius: 99px; cursor: pointer; transition: background 0.2s;
+    }
+    .rr-slider::before {
+      content: ''; position: absolute; width: 20px; height: 20px;
+      left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform 0.2s;
+    }
+    .rr-switch input:checked + .rr-slider { background: #22c55e; }
+    .rr-switch input:checked + .rr-slider::before { transform: translateX(22px); }
+
+    /* ---- FILTER / TOOLBAR ---- */
+    .pool-toolbar {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 0.625rem;
+      padding: 0.875rem 1.25rem;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .pool-toolbar-left  { display: flex; align-items: center; gap: 0.625rem; flex-wrap: wrap; flex: 1; }
+    .pool-toolbar-right { display: flex; align-items: center; gap: 0.625rem; flex-wrap: wrap; }
+
+    /* ---- JOB TABLE ---- */
+    .kt-scrollable-x-auto { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    @media (max-width: 767px) { .hide-md { display: none; } }
+    @media (max-width: 479px) { .hide-xs { display: none; } }
+
+    /* Priority badges */
+    .badge-critical { background:#fef2f2; color:#ef4444; border:1px solid #fecaca; font-weight:700; font-size:0.68rem; padding:2px 8px; border-radius:6px; letter-spacing:.04em; }
+    .badge-high     { background:#fff7ed; color:#f97316; border:1px solid #fed7aa; font-weight:700; font-size:0.68rem; padding:2px 8px; border-radius:6px; letter-spacing:.04em; }
+    .badge-medium   { background:#eff6ff; color:#3b82f6; border:1px solid #bfdbfe; font-weight:700; font-size:0.68rem; padding:2px 8px; border-radius:6px; letter-spacing:.04em; }
+    .badge-low      { background:#f0fdf4; color:#22c55e; border:1px solid #bbf7d0; font-weight:700; font-size:0.68rem; padding:2px 8px; border-radius:6px; letter-spacing:.04em; }
+
+    /* Status */
+    .sdot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; }
+    .s-inprogress { background:#6366f1; }
+    .s-pending    { background:#f59e0b; }
+    .s-onhold     { background:#ef4444; }
+    .s-queued     { background:#9ca3af; }
+    .s-review     { background:#8b5cf6; }
+
+    /* Overdue date */
+    .text-overdue { color:#ef4444; font-weight:600; }
+
+    /* Assignee cell */
+    .assignee-cell { display:flex; align-items:center; gap:7px; }
+    .assignee-cell img { width:26px; height:26px; border-radius:50%; flex-shrink:0; }
+    .unassigned-pill { display:inline-flex; align-items:center; gap:4px; background:#fef3c7; color:#92400e; font-size:0.72rem; font-weight:600; padding:2px 8px; border-radius:99px; }
+
+    /* ---- PAGINATION ---- */
+    .vedi-pagination { display:flex; align-items:center; gap:4px; }
+    .vedi-page-btn {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:32px; height:32px; border-radius:8px; font-size:0.8125rem; font-weight:500;
+      border:1px solid #e5e7eb; background:transparent; cursor:pointer; color:inherit;
+      transition:background 0.15s, border-color 0.15s;
+    }
+    .vedi-page-btn:hover  { background:#f3f4f6; }
+    .vedi-page-btn.active { background:#4338ca; color:#fff; border-color:#4338ca; }
+
+    /* ---- WORKLOAD PANEL ---- */
+    .workload-grid {
+      display: grid; gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 768px) { .workload-grid { grid-template-columns: 1fr 320px; } }
+
+    .workload-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    .workload-header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; border-bottom:1px solid #f3f4f6; }
+    .workload-header h3 { font-size:0.9rem; font-weight:600; color:#111827; margin:0; }
+
+    .emp-row { display:flex; align-items:center; gap:0.875rem; padding:0.875rem 1.25rem; border-bottom:1px solid #f3f4f6; transition:background 0.1s; }
+    .emp-row:last-child { border-bottom:none; }
+    .emp-row:hover { background:#f9fafb; }
+    .emp-avatar { width:36px; height:36px; border-radius:50%; flex-shrink:0; object-fit:cover; }
+    .emp-info { flex:1; min-width:0; }
+    .emp-name  { font-size:0.875rem; font-weight:600; color:#111827; }
+    .emp-sub   { font-size:0.75rem; color:#6b7280; }
+    .emp-bar-wrap { width:100px; }
+    .emp-bar-track { height:5px; border-radius:99px; background:#e5e7eb; overflow:hidden; }
+    .emp-bar-fill  { height:100%; border-radius:99px; transition:width 0.4s; }
+    .fill-green  { background:#22c55e; }
+    .fill-yellow { background:#f59e0b; }
+    .fill-red    { background:#ef4444; }
+    .emp-pct { font-size:0.78rem; font-weight:700; color:#374151; white-space:nowrap; }
+    .btn-assign-emp {
+      font-size:0.78rem; font-weight:600; color:#4338ca;
+      background:transparent; border:1.5px solid #c7d2fe;
+      padding:4px 10px; border-radius:7px; cursor:pointer; white-space:nowrap;
+      transition:background 0.15s, border-color 0.15s;
+    }
+    .btn-assign-emp:hover { background:#ede9fe; border-color:#a5b4fc; }
+
+    /* Quick-stats sidebar within workload section */
+    .qs-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:1.25rem; display:flex; flex-direction:column; gap:1rem; }
+    .qs-card h4 { font-size:0.875rem; font-weight:600; color:#111827; margin:0; }
+    .qs-row { display:flex; align-items:center; justify-content:space-between; }
+    .qs-label { font-size:0.8rem; color:#6b7280; }
+    .qs-value { font-size:0.875rem; font-weight:700; color:#111827; }
+    .qs-divider { height:1px; background:#f3f4f6; }
+
+    /* ---- ASSIGN MODAL ---- */
+    .pool-modal-overlay {
+      display:none; position:fixed; inset:0; z-index:200;
+      background:rgba(0,0,0,0.45); align-items:center; justify-content:center;
+    }
+    .pool-modal-overlay.open { display:flex; }
+    .pool-modal {
+      background:#fff; border-radius:14px; width:min(480px,95vw);
+      box-shadow:0 20px 60px rgba(0,0,0,0.2); overflow:hidden;
+    }
+    .pool-modal-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1rem 1.25rem; border-bottom:1px solid #f3f4f6;
+    }
+    .pool-modal-header h3 { font-size:1rem; font-weight:700; color:#111827; margin:0; }
+    .pool-modal-body   { padding:1.25rem; display:flex; flex-direction:column; gap:0.875rem; }
+    .pool-modal-footer { display:flex; justify-content:flex-end; gap:0.625rem; padding:1rem 1.25rem; border-top:1px solid #f3f4f6; }
+
+    .modal-emp-option {
+      display:flex; align-items:center; gap:0.875rem;
+      padding:0.75rem 0.875rem; border-radius:10px;
+      border:2px solid transparent; cursor:pointer; transition:border-color 0.15s, background 0.15s;
+    }
+    .modal-emp-option:hover { background:#f9fafb; border-color:#e5e7eb; }
+    .modal-emp-option.selected { background:#ede9fe; border-color:#6366f1; }
+    .modal-emp-option img { width:38px; height:38px; border-radius:50%; flex-shrink:0; }
+    .modal-emp-name { font-size:0.875rem; font-weight:600; color:#111827; }
+    .modal-emp-sub  { font-size:0.75rem; color:#6b7280; }
+
+    /* ---- TOAST ---- */
+    .pool-toast {
+      display:none; position:fixed; bottom:28px; right:28px; z-index:300;
+      background:#16a34a; color:#fff; padding:10px 18px; border-radius:10px;
+      font-size:0.85rem; font-weight:600;
+      box-shadow:0 4px 16px rgba(0,0,0,0.15); align-items:center; gap:8px;
+    }
+    .pool-toast.show { display:flex; }
+    .pool-toast.error { background:#ef4444; }
+  </style>
+</head>
+
+<body class="antialiased flex h-full text-base text-foreground bg-background demo1 kt-sidebar-fixed kt-header-fixed">
+
+<!-- Theme mode (identical to all pages) -->
+<script>
+  const defaultThemeMode = 'light';
+  let themeMode;
+  if (document.documentElement) {
+    if (localStorage.getItem('kt-theme')) { themeMode = localStorage.getItem('kt-theme'); }
+    else if (document.documentElement.hasAttribute('data-kt-theme-mode')) { themeMode = document.documentElement.getAttribute('data-kt-theme-mode'); }
+    else { themeMode = defaultThemeMode; }
+    if (themeMode === 'system') { themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+    document.documentElement.classList.add(themeMode);
+  }
+</script>
+
+<div class="flex grow">
+
+  <!-- ======================== SIDEBAR ======================== -->
+  <div class="kt-sidebar bg-background border-e border-e-border fixed top-0 bottom-0 z-20 hidden lg:flex flex-col items-stretch shrink-0" id="sidebar">
+
+    <div class="kt-sidebar-header hidden lg:flex items-center relative px-3 lg:px-6 shrink-0 h-[70px]" id="sidebar_header">
+      <a class="flex items-center gap-2.5 min-w-0" href="../dashboards/tl-dashboard.html">
+        <span class="default-logo flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+          <i class="ki-filled ki-abstract-26 text-white text-base"></i>
+        </span>
+        <span class="default-logo flex flex-col leading-none min-w-0">
+          <span class="text-sm font-bold text-mono truncate">VediTech</span>
+          <span class="text-[10px] tracking-[1.5px] text-muted-foreground uppercase truncate">Survey Jobs</span>
+        </span>
+        <span class="small-logo flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+          <i class="ki-filled ki-abstract-26 text-white text-base"></i>
+        </span>
+      </a>
+      <div data-kt-toggle="body" data-kt-toggle-class="kt-sidebar-collapse" id="sidebar_toggle">
+        <div class="dark:hidden light">
+          <button class="kt-btn kt-btn-outline kt-btn-icon size-[30px] rounded-lg absolute start-full top-2/4 z-40 -translate-x-2/4 -translate-y-2/4 rtl:translate-x-2/4">
+            <i class="ki-filled ki-black-left-line kt-toggle-active:rotate-180 transition-all duration-300 rtl:translate rtl:rotate-180 rtl:kt-toggle-active:rotate-0"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kt-sidebar-content flex grow shrink-0 py-5 pe-2" id="sidebar_content">
+      <div class="kt-menu flex flex-col grow gap-1 ps-2 lg:ps-5 pe-1 lg:pe-3" data-kt-menu="true" id="sidebar_menu">
+
+        <div class="kt-menu-item">
+          <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="../dashboards/tl-dashboard.html">
+            <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-element-11 text-lg"></i></span>
+            <span class="kt-menu-title text-sm font-medium text-foreground">Dashboard</span>
+          </a>
+        </div>
+
+        <div class="kt-menu-item">
+          <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] hover:bg-accent/60 hover:rounded-lg" href="job-creation.html">
+            <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-add-notepad text-lg"></i></span>
+            <span class="kt-menu-title text-sm font-medium text-foreground">Job Creation</span>
+          </a>
+        </div>
+
+        <div class="kt-menu-item active">
+          <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
+            <span class="kt-menu-icon items-start text-muted-foreground w-[20px] kt-menu-item-active:text-primary"><i class="ki-filled ki-briefcase text-lg"></i></span>
+            <span class="kt-menu-title text-sm font-medium text-foreground kt-menu-item-active:text-primary kt-menu-item-active:font-semibold">Job Pool</span>
+          </a>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="shrink-0 px-5 py-4 border-t border-border/20">
+      <a class="flex items-center gap-[10px] text-sm font-medium text-muted-foreground hover:text-primary" href="sign-in.html">
+        <i class="ki-filled ki-exit-up text-lg"></i>
+        <span class="default-logo">Logout</span>
+      </a>
+    </div>
+  </div>
+  <!-- End Sidebar -->
+
+  <!-- ======================== WRAPPER ======================== -->
+  <div class="kt-wrapper flex grow flex-col">
+
+    <!-- ---- HEADER (identical to job-details.html) ---- -->
+    <header class="kt-header fixed top-0 z-10 end-0 flex items-stretch shrink-0 bg-background border-b border-border" id="header">
+      <div class="kt-container-fixed flex justify-between items-stretch h-[70px]">
+
+        <div class="flex items-center gap-2.5 lg:hidden">
+          <button class="kt-btn kt-btn-icon kt-btn-ghost" data-kt-drawer-toggle="#sidebar">
+            <i class="ki-filled ki-menu"></i>
+          </button>
+          <span class="text-sm font-bold text-mono">VediTech</span>
+        </div>
+
+        <div class="flex items-center justify-between grow gap-4">
+          <div class="flex items-center">
+            <div class="vt-global-search">
+              <i class="ki-filled ki-magnifier"></i>
+              <input type="text" class="kt-input" placeholder="Search jobs, clients, or employees..."/>
+            </div>
+          </div>
+
+          <div class="shrink-0 flex items-center gap-2.5 ms-auto" data-kt-dropdown="true" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+            <div class="hidden sm:flex flex-col items-end leading-none">
+              <span class="text-sm font-semibold text-mono">Team Lead User</span>
+              <span class="text-xs text-secondary-foreground">Team Lead</span>
+            </div>
+            <div class="cursor-pointer shrink-0" data-kt-dropdown-toggle="true">
+              <img alt="" class="size-9 rounded-full border-2 border-green-500 shrink-0" src="../assets/media/avatars/300-2.png"/>
+            </div>
+            <div class="kt-dropdown-menu w-[230px]" data-kt-dropdown-menu="true">
+              <div class="flex items-center gap-2 px-2.5 py-2">
+                <img alt="" class="size-9 shrink-0 rounded-full border-2 border-green-500" src="../assets/media/avatars/300-2.png"/>
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-sm text-foreground font-semibold leading-none">Team Lead User</span>
+                  <span class="text-xs text-secondary-foreground leading-none">tl@veditech.com</span>
+                </div>
+              </div>
+              <ul class="kt-dropdown-menu-sub">
+                <li><div class="kt-dropdown-menu-separator"></div></li>
+                <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-profile-circle"></i> My Profile</a></li>
+                <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-setting-2"></i> Account Settings</a></li>
+                <li><div class="kt-dropdown-menu-separator"></div></li>
+              </ul>
+              <div class="px-2.5 pt-1.5 pb-2.5 flex flex-col gap-3.5">
+                <div class="flex items-center gap-2 justify-between">
+                  <span class="flex items-center gap-2">
+                    <i class="ki-filled ki-moon text-base text-muted-foreground"></i>
+                    <span class="font-medium text-2sm">Dark Mode</span>
+                  </span>
+                  <input class="kt-switch" data-kt-theme-switch-state="dark" data-kt-theme-switch-toggle="true" type="checkbox" value="1"/>
+                </div>
+                <a class="kt-btn kt-btn-outline justify-center w-full" href="sign-in.html">Log out</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- End Header -->
+
+    <!-- ======================== MAIN ======================== -->
+    <main class="grow pt-[90px] pb-10" id="content">
+      <div class="kt-container-fixed flex flex-col gap-6">
+
+        <!-- Breadcrumb + Title -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-col gap-1.5">
+            <nav class="flex items-center gap-1.5 text-sm text-secondary-foreground">
+              <a class="hover:text-primary" href="../dashboards/tl-dashboard.html">Dashboard</a>
+              <i class="ki-filled ki-right text-[10px]"></i>
+              <span class="text-mono font-medium">Job Pool</span>
+            </nav>
+            <h1 class="text-xl font-bold text-mono">Job Pool</h1>
+          </div>
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <a class="kt-btn kt-btn-outline gap-1.5" href="job-creation.html">
+              <i class="ki-filled ki-plus text-base"></i>
+              New Job
+            </a>
+            <button class="kt-btn kt-btn-primary gap-1.5" onclick="openBulkAssignModal()">
+              <i class="ki-filled ki-user-tick text-base"></i>
+              Bulk Assign
+            </button>
+          </div>
+        </div>
+
+        <!-- ---- STAT CARDS ---- -->
+        <div class="pool-stat-grid">
+          <div class="kt-card">
+            <div class="pool-stat-card">
+              <div class="pool-stat-icon bg-primary/10"><i class="ki-filled ki-briefcase text-primary text-xl"></i></div>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs text-secondary-foreground font-medium">Total in Pool</span>
+                <span class="text-2xl font-bold text-mono">38</span>
+              </div>
+            </div>
+          </div>
+          <div class="kt-card">
+            <div class="pool-stat-card">
+              <div class="pool-stat-icon bg-yellow-50"><i class="ki-filled ki-information-2 text-yellow-500 text-xl"></i></div>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs text-secondary-foreground font-medium">Unassigned</span>
+                <span class="text-2xl font-bold text-mono">07</span>
+              </div>
+            </div>
+          </div>
+          <div class="kt-card">
+            <div class="pool-stat-card">
+              <div class="pool-stat-icon bg-purple-50"><i class="ki-filled ki-verify text-purple-500 text-xl"></i></div>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs text-secondary-foreground font-medium">Pending Review</span>
+                <span class="text-2xl font-bold text-mono">05</span>
+              </div>
+            </div>
+          </div>
+          <div class="kt-card">
+            <div class="pool-stat-card">
+              <div class="pool-stat-icon bg-green-50"><i class="ki-filled ki-check-circle text-green-500 text-xl"></i></div>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs text-secondary-foreground font-medium">Approved (MTD)</span>
+                <span class="text-2xl font-bold text-mono">89</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---- ROUND-ROBIN BANNER ---- -->
+        <div class="rr-banner">
+          <div class="rr-banner-left">
+            <div class="rr-banner-icon">
+              <i class="ki-filled ki-arrows-circle text-white text-xl"></i>
+            </div>
+            <div>
+              <h4>Round-Robin Auto-Assignment</h4>
+              <p id="rr-status-text">Currently <strong id="rr-status-word">disabled</strong> — new jobs are queued for manual assignment.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 flex-shrink-0">
+            <span class="text-sm font-medium text-white" id="rr-label">Off</span>
+            <label class="rr-switch">
+              <input type="checkbox" id="rr-toggle" onchange="toggleRR(this)"/>
+              <span class="rr-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ---- JOB TABLE CARD ---- -->
+        <div class="kt-card">
+          <!-- Toolbar -->
+          <div class="pool-toolbar">
+            <div class="pool-toolbar-left">
+              <!-- Search within table -->
+              <div style="position:relative;">
+                <i class="ki-filled ki-magnifier" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#99a1b7;font-size:14px;"></i>
+                <input type="text" class="kt-input kt-input-sm" style="padding-left:32px;width:200px;" placeholder="Search jobs..." id="table-search" oninput="filterTable()"/>
+              </div>
+              <!-- Status filter -->
+              <select class="kt-select kt-select-sm" style="width:140px;" id="filter-status" onchange="filterTable()">
+                <option value="">All Statuses</option>
+                <option>In Progress</option>
+                <option>Pending Review</option>
+                <option>On Hold</option>
+                <option>Queued</option>
+                <option>Unassigned</option>
+              </select>
+              <!-- Priority filter -->
+              <select class="kt-select kt-select-sm" style="width:140px;" id="filter-priority" onchange="filterTable()">
+                <option value="">All Priorities</option>
+                <option>Critical</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+              <!-- Assignee filter -->
+              <select class="kt-select kt-select-sm" style="width:150px;" id="filter-assignee" onchange="filterTable()">
+                <option value="">All Assignees</option>
+                <option>Emily Chen</option>
+                <option>Marcus Webb</option>
+                <option>Priya Nair</option>
+                <option>Jordan Blake</option>
+                <option>Unassigned</option>
+              </select>
+            </div>
+            <div class="pool-toolbar-right">
+              <button class="kt-btn kt-btn-sm kt-btn-outline gap-1.5" onclick="resetFilters()">
+                <i class="ki-filled ki-filter-edit text-base"></i>
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="kt-scrollable-x-auto">
+            <table class="kt-table kt-table-border" id="pool-table">
+              <thead>
+                <tr>
+                  <th style="width:36px;"><input type="checkbox" id="select-all" onchange="toggleAll(this)"/></th>
+                  <th class="min-w-[110px]">Job ID</th>
+                  <th class="min-w-[180px]">Client / Address</th>
+                  <th class="min-w-[100px]">Priority</th>
+                  <th class="min-w-[130px]">Status</th>
+                  <th class="min-w-[150px] hide-md">Assigned To</th>
+                  <th class="min-w-[110px] hide-md">Due Date</th>
+                  <th class="min-w-[110px] hide-xs">Completion</th>
+                  <th class="min-w-[130px] text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="pool-tbody">
+
+                <!-- Row 1 -->
+                <tr data-status="Pending Review" data-priority="High" data-assignee="Emily Chen">
+                  <td><input type="checkbox" class="row-check"/></td>
+                  <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html">#SR-2036</a></td>
+                  <td>
+                    <div class="text-sm font-medium text-mono">City Council</div>
+                    <div class="text-xs text-secondary-foreground">789 Pine Rd</div>
+                  </td>
+                  <td><span class="badge-high">HIGH</span></td>
+                  <td>
+                    <span class="flex items-center text-sm font-medium">
+                      <span class="sdot s-review"></span>Pending Review
+                    </span>
+                  </td>
+                  <td class="hide-md">
+                    <div class="assignee-cell">
+                      <img src="../assets/media/avatars/300-5.png" alt=""/>
+                      <span class="text-sm font-medium text-mono">Emily Chen</span>
+                    </div>
+                  </td>
+                  <td class="hide-md"><span class="text-sm text-overdue">Today</span></td>
+                  <td class="hide-xs">
+                    <div class="flex items-center gap-2">
+                      <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+                        <div style="height:100%;width:85%;background:#6366f1;border-radius:99px;"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-mono">85%</span>
+                    </div>
+                  </td>
+                  <td class="text-end">
+                    <div class="flex items-center justify-end gap-2">
+                      <a class="kt-btn kt-btn-xs kt-btn-primary" href="job-details.html">Review</a>
+                      <button class="kt-btn kt-btn-xs kt-btn-outline" onclick="openAssignModal('#SR-2036', 'Emily Chen')">Reassign</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 2 -->
+                <tr data-status="In Progress" data-priority="Critical" data-assignee="Marcus Webb">
+                  <td><input type="checkbox" class="row-check"/></td>
+                  <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html">#SR-2038</a></td>
+                  <td>
+                    <div class="text-sm font-medium text-mono">Nexus Property Group</div>
+                    <div class="text-xs text-secondary-foreground">4822 Magnolia Dr</div>
+                  </td>
+                  <td><span class="badge-critical">CRITICAL</span></td>
+                  <td>
+                    <span class="flex items-center text-sm font-medium">
+                      <span class="sdot s-inprogress"></span>In Progress
+                    </span>
+                  </td>
+                  <td class="hide-md">
+                    <div class="assignee-cell">
+                      <img src="../assets/media/avatars/300-3.png" alt=""/>
+                      <span class="text-sm font-medium text-mono">Marcus Webb</span>
+                    </div>
+                  </td>
+                  <td class="hide-md"><span class="text-sm text-overdue">Oct 24</span></td>
+                  <td class="hide-xs">
+                    <div class="flex items-center gap-2">
+                      <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+                        <div style="height:100%;width:42%;background:#6366f1;border-radius:99px;"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-mono">42%</span>
+                    </div>
+                  </td>
+                  <td class="text-end">
+                    <div class="flex items-center justify-end gap-2">
+                      <a class="kt-btn kt-btn-xs kt-btn-outline" href="job-details.html">View</a>
+                      <button class="kt-btn kt-btn-xs kt-btn-outline" onclick="openAssignModal('#SR-2038', 'Marcus Webb')">Reassign</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 3 — Unassigned -->
+                <tr data-status="Unassigned" data-priority="Medium" data-assignee="Unassigned">
+                  <td><input type="checkbox" class="row-check"/></td>
+                  <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html">#SR-2041</a></td>
+                  <td>
+                    <div class="text-sm font-medium text-mono">Harborview Estates</div>
+                    <div class="text-xs text-secondary-foreground">12 Crescent Blvd</div>
+                  </td>
+                  <td><span class="badge-medium">MEDIUM</span></td>
+                  <td>
+                    <span class="flex items-center text-sm font-medium">
+                      <span class="sdot s-queued"></span>Queued
+                    </span>
+                  </td>
+                  <td class="hide-md">
+                    <span class="unassigned-pill"><i class="ki-filled ki-warning text-xs"></i>Unassigned</span>
+                  </td>
+                  <td class="hide-md"><span class="text-sm">Oct 28</span></td>
+                  <td class="hide-xs">
+                    <div class="flex items-center gap-2">
+                      <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+                        <div style="height:100%;width:0%;background:#6366f1;border-radius:99px;"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-mono">0%</span>
+                    </div>
+                  </td>
+                  <td class="text-end">
+                    <div class="flex items-center justify-end gap-2">
+                      <button class="kt-btn kt-btn-xs kt-btn-primary" onclick="openAssignModal('#SR-2041', '')">Assign</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 4 -->
+                <tr data-status="In Progress" data-priority="Low" data-assignee="Priya Nair">
+                  <td><input type="checkbox" class="row-check"/></td>
+                  <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html">#SR-2042</a></td>
+                  <td>
+                    <div class="text-sm font-medium text-mono">Riverside Holdings</div>
+                    <div class="text-xs text-secondary-foreground">300 Willow Ave</div>
+                  </td>
+                  <td><span class="badge-low">LOW</span></td>
+                  <td>
+                    <span class="flex items-center text-sm font-medium">
+                      <span class="sdot s-inprogress"></span>In Progress
+                    </span>
+                  </td>
+                  <td class="hide-md">
+                    <div class="assignee-cell">
+                      <img src="../assets/media/avatars/300-6.png" alt=""/>
+                      <span class="text-sm font-medium text-mono">Priya Nair</span>
+                    </div>
+                  </td>
+                  <td class="hide-md"><span class="text-sm">Nov 02</span></td>
+                  <td class="hide-xs">
+                    <div class="flex items-center gap-2">
+                      <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+                        <div style="height:100%;width:60%;background:#6366f1;border-radius:99px;"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-mono">60%</span>
+                    </div>
+                  </td>
+                  <td class="text-end">
+                    <div class="flex items-center justify-end gap-2">
+                      <a class="kt-btn kt-btn-xs kt-btn-outline" href="job-details.html">View</a>
+                      <button class="kt-btn kt-btn-xs kt-btn-outline" onclick="openAssignModal('#SR-2042', 'Priya Nair')">Reassign</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 5 — On Hold -->
+                <tr data-status="On Hold" data-priority="High" data-assignee="Jordan Blake">
+                  <td><input type="checkbox" class="row-check"/></td>
+                  <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html">#SR-2044</a></td>
+                  <td>
+                    <div class="text-sm font-medium text-mono">Pinnacle Developments</div>
+                    <div class="text-xs text-secondary-foreground">58 Summit Terrace</div>
+                  </td>
+                  <td><span class="badge-high">HIGH</span></td>
+                  <td>
+                    <span class="flex items-center text-sm font-medium">
+                      <span class="sdot s-onhold"></span>On Hold
+                    </span>
+                  </td>
+                  <td class="hide-md">
+                    <div class="assignee-cell">
+                      <img src="../assets/media/avatars/300-4.png" alt=""/>
+                      <span class="text-sm font-medium text-mono">Jordan Blake</span>
+                    </div>
+                  </td>
+                  <td class="hide-md"><span class="text-sm">Oct 26</span></td>
+                  <td class="hide-xs">
+                    <div class="flex items-center gap-2">
+                      <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+                        <div style="height:100%;width:30%;background:#6366f1;border-radius:99px;"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-mono">30%</span>
+                    </div>
+                  </td>
+                  <td class="text-end">
+                    <div class="flex items-center justify-end gap-2">
+                      <a class="kt-btn kt-btn-xs kt-btn-outline" href="job-details.html">View</a>
+                      <button class="kt-btn kt-btn-xs kt-btn-outline" onclick="openAssignModal('#SR-2044', 'Jordan Blake')">Reassign</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 6 — Unassigned -->
+                <tr data-status="Unassigned" data-priority="Critical" data-assignee="Unassigned">
+                  <td><input type="checkbox" class="row-check"/></td>
+                  <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html">#SR-2045</a></td>
+                  <td>
+                    <div class="text-sm font-medium text-mono">Meridian Land Partners</div>
+                    <div class="text-xs text-secondary-foreground">99 Cliffside Dr</div>
+                  </td>
+                  <td><span class="badge-critical">CRITICAL</span></td>
+                  <td>
+                    <span class="flex items-center text-sm font-medium">
+                      <span class="sdot s-queued"></span>Queued
+                    </span>
+                  </td>
+                  <td class="hide-md">
+                    <span class="unassigned-pill"><i class="ki-filled ki-warning text-xs"></i>Unassigned</span>
+                  </td>
+                  <td class="hide-md"><span class="text-sm text-overdue">Today</span></td>
+                  <td class="hide-xs">
+                    <div class="flex items-center gap-2">
+                      <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+                        <div style="height:100%;width:0%;background:#6366f1;border-radius:99px;"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-mono">0%</span>
+                    </div>
+                  </td>
+                  <td class="text-end">
+                    <div class="flex items-center justify-end gap-2">
+                      <button class="kt-btn kt-btn-xs kt-btn-primary" onclick="openAssignModal('#SR-2045', '')">Assign</button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Row 7 — Pending Review -->
+                <tr data-status="Pending Review" data-priority="Medium" data-assignee="Priya Nair">
+                  <td><input type="checkbox" class="row-check"/></td>
+                  <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html">#SR-2046</a></td>
+                  <td>
+                    <div class="text-sm font-medium text-mono">Bayshore Construction</div>
+                    <div class="text-xs text-secondary-foreground">17 Anchor Way</div>
+                  </td>
+                  <td><span class="badge-medium">MEDIUM</span></td>
+                  <td>
+                    <span class="flex items-center text-sm font-medium">
+                      <span class="sdot s-review"></span>Pending Review
+                    </span>
+                  </td>
+                  <td class="hide-md">
+                    <div class="assignee-cell">
+                      <img src="../assets/media/avatars/300-6.png" alt=""/>
+                      <span class="text-sm font-medium text-mono">Priya Nair</span>
+                    </div>
+                  </td>
+                  <td class="hide-md"><span class="text-sm">Oct 29</span></td>
+                  <td class="hide-xs">
+                    <div class="flex items-center gap-2">
+                      <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+                        <div style="height:100%;width:95%;background:#22c55e;border-radius:99px;"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-mono">95%</span>
+                    </div>
+                  </td>
+                  <td class="text-end">
+                    <div class="flex items-center justify-end gap-2">
+                      <a class="kt-btn kt-btn-xs kt-btn-primary" href="job-details.html">Review</a>
+                      <button class="kt-btn kt-btn-xs kt-btn-outline" onclick="openAssignModal('#SR-2046', 'Priya Nair')">Reassign</button>
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+          <!-- No-results row (hidden by default) -->
+          <div id="no-results" class="hidden py-10 text-center text-sm text-secondary-foreground">
+            No jobs match the selected filters.
+          </div>
+
+          <!-- Pagination -->
+          <div class="flex items-center justify-between px-5 py-4 flex-wrap gap-3">
+            <span class="text-sm text-secondary-foreground">Showing 1–7 of 38 jobs</span>
+            <div class="vedi-pagination">
+              <button class="vedi-page-btn"><i class="ki-filled ki-arrow-left text-sm"></i></button>
+              <button class="vedi-page-btn active">1</button>
+              <button class="vedi-page-btn">2</button>
+              <button class="vedi-page-btn">3</button>
+              <span class="vedi-page-btn" style="border:none;cursor:default;">…</span>
+              <button class="vedi-page-btn">6</button>
+              <button class="vedi-page-btn"><i class="ki-filled ki-arrow-right text-sm"></i></button>
+            </div>
+          </div>
+        </div>
+        <!-- End Job Table Card -->
+
+        <!-- ---- TEAM WORKLOAD + QUICK STATS ---- -->
+        <div class="workload-grid">
+
+          <!-- Workload table -->
+          <div class="workload-card">
+            <div class="workload-header">
+              <h3>Team Workload</h3>
+              <span class="text-xs text-secondary-foreground">Auto-refreshes every 5 min</span>
+            </div>
+
+            <div class="emp-row">
+              <img class="emp-avatar" src="../assets/media/avatars/300-5.png" alt=""/>
+              <div class="emp-info">
+                <div class="emp-name">Emily Chen</div>
+                <div class="emp-sub">8 active jobs</div>
+              </div>
+              <div class="emp-bar-wrap">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="emp-pct">78%</span>
+                </div>
+                <div class="emp-bar-track"><div class="emp-bar-fill fill-yellow" style="width:78%"></div></div>
+              </div>
+              <button class="btn-assign-emp" onclick="openAssignToEmployee('Emily Chen')">Assign Job</button>
+            </div>
+
+            <div class="emp-row">
+              <img class="emp-avatar" src="../assets/media/avatars/300-3.png" alt=""/>
+              <div class="emp-info">
+                <div class="emp-name">Marcus Webb</div>
+                <div class="emp-sub">10 active jobs</div>
+              </div>
+              <div class="emp-bar-wrap">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="emp-pct">91%</span>
+                </div>
+                <div class="emp-bar-track"><div class="emp-bar-fill fill-red" style="width:91%"></div></div>
+              </div>
+              <button class="btn-assign-emp" onclick="openAssignToEmployee('Marcus Webb')">Assign Job</button>
+            </div>
+
+            <div class="emp-row">
+              <img class="emp-avatar" src="../assets/media/avatars/300-6.png" alt=""/>
+              <div class="emp-info">
+                <div class="emp-name">Priya Nair</div>
+                <div class="emp-sub">5 active jobs</div>
+              </div>
+              <div class="emp-bar-wrap">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="emp-pct">48%</span>
+                </div>
+                <div class="emp-bar-track"><div class="emp-bar-fill fill-green" style="width:48%"></div></div>
+              </div>
+              <button class="btn-assign-emp" onclick="openAssignToEmployee('Priya Nair')">Assign Job</button>
+            </div>
+
+            <div class="emp-row">
+              <img class="emp-avatar" src="../assets/media/avatars/300-4.png" alt=""/>
+              <div class="emp-info">
+                <div class="emp-name">Jordan Blake</div>
+                <div class="emp-sub">6 active jobs</div>
+              </div>
+              <div class="emp-bar-wrap">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="emp-pct">55%</span>
+                </div>
+                <div class="emp-bar-track"><div class="emp-bar-fill fill-green" style="width:55%"></div></div>
+              </div>
+              <button class="btn-assign-emp" onclick="openAssignToEmployee('Jordan Blake')">Assign Job</button>
+            </div>
+
+          </div>
+
+          <!-- Quick stats sidebar -->
+          <div class="qs-card">
+            <h4>Pool Summary</h4>
+            <div class="qs-row"><span class="qs-label">Due today</span><span class="qs-value text-red-500">4</span></div>
+            <div class="qs-divider"></div>
+            <div class="qs-row"><span class="qs-label">Overdue</span><span class="qs-value text-red-500">2</span></div>
+            <div class="qs-divider"></div>
+            <div class="qs-row"><span class="qs-label">Avg. completion</span><span class="qs-value">58%</span></div>
+            <div class="qs-divider"></div>
+            <div class="qs-row"><span class="qs-label">Highest load</span>
+              <div class="assignee-cell">
+                <img src="../assets/media/avatars/300-3.png" alt="" style="width:22px;height:22px;border-radius:50%;"/>
+                <span class="qs-value" style="font-size:0.8rem;">Marcus (91%)</span>
+              </div>
+            </div>
+            <div class="qs-divider"></div>
+            <div class="qs-row"><span class="qs-label">Round-Robin</span>
+              <span id="qs-rr-badge" class="kt-badge kt-badge-sm kt-badge-danger">Off</span>
+            </div>
+            <div class="qs-divider"></div>
+            <div class="qs-row"><span class="qs-label">Team members</span><span class="qs-value">4</span></div>
+          </div>
+
+        </div>
+        <!-- End Workload -->
+
+      </div>
+    </main>
+    <!-- End Main -->
+
+    <!-- Footer -->
+    <footer class="kt-footer">
+      <div class="kt-container-fixed">
+        <div class="flex flex-col md:flex-row justify-center md:justify-between items-center gap-3 py-5">
+          <div class="flex order-2 md:order-1 gap-2 font-normal text-sm">
+            <span class="text-secondary-foreground">2026©</span>
+            <span class="text-secondary-foreground">VediTech Systems</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+  <!-- End Wrapper -->
+</div>
+
+<!-- ============================================================
+     ASSIGN MODAL
+     ============================================================ -->
+<div class="pool-modal-overlay" id="assign-modal">
+  <div class="pool-modal">
+    <div class="pool-modal-header">
+      <h3>Assign Job <span id="modal-job-id" class="text-primary"></span></h3>
+      <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-dim" onclick="closeAssignModal()">
+        <i class="ki-filled ki-cross"></i>
+      </button>
+    </div>
+    <div class="pool-modal-body">
+      <p class="text-sm text-secondary-foreground" id="modal-subtitle">Select an employee to assign this job to.</p>
+
+      <div class="modal-emp-option" onclick="selectEmployee(this, 'Emily Chen')" data-name="Emily Chen">
+        <img src="../assets/media/avatars/300-5.png" alt=""/>
+        <div class="flex-1">
+          <div class="modal-emp-name">Emily Chen</div>
+          <div class="modal-emp-sub">8 jobs · 78% workload</div>
+        </div>
+        <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+          <div style="height:100%;width:78%;background:#f59e0b;border-radius:99px;"></div>
+        </div>
+      </div>
+
+      <div class="modal-emp-option" onclick="selectEmployee(this, 'Marcus Webb')" data-name="Marcus Webb">
+        <img src="../assets/media/avatars/300-3.png" alt=""/>
+        <div class="flex-1">
+          <div class="modal-emp-name">Marcus Webb</div>
+          <div class="modal-emp-sub">10 jobs · 91% workload <span style="color:#ef4444;font-weight:700;">⚠ High load</span></div>
+        </div>
+        <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+          <div style="height:100%;width:91%;background:#ef4444;border-radius:99px;"></div>
+        </div>
+      </div>
+
+      <div class="modal-emp-option" onclick="selectEmployee(this, 'Priya Nair')" data-name="Priya Nair">
+        <img src="../assets/media/avatars/300-6.png" alt=""/>
+        <div class="flex-1">
+          <div class="modal-emp-name">Priya Nair</div>
+          <div class="modal-emp-sub">5 jobs · 48% workload <span style="color:#22c55e;font-weight:700;">✓ Best fit</span></div>
+        </div>
+        <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+          <div style="height:100%;width:48%;background:#22c55e;border-radius:99px;"></div>
+        </div>
+      </div>
+
+      <div class="modal-emp-option" onclick="selectEmployee(this, 'Jordan Blake')" data-name="Jordan Blake">
+        <img src="../assets/media/avatars/300-4.png" alt=""/>
+        <div class="flex-1">
+          <div class="modal-emp-name">Jordan Blake</div>
+          <div class="modal-emp-sub">6 jobs · 55% workload</div>
+        </div>
+        <div style="height:5px;width:70px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+          <div style="height:100%;width:55%;background:#22c55e;border-radius:99px;"></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="pool-modal-footer">
+      <button class="kt-btn kt-btn-outline" onclick="closeAssignModal()">Cancel</button>
+      <button class="kt-btn kt-btn-primary" id="confirm-assign-btn" onclick="confirmAssign()" disabled>Confirm Assignment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="pool-toast" id="pool-toast">
+  <i class="ki-filled ki-check-circle"></i>
+  <span id="toast-msg">Assignment saved</span>
+</div>
+
+<!-- Scripts -->
+<script src="../assets/js/core.bundle.js"></script>
+<script src="../assets/vendors/ktui/ktui.min.js"></script>
+<script src="../assets/js/layouts/demo1.js"></script>
+
+<script>
+  /* ================================================================
+     ROUND-ROBIN TOGGLE
+  ================================================================ */
+  function toggleRR(cb) {
+    const on = cb.checked;
+    document.getElementById('rr-label').textContent = on ? 'On' : 'Off';
+    document.getElementById('rr-status-word').textContent = on ? 'enabled' : 'disabled';
+    document.getElementById('rr-status-text').innerHTML = on
+      ? 'Currently <strong id="rr-status-word">enabled</strong> — new jobs will be auto-assigned by workload.'
+      : 'Currently <strong id="rr-status-word">disabled</strong> — new jobs are queued for manual assignment.';
+    const rrBadge = document.getElementById('qs-rr-badge');
+    if (on) {
+      rrBadge.className = 'kt-badge kt-badge-sm kt-badge-success';
+      rrBadge.textContent = 'On';
+    } else {
+      rrBadge.className = 'kt-badge kt-badge-sm kt-badge-danger';
+      rrBadge.textContent = 'Off';
+    }
+    showToast(on ? '✓ Round-Robin enabled — jobs will auto-assign' : 'Round-Robin disabled', !on ? 'info' : 'ok');
+  }
+
+  /* ================================================================
+     TABLE FILTER
+  ================================================================ */
+  function filterTable() {
+    const q        = document.getElementById('table-search').value.toLowerCase();
+    const status   = document.getElementById('filter-status').value;
+    const priority = document.getElementById('filter-priority').value;
+    const assignee = document.getElementById('filter-assignee').value;
+    const rows     = document.querySelectorAll('#pool-tbody tr');
+    let visible    = 0;
+
+    rows.forEach(row => {
+      const text     = row.textContent.toLowerCase();
+      const rStatus  = row.dataset.status   || '';
+      const rPrio    = row.dataset.priority  || '';
+      const rAssign  = row.dataset.assignee  || '';
+
+      const matchQ  = !q        || text.includes(q);
+      const matchS  = !status   || rStatus   === status;
+      const matchP  = !priority || rPrio     === priority;
+      const matchA  = !assignee || rAssign   === assignee;
+
+      const show = matchQ && matchS && matchP && matchA;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    document.getElementById('no-results').classList.toggle('hidden', visible > 0);
+  }
+
+  function resetFilters() {
+    document.getElementById('table-search').value   = '';
+    document.getElementById('filter-status').value  = '';
+    document.getElementById('filter-priority').value = '';
+    document.getElementById('filter-assignee').value = '';
+    filterTable();
+  }
+
+  /* ================================================================
+     SELECT ALL CHECKBOX
+  ================================================================ */
+  function toggleAll(master) {
+    document.querySelectorAll('.row-check').forEach(cb => cb.checked = master.checked);
+  }
+
+  /* ================================================================
+     ASSIGN MODAL
+  ================================================================ */
+  let currentJobId     = '';
+  let selectedEmployee = '';
+
+  function openAssignModal(jobId, currentAssignee) {
+    currentJobId = jobId;
+    selectedEmployee = '';
+    document.getElementById('modal-job-id').textContent = jobId;
+    document.getElementById('modal-subtitle').textContent = currentAssignee
+      ? `Currently assigned to ${currentAssignee}. Select a new employee to reassign.`
+      : 'Select an employee to assign this job to.';
+
+    // Clear previous selection
+    document.querySelectorAll('.modal-emp-option').forEach(el => el.classList.remove('selected'));
+    // Pre-select current assignee if any
+    if (currentAssignee) {
+      const match = document.querySelector(`.modal-emp-option[data-name="${currentAssignee}"]`);
+      if (match) { match.classList.add('selected'); selectedEmployee = currentAssignee; }
+    }
+    document.getElementById('confirm-assign-btn').disabled = !selectedEmployee;
+    document.getElementById('assign-modal').classList.add('open');
+  }
+
+  function openAssignToEmployee(empName) {
+    // Opens modal pre-filtered to a specific employee (from workload row)
+    openAssignModal('(select a job)', '');
+    const match = document.querySelector(`.modal-emp-option[data-name="${empName}"]`);
+    if (match) { selectEmployee(match, empName); }
+  }
+
+  function openBulkAssignModal() {
+    const checked = document.querySelectorAll('.row-check:checked');
+    if (checked.length === 0) { showToast('Select at least one job to bulk-assign', 'error'); return; }
+    openAssignModal(`(${checked.length} selected jobs)`, '');
+  }
+
+  function closeAssignModal() {
+    document.getElementById('assign-modal').classList.remove('open');
+  }
+
+  function selectEmployee(el, name) {
+    document.querySelectorAll('.modal-emp-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedEmployee = name;
+    document.getElementById('confirm-assign-btn').disabled = false;
+  }
+
+  function confirmAssign() {
+    closeAssignModal();
+    showToast(`✓ ${currentJobId} assigned to ${selectedEmployee}`);
+  }
+
+  // Close modal on overlay click
+  document.getElementById('assign-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeAssignModal();
+  });
+
+  /* ================================================================
+     TOAST
+  ================================================================ */
+  let toastTimer;
+  function showToast(msg, type) {
+    const t = document.getElementById('pool-toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.className = 'pool-toast show' + (type === 'error' ? ' error' : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.className = 'pool-toast'; }, 3500);
+  }
+</script>
+
+</body>
+</html>
