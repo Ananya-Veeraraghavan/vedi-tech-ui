@@ -1,0 +1,945 @@
+<!--
+Product: Metronic (Tailwind) — adapted for VediTech Survey Jobs
+Page: Team Lead Dashboard
+Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
+       multi-tab notifications drawer since they were generic template filler
+       unrelated to VediTech. Kept the same kt-* component classes and asset
+       paths so it still matches the original theme. See emp-job-details.html for
+       the dedicated per-job chat thread.
+-->
+<!DOCTYPE html>
+<html class="h-full" data-kt-theme="true" data-kt-theme-mode="light" dir="ltr" lang="en">
+<head>
+  <base href="./">
+  <title>VediTech - Dashboard</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="../assets/media/app/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="../assets/vendors/apexcharts/apexcharts.css" rel="stylesheet"/>
+  <link href="../assets/vendors/keenicons/styles.bundle.css" rel="stylesheet"/>
+  <link href="../assets/css/styles.css" rel="stylesheet"/>
+
+  <style>
+    .vt-global-search {
+      width: 650px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .vt-global-search i {
+      position: absolute;
+      left: 16px;
+      color: #99A1B7;
+      font-size: 18px;
+      z-index: 2;
+    }
+    .vt-global-search .kt-input {
+      width: 100%;
+      height: 100%;
+      padding-left: 48px;
+      border-radius: 10px;
+    }
+
+    /* ---- SIDEBAR COLLAPSE ---- */
+    .kt-sidebar {
+      transition: width 0.2s ease;
+    }
+    .kt-wrapper {
+      padding-inline-start: 0;
+      transition: padding-inline-start 0.2s ease;
+    }
+    .kt-header {
+      inset-inline-start: 0;
+      transition: inset-inline-start 0.2s ease;
+    }
+    .kt-sidebar .small-logo {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .kt-sidebar {
+        width: 280px;
+      }
+      .kt-wrapper {
+        padding-inline-start: 280px;
+      }
+      .kt-header {
+        inset-inline-start: 280px;
+      }
+
+      body.kt-sidebar-collapse .kt-sidebar {
+        width: 72px;
+      }
+      body.kt-sidebar-collapse .kt-wrapper {
+        padding-inline-start: 72px;
+      }
+      body.kt-sidebar-collapse .kt-header {
+        inset-inline-start: 72px;
+      }
+    }
+
+    body.kt-sidebar-collapse .kt-sidebar .default-logo {
+      display: none;
+    }
+    body.kt-sidebar-collapse .kt-sidebar .small-logo {
+      display: flex;
+    }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-title {
+      display: none;
+    }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-icon {
+      width: auto;
+    }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-link {
+      justify-content: center;
+    }
+
+    /* ---- STAT GRID ---- */
+    .vedi-stat-grid {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(2, 1fr);
+      transition: grid-template-columns 0.2s ease;
+    }
+    @media (min-width: 480px) {
+      .vedi-stat-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (min-width: 768px) {
+      .vedi-stat-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+    .vedi-stat-grid .kt-card {
+      padding: 0.625rem 0.75rem;
+    }
+    .vedi-stat-grid .kt-card span.text-xl {
+      font-size: 1.125rem;
+    }
+
+    /* Sidebar collapse frees up width, so the stat grid can fit more columns sooner */
+    body.kt-sidebar-collapse .vedi-stat-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    @media (max-width: 767px) {
+      body.kt-sidebar-collapse .vedi-stat-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 479px) {
+      body.kt-sidebar-collapse .vedi-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body class="antialiased flex h-full text-base text-foreground bg-background demo1 kt-sidebar-fixed kt-header-fixed">
+  <!-- Theme Mode -->
+  <script>
+    const defaultThemeMode = 'light';
+    let themeMode;
+    if (document.documentElement) {
+      if (localStorage.getItem('kt-theme')) {
+        themeMode = localStorage.getItem('kt-theme');
+      } else if (document.documentElement.hasAttribute('data-kt-theme-mode')) {
+        themeMode = document.documentElement.getAttribute('data-kt-theme-mode');
+      } else {
+        themeMode = defaultThemeMode;
+      }
+      if (themeMode === 'system') {
+        themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.classList.add(themeMode);
+    }
+  </script>
+
+  <div class="flex grow">
+    <!-- Sidebar -->
+    <div class="kt-sidebar bg-background border-e border-e-border fixed top-0 bottom-0 z-20 hidden lg:flex flex-col items-stretch shrink-0" id="sidebar">
+      <div class="kt-sidebar-header hidden lg:flex items-center relative px-3 lg:px-6 shrink-0 h-[70px]" id="sidebar_header">
+        <a class="flex items-center gap-2.5 min-w-0" href="dashboard.html">
+          <span class="default-logo flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+            <i class="ki-filled ki-abstract-26 text-white text-base"></i>
+          </span>
+          <span class="default-logo flex flex-col leading-none min-w-0">
+            <span class="text-sm font-bold text-mono truncate">VediTech</span>
+            <span class="text-[10px] tracking-[1.5px] text-muted-foreground uppercase truncate">Survey Jobs</span>
+          </span>
+          <span class="small-logo flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+            <i class="ki-filled ki-abstract-26 text-white text-base"></i>
+          </span>
+        </a>
+        <div data-kt-toggle="body" data-kt-toggle-class="kt-sidebar-collapse" id="sidebar_toggle">
+          <div class="dark:hidden light">
+            <button class="kt-btn kt-btn-outline kt-btn-icon size-[30px] rounded-lg absolute start-full top-2/4 z-40 -translate-x-2/4 -translate-y-2/4 rtl:translate-x-2/4">
+              <i class="ki-filled ki-black-left-line kt-toggle-active:rotate-180 transition-all duration-300 rtl:translate rtl:rotate-180 rtl:kt-toggle-active:rotate-0"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="kt-sidebar-content flex grow shrink-0 py-5 pe-2" id="sidebar_content">
+        <div class="kt-menu flex flex-col grow gap-1 ps-2 lg:ps-5 pe-1 lg:pe-3" data-kt-menu="true" id="sidebar_menu">
+          <div class="kt-menu-item active">
+    <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg"
+       href="dashboard.html">
+        <span class="kt-menu-icon items-start text-muted-foreground w-[20px] kt-menu-item-active:text-primary">
+            <i class="ki-filled ki-element-11 text-lg"></i>
+        </span>
+        <span class="kt-menu-title text-sm font-medium text-foreground kt-menu-item-active:text-primary kt-menu-item-active:font-semibold">
+            Dashboard
+        </span>
+    </a>
+</div>
+
+<div class="kt-menu-item">
+    <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] hover:bg-accent/60 hover:rounded-lg"
+       href="../jobs/emp-myjobs.html">
+        <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+            <i class="ki-filled ki-briefcase text-lg"></i>
+        </span>
+        <span class="kt-menu-title text-sm font-medium text-foreground">
+            My Jobs
+        </span>
+    </a>
+</div>
+        </div>
+      </div>
+      <div class="shrink-0 px-5 py-4 border-t border-border/20">
+        <a class="flex items-center gap-[10px] text-sm font-medium text-muted-foreground hover:text-primary" href="sign-in.html">
+          <i class="ki-filled ki-exit-up text-lg"></i>
+          <span class="default-logo">Logout</span>
+        </a>
+      </div>
+    </div>
+    <!-- End of Sidebar -->
+
+    <div class="kt-wrapper flex grow flex-col">
+      <!-- Header -->
+      <header class="kt-header fixed top-0 z-10 end-0 flex items-stretch shrink-0 bg-background border-b border-border" id="header">
+  <div class="kt-container-fixed flex justify-between items-stretch h-[70px]">
+    
+    <!-- Mobile Logo + Hamburger -->
+    <div class="flex items-center gap-2.5 lg:hidden">
+      <button class="kt-btn kt-btn-icon kt-btn-ghost" data-kt-drawer-toggle="#sidebar">
+        <i class="ki-filled ki-menu"></i>
+      </button>
+      <span class="text-sm font-bold text-mono">VediTech</span>
+    </div>
+
+    <!-- Topbar: Search + Profile only -->
+    <div class="flex items-center justify-between grow gap-4">
+      <div class="flex items-center">
+        <div class="vt-global-search">
+          <i class="ki-filled ki-magnifier"></i>
+          <input
+            type="text"
+            class="kt-input"
+            placeholder="Global Search"
+          />
+        </div>
+      </div>
+
+      <!-- User -->
+      <div class="shrink-0 flex items-center gap-2.5 ms-auto" data-kt-dropdown="true" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+        <div class="hidden sm:flex flex-col items-end leading-none">
+          <span class="text-sm font-semibold text-mono">Alex Mitchell</span>
+          <span class="text-xs text-secondary-foreground">Employee</span>
+        </div>
+        <div class="cursor-pointer shrink-0" data-kt-dropdown-toggle="true">
+          <img alt="" class="size-9 rounded-full border-2 border-green-500 shrink-0" src="../assets/media/avatars/300-2.png"/>
+        </div>
+        <div class="kt-dropdown-menu w-[230px]" data-kt-dropdown-menu="true">
+          <div class="flex items-center gap-2 px-2.5 py-2">
+            <img alt="" class="size-9 shrink-0 rounded-full border-2 border-green-500" src="../assets/media/avatars/300-2.png"/>
+            <div class="flex flex-col gap-0.5">
+              <span class="text-sm text-foreground font-semibold leading-none">Alex Mitchell</span>
+              <span class="text-xs text-secondary-foreground leading-none">alex@veditech.com</span>
+            </div>
+          </div>
+          <ul class="kt-dropdown-menu-sub">
+            <li><div class="kt-dropdown-menu-separator"></div></li>
+            <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-profile-circle"></i> My Profile</a></li>
+            <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-setting-2"></i> Account Settings</a></li>
+            <li><div class="kt-dropdown-menu-separator"></div></li>
+          </ul>
+          <div class="px-2.5 pt-1.5 pb-2.5 flex flex-col gap-3.5">
+            <div class="flex items-center gap-2 justify-between">
+              <span class="flex items-center gap-2">
+                <i class="ki-filled ki-moon text-base text-muted-foreground"></i>
+                <span class="font-medium text-2sm">Dark Mode</span>
+              </span>
+              <input class="kt-switch" data-kt-theme-switch-state="dark" data-kt-theme-switch-toggle="true" type="checkbox" value="1"/>
+            </div>
+            <a class="kt-btn kt-btn-outline justify-center w-full" href="sign-in.html">Log out</a>
+          </div>
+        </div>
+      </div>
+      <!-- End of User -->
+    </div>
+  </div>
+</header>
+<!-- End of Header -->
+      <!-- End of Header -->
+
+      <main class="grow pt-[90px] pb-10" id="content" role="content">
+        <div class="kt-container-fixed">
+          <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+            <div class="flex flex-col justify-center gap-2">
+              <h1 class="text-xl font-medium leading-none text-mono">Employee Dashboard</h1>
+              <div class="flex items-center gap-2 text-sm font-normal text-secondary-foreground">
+                Welcome back, Alex. Here is your operational overview for today.
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="relative" id="date-picker-wrapper">
+                <button
+                  id="date-picker-btn"
+                  class="kt-btn kt-btn-sm kt-btn-outline flex items-center gap-2"
+                  onclick="document.getElementById('date-picker-popover').classList.toggle('hidden')"
+                >
+                  <i class="ki-filled ki-calendar text-base"></i>
+                  <span id="date-picker-label">This Week</span>
+                </button>
+                <div id="date-picker-popover" class="hidden absolute end-0 top-full mt-1 z-50 bg-background border border-border rounded-xl shadow-lg p-4 w-[280px]">
+                  <div class="flex flex-col gap-3">
+                    <div class="flex gap-2">
+                      <div class="flex flex-col gap-1 flex-1">
+                        <label class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">From</label>
+                        <input type="date" id="date-from" class="kt-input kt-input-sm w-full" />
+                      </div>
+                      <div class="flex flex-col gap-1 flex-1">
+                        <label class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">To</label>
+                        <input type="date" id="date-to" class="kt-input kt-input-sm w-full" />
+                      </div>
+                    </div>
+                    <div class="flex gap-2 flex-wrap">
+                      <button class="kt-btn kt-btn-xs kt-btn-outline date-preset" data-preset="today">Today</button>
+                      <button class="kt-btn kt-btn-xs kt-btn-outline date-preset" data-preset="week">This Week</button>
+                      <button class="kt-btn kt-btn-xs kt-btn-outline date-preset" data-preset="month">This Month</button>
+                    </div>
+                    <button class="kt-btn kt-btn-sm kt-btn-primary w-full" onclick="applyDateRange()">Apply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="kt-container-fixed">
+          <div class="grid gap-5 lg:gap-7.5">
+
+            <!-- Employee Overview -->
+<div class="vedi-stat-grid">
+
+  <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+    <div class="flex flex-col gap-0.5">
+      <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">
+        Assigned Jobs
+      </span>
+      <span class="text-xl font-semibold text-mono">24</span>
+    </div>
+    <span class="flex items-center justify-center size-7 rounded-lg bg-accent shrink-0">
+      <i class="ki-filled ki-briefcase text-primary text-sm"></i>
+    </span>
+  </div>
+
+  <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+    <div class="flex flex-col gap-0.5">
+      <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">
+        In Progress
+      </span>
+      <span class="text-xl font-semibold text-mono">12</span>
+    </div>
+    <span class="flex items-center justify-center size-7 rounded-lg bg-primary/10 shrink-0">
+      <i class="ki-filled ki-time text-primary text-sm"></i>
+    </span>
+  </div>
+
+  <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+    <div class="flex flex-col gap-0.5">
+      <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">
+        Pending
+      </span>
+      <span class="text-xl font-semibold text-mono">05</span>
+    </div>
+    <span class="flex items-center justify-center size-7 rounded-lg bg-yellow-50 shrink-0">
+      <i class="ki-filled ki-information text-yellow-500 text-sm"></i>
+    </span>
+  </div>
+
+  <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+    <div class="flex flex-col gap-0.5">
+      <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">
+        Completed
+      </span>
+      <span class="text-xl font-semibold text-mono">118</span>
+    </div>
+    <span class="flex items-center justify-center size-7 rounded-lg bg-green-50 shrink-0">
+      <i class="ki-filled ki-check-circle text-green-500 text-sm"></i>
+    </span>
+  </div>
+
+  <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+    <div class="flex flex-col gap-0.5">
+      <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">
+        Under Review
+      </span>
+      <span class="text-xl font-semibold text-mono">08</span>
+    </div>
+    <span class="flex items-center justify-center size-7 rounded-lg bg-red-50 shrink-0">
+      <i class="ki-filled ki-file-up text-red-500 text-sm"></i>
+    </span>
+  </div>
+
+</div>
+<!-- End Employee Overview -->
+         
+
+<!-- Productivity + Job Distribution -->
+<div class="grid lg:grid-cols-3 gap-5 lg:gap-7.5">
+
+  <!-- Weekly Productivity Trend -->
+  <div class="kt-card lg:col-span-2">
+    <div class="kt-card-header">
+      <h3 class="kt-card-title">Weekly Productivity Trend</h3>
+      <a href="#" class="text-primary text-sm">View Report →</a>
+    </div>
+
+    <div class="kt-card-content">
+      <div style="height:300px;">
+        <canvas id="weeklyTrendChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+<!-- Job Distribution -->
+<div class="kt-card">
+    <div class="kt-card-header">
+        <h3 class="kt-card-title">Job Distribution</h3>
+    </div>
+
+    <div class="kt-card-content flex flex-col items-center">
+
+        <div style="
+            width:180px;
+            height:180px;
+            position:relative;
+            margin:auto;
+        ">
+            <canvas id="jobDistributionChart"></canvas>
+
+            <div style="
+                position:absolute;
+                top:50%;
+                left:50%;
+                transform:translate(-50%, -50%);
+                text-align:center;
+                pointer-events:none;
+                z-index:10;
+                width:100px;
+            ">
+                <div class="text-2xl font-semibold text-mono">
+                    159
+                </div>
+
+                <div class="text-xs text-secondary-foreground mt-1">
+                    Total Jobs
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4 mt-4 text-sm">
+
+            <div class="flex items-center gap-2">
+                <span class="size-2 rounded-full bg-primary"></span>
+                <span class="text-secondary-foreground">
+                    Done (70%)
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <span class="size-2 rounded-full bg-secondary"></span>
+                <span class="text-secondary-foreground">
+                    In Progress (15%)
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <span class="size-2 rounded-full bg-destructive"></span>
+                <span class="text-secondary-foreground">
+                    Blocked (15%)
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</div>
+<!-- End Productivity + Job Distribution -->
+
+
+<!-- Recent Jobs -->
+<div class="kt-card">
+  <div class="kt-card-header flex-wrap gap-3">
+    <div class="flex flex-col gap-1">
+      <h3 class="kt-card-title">Recent Jobs</h3>
+      <span class="text-xs text-secondary-foreground">
+        Jobs assigned to you with current status and priority.
+      </span>
+    </div>
+
+  </div>
+
+  <div class="kt-card-table">
+    <div class="kt-scrollable-x-auto">
+
+      <table class="kt-table kt-table-border">
+
+        <thead>
+<tr>
+    <th>JOB ID</th>
+    <th>CLIENT NAME</th>
+    <th>RECEIVED</th>
+    <th>DUE DATE</th>
+    <th>PRIORITY</th>
+    <th>STATUS</th>
+    <th>ACTION</th>
+</tr>
+</thead>
+
+        <tbody>
+
+          <tr>
+            <td>
+              <a class="text-sm font-semibold text-primary hover:underline"
+                 href="../jobs/emp-job-details.html?job=VT-92840">
+                #VT-92840
+              </a>
+            </td>
+
+            <td>
+              <span class="text-sm font-medium text-mono">
+                Global Dynamics Corp
+              </span>
+            </td>
+
+            <td>
+              <span class="text-sm text-secondary-foreground">
+                Oct 12, 2023
+              </span>
+            </td>
+
+            <td>
+              <span class="text-sm text-secondary-foreground">
+                Oct 24, 2023
+              </span>
+            </td>
+
+            <td>
+              <span class="kt-badge kt-badge-sm kt-badge-destructive kt-badge-outline">
+                High
+              </span>
+            </td>
+
+            <td>
+              <span class="kt-badge kt-badge-sm kt-badge-primary kt-badge-outline">
+                In Progress
+              </span>
+            </td>
+
+            <td class="text-center">
+              <div class="relative inline-block" data-kt-dropdown="true" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+                <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" data-kt-dropdown-toggle="true">
+                  <i class="ki-filled ki-dots-vertical"></i>
+                </button>
+                <div class="kt-dropdown-menu w-[170px]" data-kt-dropdown-menu="true">
+                  <ul class="kt-dropdown-menu-sub">
+                    <li>
+                      <a class="kt-dropdown-menu-link" href="../jobs/emp-job-details.html?job=VT-92840&tab=chat">
+                        <i class="ki-filled ki-message-text-2"></i> Open Chat
+                      </a>
+                    </li>
+                    <li>
+                      <a class="kt-dropdown-menu-link" href="mailto:contact@globaldynamics.com">
+                        <i class="ki-filled ki-phone"></i> Contact Client
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+                #VT-92841
+              </a>
+            </td>
+
+            <td>
+              <span class="text-sm font-medium text-mono">
+                Stellar Systems LLC
+              </span>
+            </td>
+
+            <td>
+              <span class="text-sm text-secondary-foreground">
+                Oct 14, 2023
+              </span>
+            </td>
+
+            <td>
+              <span class="text-sm text-secondary-foreground">
+                Nov 02, 2023
+              </span>
+            </td>
+
+            <td>
+              <span class="kt-badge kt-badge-sm kt-badge-warning kt-badge-outline">
+                Medium
+              </span>
+            </td>
+
+            <td>
+              <span class="kt-badge kt-badge-sm kt-badge-info kt-badge-outline">
+                To Do
+              </span>
+            </td>
+
+            <td class="text-center">
+              <div class="relative inline-block" data-kt-dropdown="true" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+                <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" data-kt-dropdown-toggle="true">
+                  <i class="ki-filled ki-dots-vertical"></i>
+                </button>
+                <div class="kt-dropdown-menu w-[170px]" data-kt-dropdown-menu="true">
+                  <ul class="kt-dropdown-menu-sub">
+                    <li>
+                      <a class="kt-dropdown-menu-link" href="../jobs/emp-job-details.html?job=VT-92841&tab=chat">
+                        <i class="ki-filled ki-message-text-2"></i> Open Chat
+                      </a>
+                    </li>
+                    <li>
+                      <a class="kt-dropdown-menu-link" href="mailto:contact@stellarsystems.com">
+                        <i class="ki-filled ki-phone"></i> Contact Client
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <a class="text-sm font-semibold text-primary hover:underline"
+                 href="../jobs/emp-job-details.html?job=VT-92845">
+                #VT-92845
+              </a>
+            </td>
+
+            <td>
+              <span class="text-sm font-medium text-mono">
+                Acme Heavy Industries
+              </span>
+            </td>
+
+            <td>
+              <span class="text-sm text-secondary-foreground">
+                Oct 15, 2023
+              </span>
+            </td>
+
+            <td>
+              <span class="text-sm text-secondary-foreground">
+                Oct 20, 2023
+              </span>
+            </td>
+
+            <td>
+              <span class="kt-badge kt-badge-sm kt-badge-destructive kt-badge-outline">
+                High
+              </span>
+            </td>
+
+            <td>
+              <span class="kt-badge kt-badge-sm kt-badge-destructive kt-badge-outline">
+                Blocked
+              </span>
+            </td>
+
+            <td class="text-center">
+              <div class="relative inline-block" data-kt-dropdown="true" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+                <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" data-kt-dropdown-toggle="true">
+                  <i class="ki-filled ki-dots-vertical"></i>
+                </button>
+                <div class="kt-dropdown-menu w-[170px]" data-kt-dropdown-menu="true">
+                  <ul class="kt-dropdown-menu-sub">
+                    <li>
+                      <a class="kt-dropdown-menu-link" href="../jobs/emp-job-details.html?job=VT-92845&tab=chat">
+                        <i class="ki-filled ki-message-text-2"></i> Open Chat
+                      </a>
+                    </li>
+                    <li>
+                      <a class="kt-dropdown-menu-link" href="mailto:contact@acmeheavy.com">
+                        <i class="ki-filled ki-phone"></i> Contact Client
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <a class="text-sm font-semibold text-primary hover:underline"
+                 href="../jobs/emp-job-details.html?job=VT-92850">
+                #VT-92850
+              </a>
+            </td>
+
+            <td>
+              <span class="text-sm font-medium text-mono">
+                Nexus Retail Group
+              </span>
+            </td>
+
+            <td>
+              <span class="text-sm text-secondary-foreground">
+                Oct 16, 2023
+              </span>
+            </td>
+
+            <td>
+              <span class="text-sm text-secondary-foreground">
+                Dec 12, 2023
+              </span>
+            </td>
+
+            <td>
+              <span class="kt-badge kt-badge-sm kt-badge-success kt-badge-outline">
+                Low
+              </span>
+            </td>
+
+            <td>
+              <span class="kt-badge kt-badge-sm kt-badge-info kt-badge-outline">
+                To Do
+              </span>
+            </td>
+
+            <td class="text-center">
+              <div class="relative inline-block" data-kt-dropdown="true" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+                <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-ghost" data-kt-dropdown-toggle="true">
+                  <i class="ki-filled ki-dots-vertical"></i>
+                </button>
+                <div class="kt-dropdown-menu w-[170px]" data-kt-dropdown-menu="true">
+                  <ul class="kt-dropdown-menu-sub">
+                    <li>
+                      <a class="kt-dropdown-menu-link" href="../jobs/emp-job-details.html?job=VT-92850&tab=chat">
+                        <i class="ki-filled ki-message-text-2"></i> Open Chat
+                      </a>
+                    </li>
+                    <li>
+                      <a class="kt-dropdown-menu-link" href="mailto:contact@nexusretail.com">
+                        <i class="ki-filled ki-phone"></i> Contact Client
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+
+      </table>
+
+    </div>
+  </div>
+
+  <div class="flex items-center justify-between p-4">
+    <span class="text-sm text-secondary-foreground">
+      Showing 4 of 24 assigned jobs
+    </span>
+
+    <div class="flex items-center gap-1">
+      <button class="kt-btn kt-btn-sm kt-btn-outline">‹</button>
+      <button class="kt-btn kt-btn-sm kt-btn-primary">1</button>
+      <button class="kt-btn kt-btn-sm kt-btn-outline">2</button>
+      <button class="kt-btn kt-btn-sm kt-btn-outline">3</button>
+      <button class="kt-btn kt-btn-sm kt-btn-outline">›</button>
+    </div>
+  </div>
+</div>
+<!-- End Recent Jobs -->
+
+
+         
+
+
+          </div>
+        </div>
+      </main>
+
+      <footer class="kt-footer">
+        <div class="kt-container-fixed">
+          <div class="flex flex-col md:flex-row justify-center md:justify-between items-center gap-3 py-5">
+            <div class="flex order-2 md:order-1 gap-2 font-normal text-sm">
+              <span class="text-secondary-foreground">2026©</span>
+              <span class="text-secondary-foreground">VediTech Systems</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Search modal (simplified to a single result list) -->
+  <div class="kt-modal" data-kt-modal="true" id="search_modal">
+    <div class="kt-modal-content max-w-[600px] top-[15%]">
+      <div class="kt-modal-header py-4 px-5">
+        <i class="ki-filled ki-magnifier text-muted-foreground text-xl"></i>
+        <input class="kt-input kt-input-ghost" name="query" placeholder="Search jobs, clients, or employees" type="text"/>
+        <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-dim shrink-0" data-kt-modal-dismiss="true"><i class="ki-filled ki-cross"></i></button>
+      </div>
+      <div class="kt-modal-body p-0 pb-5">
+        <div class="kt-menu kt-menu-default px-2 flex-col">
+          <div class="text-xs text-secondary-foreground font-medium pt-2.5 pb-1.5 ps-3">Jobs</div>
+          <div class="kt-menu-item"><a class="kt-menu-link" href="../jobs/emp-job-details.html?job=SR-2036"><span class="kt-menu-title">#SR-2036 — City Council, 789 Pine Rd</span></a></div>
+          <div class="kt-menu-item"><a class="kt-menu-link" href="../jobs/emp-job-details.html?job=SR-2042"><span class="kt-menu-title">#SR-2042 — Nexus Property Group, 4822 Magnolia Dr</span></a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/core.bundle.js"></script>
+  <script src="../assets/vendors/ktui/ktui.min.js"></script>
+  <script src="../assets/vendors/apexcharts/apexcharts.min.js"></script>
+  <script src="../assets/js/widgets/general.js"></script>
+  <script src="../assets/js/layouts/demo1.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const trendCtx = document.getElementById('weeklyTrendChart');
+
+  if (trendCtx) {
+    new Chart(trendCtx, {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        datasets: [{
+          label: 'Jobs Completed',
+          data: [18, 22, 25, 21, 32],
+          borderColor: '#1558d6',
+          backgroundColor: 'rgba(21,88,214,0.08)',
+          borderWidth: 1.5,
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  }
+
+  const donutCtx = document.getElementById('jobDistributionChart');
+
+  if (donutCtx) {
+    new Chart(donutCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Done', 'In Progress', 'Blocked'],
+        datasets: [{
+          data: [70, 15, 15],
+          backgroundColor: [
+            '#1558d6',
+            '#64748b',
+            '#dc2626'
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        cutout: '85%',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  }
+
+});
+</script>
+
+
+<script>
+// Date picker logic
+(function () {
+  const btn = document.getElementById('date-picker-btn');
+  const popover = document.getElementById('date-picker-popover');
+  const label = document.getElementById('date-picker-label');
+  const fromInput = document.getElementById('date-from');
+  const toInput = document.getElementById('date-to');
+
+  function formatDate(d) {
+    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  // Preset quick-select buttons
+  document.querySelectorAll('.date-preset').forEach(function (el) {
+    el.addEventListener('click', function () {
+      const today = new Date();
+      let from, to;
+      const preset = el.dataset.preset;
+      if (preset === 'today') {
+        from = to = today;
+      } else if (preset === 'week') {
+        const day = today.getDay() || 7;
+        from = new Date(today); from.setDate(today.getDate() - day + 1);
+        to = new Date(from); to.setDate(from.getDate() + 6);
+      } else if (preset === 'month') {
+        from = new Date(today.getFullYear(), today.getMonth(), 1);
+        to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      }
+      fromInput.value = from.toISOString().slice(0, 10);
+      toInput.value = to.toISOString().slice(0, 10);
+    });
+  });
+
+  window.applyDateRange = function () {
+    const from = fromInput.value;
+    const to = toInput.value;
+    if (from && to) {
+      const f = new Date(from), t = new Date(to);
+      label.textContent = formatDate(f) + ' – ' + formatDate(t);
+    } else if (from) {
+      label.textContent = formatDate(new Date(from));
+    }
+    popover.classList.add('hidden');
+  };
+
+  // Close popover on outside click
+  document.addEventListener('click', function (e) {
+    if (popover && !popover.classList.contains('hidden')) {
+      if (!document.getElementById('date-picker-wrapper').contains(e.target)) {
+        popover.classList.add('hidden');
+      }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
