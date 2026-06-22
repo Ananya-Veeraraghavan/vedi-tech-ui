@@ -59,6 +59,10 @@
       border: 1px solid var(--kt-border-color, #e5e7eb);
       border-radius: 14px;
       padding: 1.25rem 1.5rem;
+      position: sticky;
+      top: 70px; /* sits flush below the 70px fixed header */
+      z-index: 9;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     .vedi-job-badge {
       display: inline-flex; align-items: center; gap: 6px;
@@ -83,53 +87,64 @@
     .vedi-prog-track { height: 6px; width: 120px; background: #e5e7eb; border-radius: 99px; overflow: hidden; }
     .vedi-prog-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #6366f1, #4338ca); }
 
-    /* ---- WORKSPACE 3-COL GRID ---- */
+    /* ---- WORKSPACE 2-COL GRID ---- */
     .vedi-workspace {
       display: grid;
       grid-template-columns: 1fr;
       gap: 1.25rem;
+      align-items: start;
     }
     @media (min-width: 1024px) {
       .vedi-workspace {
-        grid-template-columns: 300px 1fr 280px;
+        grid-template-columns: 1fr 320px;
         gap: 1.5rem;
       }
     }
-    @media (min-width: 768px) and (max-width: 1023px) {
-      .vedi-workspace {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
 
-    /* ---- DOCUMENT PREVIEW PANEL (left col) ---- */
-    .vedi-preview-panel {
-      background: #f3f4f8;
+    /* ---- JOB DETAILS CARD ---- */
+    .vedi-info-card {
+      background: #fff;
       border: 1px solid #e5e7eb;
       border-radius: 12px;
-      min-height: 420px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      overflow: hidden;
+    }
+    .vedi-info-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .vedi-info-card-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.9rem; font-weight: 600; color: #1f2937;
+    }
+    .vedi-info-card-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1.25rem; }
+    .vedi-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 479px) { .vedi-field-grid { grid-template-columns: 1fr; } }
+    .vedi-field label {
+      display: block; font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #6b7280; margin-bottom: 6px;
+    }
+    .vedi-field input, .vedi-field select, .vedi-field textarea {
+      width: 100%;
+    }
+    .vedi-contact-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
       gap: 1rem;
-      padding: 2rem 1.5rem;
-      text-align: center;
+      flex-wrap: wrap;
     }
-    .vedi-preview-icon {
-      width: 72px; height: 72px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
-      display: flex; align-items: center; justify-content: center;
+    .vedi-contact-info { font-size: 0.875rem; color: #374151; }
+    .btn-edit-contact {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.8125rem; font-weight: 600; color: #4338ca;
+      background: none; border: none; cursor: pointer; padding: 0;
+      white-space: nowrap;
     }
-    .vedi-preview-panel h4 { font-size: 0.9rem; font-weight: 600; color: #1f2937; margin: 0; }
-    .vedi-preview-panel p  { font-size: 0.8rem; color: #6b7280; margin: 0; line-height: 1.5; }
+    .btn-edit-contact:hover { text-decoration: underline; }
 
-    /* Validation progress label inside preview */
-    .vedi-val-progress { width: 100%; margin-top: auto; }
-    .vedi-val-track { height: 8px; border-radius: 99px; background: #e5e7eb; overflow: hidden; margin-top: 6px; }
-    .vedi-val-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #6366f1, #4338ca); }
-
-    /* ---- REQUIRED DOCUMENTS PANEL (centre col) ---- */
+    /* ---- ASSOCIATED DOCUMENTS TABLE ---- */
     .vedi-doc-panel {
       background: #fff;
       border: 1px solid #e5e7eb;
@@ -148,27 +163,42 @@
     .vedi-doc-actions {
       display: flex; gap: 0.625rem; flex-wrap: wrap;
     }
-    .btn-clarify {
+    .btn-upload {
       display: inline-flex; align-items: center; gap: 6px;
       background: #4338ca; color: #fff;
       font-size: 0.8125rem; font-weight: 600;
       padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer;
-      transition: background 0.15s;
-      white-space: nowrap;
+      transition: background 0.15s; white-space: nowrap;
     }
-    .btn-clarify:hover { background: #3730a3; }
+    .btn-upload:hover { background: #3730a3; }
     .btn-notify {
       display: inline-flex; align-items: center; gap: 6px;
       background: #fff; color: #1f2937;
       font-size: 0.8125rem; font-weight: 600;
       padding: 7px 14px; border-radius: 8px;
       border: 1.5px solid #d1d5db; cursor: pointer;
-      transition: border-color 0.15s;
-      white-space: nowrap;
+      transition: border-color 0.15s; white-space: nowrap;
     }
     .btn-notify:hover { border-color: #6366f1; color: #4338ca; }
+    /* keep btn-clarify alias */
+    .btn-clarify { display: inline-flex; align-items: center; gap: 6px;
+      background: #4338ca; color: #fff; font-size: 0.8125rem; font-weight: 600;
+      padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer;
+      transition: background 0.15s; white-space: nowrap; }
+    .btn-clarify:hover { background: #3730a3; }
 
-    /* Document row list */
+    /* Documents table */
+    .vedi-docs-table { width: 100%; border-collapse: collapse; }
+    .vedi-docs-table th {
+      text-align: left; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.07em; text-transform: uppercase; color: #9ca3af;
+      padding: 0.625rem 1.25rem; border-bottom: 1px solid #f3f4f6;
+    }
+    .vedi-docs-table td { padding: 0.875rem 1.25rem; border-bottom: 1px solid #f9fafb; vertical-align: middle; }
+    .vedi-docs-table tr:last-child td { border-bottom: none; }
+    .vedi-docs-table tr:hover td { background: #fafafa; }
+
+    /* Document row list (kept for compat) */
     .vedi-doc-list { display: flex; flex-direction: column; }
     .vedi-doc-row {
       display: flex; align-items: center; justify-content: space-between; gap: 1rem;
@@ -192,6 +222,127 @@
     /* Missing row highlight */
     .vedi-doc-row.is-missing { border-left: 3px solid #ef4444; }
     .vedi-doc-row.is-missing .vedi-doc-name { color: #ef4444; }
+
+    /* ---- VALIDATION CHECKLIST CARD ---- */
+    .vedi-checklist-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .vedi-checklist-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .vedi-checklist-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.9rem; font-weight: 600; color: #1f2937;
+    }
+    .vedi-prog-bar { height: 6px; background: #e5e7eb; border-radius: 99px; overflow: hidden; margin: 0 1.25rem 0.75rem; }
+    .vedi-prog-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #6366f1, #4338ca); }
+    .vedi-checklist-progress-label {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.875rem 1.25rem 0.5rem;
+    }
+    .vedi-checklist-progress-label span { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6b7280; }
+    .vedi-checklist-progress-label .count { color: #1f2937; }
+    .vedi-checklist-body { padding: 0 1.25rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .vedi-check-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+    .vedi-check-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: #4338ca; cursor: pointer; flex-shrink: 0; }
+    .vedi-check-item label { font-size: 0.875rem; color: #374151; cursor: pointer; user-select: none; }
+    .vedi-check-item input:checked + label { color: #9ca3af; text-decoration: line-through; }
+
+    /* ---- COMMUNICATIONS CARD ---- */
+    .vedi-comms-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .vedi-comms-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .vedi-comms-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.9rem; font-weight: 600; color: #1f2937;
+    }
+    .vedi-comms-messages {
+      flex: 1; overflow-y: auto; padding: 1rem 1.25rem;
+      display: flex; flex-direction: column; gap: 0.875rem;
+      max-height: 340px;
+    }
+    .vedi-msg { display: flex; flex-direction: column; gap: 4px; }
+    .vedi-msg-meta { display: flex; align-items: center; gap: 8px; }
+    .vedi-msg-name { font-size: 0.825rem; font-weight: 600; color: #111827; }
+    .vedi-msg-badge {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em;
+      padding: 2px 7px; border-radius: 4px;
+    }
+    .badge-client { background: #dbeafe; color: #1d4ed8; }
+    .badge-operator { background: #ede9fe; color: #4338ca; }
+    .vedi-msg-time { font-size: 0.72rem; color: #9ca3af; margin-left: auto; }
+    .vedi-msg-bubble {
+      font-size: 0.875rem; color: #374151; line-height: 1.55;
+      background: #f9fafb; border: 1px solid #f3f4f6;
+      border-radius: 0 10px 10px 10px;
+      padding: 0.625rem 0.875rem;
+    }
+    .vedi-msg.is-self .vedi-msg-bubble {
+      background: #4338ca; color: #fff;
+      border-color: #4338ca;
+      border-radius: 10px 0 10px 10px;
+      margin-left: auto;
+    }
+    .vedi-msg.is-self .vedi-msg-meta { flex-direction: row-reverse; }
+    .vedi-msg.is-self .vedi-msg-time { margin-left: 0; margin-right: auto; }
+    .vedi-comms-input {
+      border-top: 1px solid #f3f4f6;
+      padding: 0.875rem 1.25rem;
+      display: flex; gap: 8px; align-items: center;
+    }
+    .vedi-comms-input input { flex: 1; }
+    .btn-send {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #4338ca; color: #fff;
+      width: 36px; height: 36px; border-radius: 8px; border: none; cursor: pointer;
+      flex-shrink: 0; transition: background 0.15s;
+    }
+    .btn-send:hover { background: #3730a3; }
+    .btn-attach {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #f3f4f6; color: #6b7280;
+      width: 36px; height: 36px; border-radius: 8px; border: none; cursor: pointer;
+      flex-shrink: 0; transition: background 0.15s;
+    }
+    .btn-attach:hover { background: #e5e7eb; }
+
+    /* ---- STATUS / TYPE BADGES for doc table ---- */
+    .doc-type-badge {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em;
+      padding: 3px 8px; border-radius: 5px; text-transform: uppercase;
+    }
+    .doc-type-plat    { background: #dbeafe; color: #1d4ed8; }
+    .doc-type-notes   { background: #d1fae5; color: #065f46; }
+    .doc-type-crd     { background: #fee2e2; color: #b91c1c; }
+    .doc-type-media   { background: #fef3c7; color: #92400e; }
+    .doc-status-received { display: flex; align-items: center; gap: 5px; color: #16a34a; font-size: 0.8125rem; font-weight: 600; }
+    .doc-status-missing  { display: flex; align-items: center; gap: 5px; color: #ef4444; font-size: 0.8125rem; font-weight: 600; }
+    .btn-request-this {
+      font-size: 0.8rem; font-weight: 700; color: #ef4444;
+      background: none; border: none; cursor: pointer; padding: 0;
+      white-space: nowrap;
+    }
+    .btn-request-this:hover { text-decoration: underline; }
+    .btn-download-doc {
+      background: none; border: none; cursor: pointer;
+      color: #6b7280; font-size: 1rem; padding: 4px 6px; border-radius: 6px;
+      transition: background 0.1s;
+    }
+    .btn-download-doc:hover { background: #f3f4f6; color: #4338ca; }
 
     /* ---- ACTIVITY TIMELINE (right col) ---- */
     .vedi-timeline-card {
@@ -369,54 +520,18 @@
           <div class="kt-menu flex flex-col grow gap-1" data-kt-menu="true" data-kt-menu-accordion-expand-all="false" id="sidebar_menu">
 
             <div class="kt-menu-item">
-              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="../dashboards/">
                 <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-element-11 text-lg"></i></span>
                 <span class="kt-menu-title text-sm font-medium text-foreground">Dashboard</span>
               </a>
             </div>
 
             <div class="kt-menu-item active">
-              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="employee-dashboard.html">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
                 <span class="kt-menu-icon items-start text-muted-foreground w-[20px] kt-menu-item-active:text-primary"><i class="ki-filled ki-briefcase text-lg"></i></span>
                 <span class="kt-menu-title text-sm font-medium text-foreground kt-menu-item-active:text-primary kt-menu-item-active:font-semibold">My Jobs</span>
               </a>
             </div>
-
-            <div class="kt-menu-item">
-              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
-                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-verify text-lg"></i></span>
-                <span class="kt-menu-title text-sm font-medium text-foreground">Validation Center</span>
-              </a>
-            </div>
-
-            <div class="kt-menu-item">
-              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
-                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-check-circle text-lg"></i></span>
-                <span class="kt-menu-title text-sm font-medium text-foreground">Processing Checklist</span>
-              </a>
-            </div>
-
-            <div class="kt-menu-item">
-              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
-                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-messages text-lg"></i></span>
-                <span class="kt-menu-title text-sm font-medium text-foreground">Client Communication</span>
-              </a>
-            </div>
-
-            <div class="kt-menu-item">
-              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
-                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-people text-lg"></i></span>
-                <span class="kt-menu-title text-sm font-medium text-foreground">Team Lead Reviews</span>
-              </a>
-            </div>
-
-            <div class="kt-menu-item">
-              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="#">
-                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-send text-lg"></i></span>
-                <span class="kt-menu-title text-sm font-medium text-foreground">Final Submission</span>
-              </a>
-            </div>
-
           </div>
         </div>
       </div>
@@ -518,240 +633,329 @@
           <nav class="vedi-breadcrumb">
             <a href="employee-dashboard.html">My Jobs</a>
             <span class="sep">›</span>
-            <span class="current">North Creek Residential Development</span>
+            <span class="current">124 Oak Haven Lane, North District</span>
           </nav>
 
           <!-- ---- JOB HERO HEADER ---- -->
           <div class="vedi-job-hero">
-            <div class="flex flex-wrap items-center gap-3 mb-3">
-              <span class="vedi-job-badge">
-                <i class="ki-filled ki-tag text-xs"></i>
-                #JOB-2024-8842
-              </span>
-              <span class="flex items-center gap-1.5 text-xs text-secondary-foreground">
-                <i class="ki-filled ki-time text-sm"></i>
-                Last saved: 12 minutes ago
-              </span>
-            </div>
-
-            <h1 class="text-2xl font-bold text-mono mb-1">North Creek Residential Development</h1>
-            <p class="text-sm text-secondary-foreground mb-4">Vanguard Properties Group</p>
-
-            <div class="vedi-meta-row">
-              <div class="vedi-meta-item">
-                <span class="vedi-meta-label">Status</span>
-                <span class="vedi-meta-value">
-                  <span class="status-dot dot-inprogress"></span>In Progress
-                </span>
-              </div>
-              <div class="vedi-meta-item">
-                <span class="vedi-meta-label">Priority</span>
-                <span class="badge-urgent">URGENT</span>
-              </div>
-              <div class="vedi-meta-item">
-                <span class="vedi-meta-label">Due Date</span>
-                <span class="vedi-meta-value">Oct 24, 2024</span>
-              </div>
-              <div class="vedi-meta-item">
-                <span class="vedi-meta-label">Completion</span>
-                <div class="vedi-completion">
-                  <div class="vedi-prog-track">
-                    <div class="vedi-prog-fill" style="width: 65%"></div>
-                  </div>
-                  <span class="vedi-meta-value">65%</span>
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div class="flex flex-col gap-2 min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-medium text-secondary-foreground">JOB DETAIL</span>
+                  <span class="text-secondary-foreground">·</span>
+                  <span class="text-xs font-semibold text-mono">#VT-8921</span>
+                  <span class="vedi-job-badge">
+                    <i class="ki-filled ki-check text-xs"></i>
+                    ASSIGNED
+                  </span>
                 </div>
+                <h1 class="text-2xl font-bold text-mono mb-0">124 Oak Haven Lane, North District</h1>
+                <p class="text-sm text-secondary-foreground flex items-center gap-1.5 mb-0">
+                  <i class="ki-filled ki-profile-circle text-sm"></i>
+                  Client: <strong class="text-foreground font-semibold">James Wilson</strong>
+                </p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 shrink-0">
+                <button class="btn-notify" onclick="">
+                  Revert to Client
+                </button>
+                <button class="btn-notify" onclick="">
+                  Save
+                </button>
+                <button class="btn-clarify" onclick="">
+                  Mark Complete
+                </button>
               </div>
             </div>
           </div>
           <!-- End Job Hero -->
 
-          <!-- ---- 3-COLUMN WORKSPACE ---- -->
+          <!-- ---- 2-COLUMN WORKSPACE ---- -->
           <div class="vedi-workspace">
 
-            <!-- COL 1: Document Preview -->
-            <div class="flex flex-col gap-4">
-              <div class="vedi-preview-panel">
-                <div class="vedi-preview-icon">
-                  <i class="ki-filled ki-eye-slash text-primary" style="font-size:2rem;"></i>
-                </div>
-                <h4>Select a document to preview content</h4>
-                <p>Large files may take a few seconds to render in the secure viewer.</p>
+            <!-- LEFT COLUMN: Job Details + Associated Documents -->
+            <div class="flex flex-col gap-5">
 
-                <div class="vedi-val-progress">
-                  <div class="flex items-center justify-between mb-1">
-                    <span style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6b7280;">Validation Progress</span>
-                    <span style="font-size:0.8rem;font-weight:700;color:#4338ca;">65% Complete</span>
+              <!-- Job Details Card -->
+              <div class="vedi-info-card">
+                <div class="vedi-info-card-header">
+                  <div class="vedi-info-card-title">
+                    <i class="ki-filled ki-information-2 text-primary text-lg"></i>
+                    Job Details
                   </div>
-                  <div class="vedi-val-track">
-                    <div class="vedi-val-fill" style="width:65%"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Col 1 -->
-
-            <!-- COL 2: Required Documents -->
-            <div class="vedi-doc-panel">
-              <div class="vedi-doc-panel-header">
-                <div class="vedi-doc-panel-title">
-                  <i class="ki-filled ki-document text-primary text-lg"></i>
-                  Required Documents
-                </div>
-                <div class="vedi-doc-actions">
-                  <button class="btn-clarify" onclick="openChat()">
-                    <i class="ki-filled ki-messages text-sm"></i>
-                    Request Clarification
-                  </button>
-                  <button class="btn-notify" onclick="notifyTeamLead()">
-                    <i class="ki-filled ki-notification-on text-sm"></i>
-                    Notify Team Lead
+                  <button class="kt-btn kt-btn-icon kt-btn-sm kt-btn-ghost" title="Collapse">
+                    <i class="ki-filled ki-down text-sm"></i>
                   </button>
                 </div>
+                <div class="vedi-info-card-body">
+
+                  <!-- Survey Type + County/Parish -->
+                  <div class="vedi-field-grid">
+                    <div class="vedi-field">
+                      <label>Survey Type</label>
+                      <select class="kt-select">
+                        <option selected>Boundary &amp; Topographic</option>
+                        <option>Boundary Survey</option>
+                        <option>Topographic Survey</option>
+                        <option>ALTA/NSPS Survey</option>
+                      </select>
+                    </div>
+                    <div class="vedi-field">
+                      <label>County / Parish</label>
+                      <input type="text" class="kt-input" value="Oakland County"/>
+                    </div>
+                  </div>
+
+                  <!-- Property Description -->
+                  <div class="vedi-field">
+                    <label>Property Description</label>
+                    <textarea class="kt-textarea" rows="3">Residential lot with dense vegetation on north-west quadrant. Existing 2-story structure and detached garage to be verified against 1994 plat jobs.</textarea>
+                  </div>
+
+                  <!-- Section/Township/Range + Parcel ID -->
+                  <div class="vedi-field-grid">
+                    <div class="vedi-field">
+                      <label>Section / Township / Range</label>
+                      <input type="text" class="kt-input" value="S24 / T2N / R11E"/>
+                    </div>
+                    <div class="vedi-field">
+                      <label>Parcel ID</label>
+                      <input type="text" class="kt-input" value="25-24-401-012"/>
+                    </div>
+                  </div>
+
+                  <!-- Client Contact Info -->
+                  <div class="vedi-field">
+                    <label>Client Contact Info</label>
+                    <div class="vedi-contact-row">
+                      <span class="vedi-contact-info">j.wilson@email.com &bull; (555) 123-4567</span>
+                      <button class="btn-edit-contact">
+                        <i class="ki-filled ki-pencil text-sm"></i>
+                        Edit Contact
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
               </div>
+              <!-- End Job Details Card -->
 
-              <div class="vedi-doc-list">
-
-                <!-- Text/Crd File — AVAILABLE -->
-                <div class="vedi-doc-row" onclick="selectDoc(this, 'Text/Crd File')">
-                  <div class="vedi-doc-name">
-                    <i class="ki-filled ki-document"></i>
-                    Text/Crd File
+              <!-- Associated Documents Card -->
+              <div class="vedi-doc-panel">
+                <div class="vedi-doc-panel-header">
+                  <div class="vedi-doc-panel-title">
+                    <i class="ki-filled ki-folder text-primary text-lg"></i>
+                    Associated Documents
                   </div>
-                  <span class="pill pill-available">AVAILABLE</span>
+                  <div class="vedi-doc-actions">
+                    <button class="btn-upload">
+                      <i class="ki-filled ki-cloud-add text-sm"></i>
+                      Upload New
+                    </button>
+                    <button class="kt-btn kt-btn-icon kt-btn-sm kt-btn-ghost" title="Collapse">
+                      <i class="ki-filled ki-down text-sm"></i>
+                    </button>
+                  </div>
                 </div>
 
-                <!-- Field Notes — MISSING -->
-                <div class="vedi-doc-row is-missing" onclick="selectDoc(this, 'Field Notes')">
-                  <div class="vedi-doc-name">
-                    <i class="ki-filled ki-information-2" style="color:#ef4444;"></i>
-                    Field Notes
-                  </div>
-                  <span class="pill pill-missing">MISSING</span>
+                <div style="overflow-x:auto;">
+                  <table class="vedi-docs-table">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Filename</th>
+                        <th>Size</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Plat — Received -->
+                      <tr>
+                        <td><span class="doc-type-badge doc-type-plat">Plat</span></td>
+                        <td style="font-size:0.875rem;color:#111827;font-weight:500;">Plat_Final_V2.pdf</td>
+                        <td style="font-size:0.8rem;color:#6b7280;white-space:nowrap;">4.2 MB</td>
+                        <td>
+                          <span class="doc-status-received">
+                            <i class="ki-filled ki-check-circle text-sm"></i>
+                            Received
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn-download-doc" title="Download">
+                            <i class="ki-filled ki-cloud-download"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <!-- Field Notes — Received -->
+                      <tr>
+                        <td><span class="doc-type-badge doc-type-notes">Notes</span></td>
+                        <td style="font-size:0.875rem;color:#111827;font-weight:500;">Field_Notes_Oct_23.txt</td>
+                        <td style="font-size:0.8rem;color:#6b7280;white-space:nowrap;">156 KB</td>
+                        <td>
+                          <span class="doc-status-received">
+                            <i class="ki-filled ki-check-circle text-sm"></i>
+                            Received
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn-download-doc" title="Download">
+                            <i class="ki-filled ki-cloud-download"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <!-- CRD File — Missing -->
+                      <tr>
+                        <td><span class="doc-type-badge doc-type-crd">CRD File</span></td>
+                        <td style="font-size:0.875rem;color:#ef4444;font-weight:500;font-style:italic;">Survey_Data_Raw.crd</td>
+                        <td style="font-size:0.8rem;color:#9ca3af;">—</td>
+                        <td>
+                          <span class="doc-status-missing">
+                            <i class="ki-filled ki-warning text-sm"></i>
+                            Missing
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn-request-this" onclick="notifyTeamLead()">Request This</button>
+                        </td>
+                      </tr>
+                      <!-- Media — Received -->
+                      <tr>
+                        <td><span class="doc-type-badge doc-type-media">Media</span></td>
+                        <td style="font-size:0.875rem;color:#111827;font-weight:500;">Property_Photos_SiteA.zip</td>
+                        <td style="font-size:0.8rem;color:#6b7280;white-space:nowrap;">12.8 MB</td>
+                        <td>
+                          <span class="doc-status-received">
+                            <i class="ki-filled ki-check-circle text-sm"></i>
+                            Received
+                          </span>
+                        </td>
+                        <td>
+                          <button class="btn-download-doc" title="Download">
+                            <i class="ki-filled ki-cloud-download"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-
-                <!-- Plat — PENDING REVIEW -->
-                <div class="vedi-doc-row" onclick="selectDoc(this, 'Plat')">
-                  <div class="vedi-doc-name">
-                    <i class="ki-filled ki-element-equal"></i>
-                    Plat
-                  </div>
-                  <span class="pill pill-pending">PENDING REVIEW</span>
-                </div>
-
-                <!-- Property Appraiser — AVAILABLE -->
-                <div class="vedi-doc-row" onclick="selectDoc(this, 'Property Appraiser')">
-                  <div class="vedi-doc-name">
-                    <i class="ki-filled ki-bank"></i>
-                    Property Appraiser
-                  </div>
-                  <span class="pill pill-available">AVAILABLE</span>
-                </div>
-
-                <!-- DXF File — AVAILABLE -->
-                <div class="vedi-doc-row" onclick="selectDoc(this, 'DXF File')">
-                  <div class="vedi-doc-name">
-                    <i class="ki-filled ki-design-1"></i>
-                    DXF File
-                  </div>
-                  <span class="pill pill-available">AVAILABLE</span>
-                </div>
-
-                <!-- Flood Info — AVAILABLE -->
-                <div class="vedi-doc-row" onclick="selectDoc(this, 'Flood Info')">
-                  <div class="vedi-doc-name">
-                    <i class="ki-filled ki-home-3"></i>
-                    Flood Info
-                  </div>
-                  <span class="pill pill-available">AVAILABLE</span>
-                </div>
-
-                <!-- Property Pics — AVAILABLE -->
-                <div class="vedi-doc-row" onclick="selectDoc(this, 'Property Pics')">
-                  <div class="vedi-doc-name">
-                    <i class="ki-filled ki-picture"></i>
-                    Property Pics
-                  </div>
-                  <span class="pill pill-available">AVAILABLE</span>
-                </div>
-
               </div>
+              <!-- End Associated Documents -->
+
             </div>
-            <!-- End Col 2 -->
+            <!-- End Left Column -->
 
-            <!-- COL 3: Activity Timeline + Need Clarification -->
-            <div class="col-timeline flex flex-col gap-4">
+            <!-- RIGHT COLUMN: Validation Checklist + Communications -->
+            <div class="flex flex-col gap-5">
 
-              <!-- Activity Timeline -->
-              <div class="vedi-timeline-card">
-                <div class="vedi-timeline-header">
-                  <i class="ki-filled ki-time text-primary text-lg"></i>
-                  Activity Timeline
+              <!-- Validation Checklist -->
+              <div class="vedi-checklist-card">
+                <div class="vedi-checklist-header">
+                  <div class="vedi-checklist-title">
+                    <i class="ki-filled ki-verify text-primary text-lg"></i>
+                    Validation Checklist
+                  </div>
+                  <button class="kt-btn kt-btn-icon kt-btn-sm kt-btn-ghost" title="Collapse">
+                    <i class="ki-filled ki-down text-sm"></i>
+                  </button>
                 </div>
-                <div class="vedi-timeline-body">
-
-                  <div class="vedi-tl-item">
-                    <div class="vedi-tl-icon tl-purple">
-                      <i class="ki-filled ki-abstract-25 text-sm"></i>
-                    </div>
-                    <div class="vedi-tl-content">
-                      <div class="vedi-tl-time">Today, 09:12 AM</div>
-                      <div class="vedi-tl-title">Validation Started</div>
-                      <div class="vedi-tl-desc">Automated data integrity check initiated by System.</div>
-                    </div>
-                  </div>
-
-                  <div class="vedi-tl-item">
-                    <div class="vedi-tl-icon tl-blue">
-                      <i class="ki-filled ki-file-up text-sm"></i>
-                    </div>
-                    <div class="vedi-tl-content">
-                      <div class="vedi-tl-time">Oct 21, 04:45 PM</div>
-                      <div class="vedi-tl-title">Documents Uploaded</div>
-                      <div class="vedi-tl-desc">Field team (Marker J.) uploaded 4 new files from mobile.</div>
-                    </div>
-                  </div>
-
-                  <div class="vedi-tl-item">
-                    <div class="vedi-tl-icon tl-green">
-                      <i class="ki-filled ki-user-tick text-sm"></i>
-                    </div>
-                    <div class="vedi-tl-content">
-                      <div class="vedi-tl-time">Oct 20, 11:20 AM</div>
-                      <div class="vedi-tl-title">Job Assigned</div>
-                      <div class="vedi-tl-desc">Assigned to Lead Processor Alex Riverton by Sarah Chen.</div>
-                    </div>
-                  </div>
-
-                  <div class="vedi-tl-item">
-                    <div class="vedi-tl-icon tl-gray">
-                      <i class="ki-filled ki-document text-sm"></i>
-                    </div>
-                    <div class="vedi-tl-content">
-                      <div class="vedi-tl-time">Oct 19, 09:00 AM</div>
-                      <div class="vedi-tl-title">Job Created</div>
-                      <div class="vedi-tl-desc">Project record initialized through client API portal.</div>
-                    </div>
-                  </div>
-
+                <div class="vedi-checklist-progress-label">
+                  <span>Completion Progress</span>
+                  <span class="count">4 / 9 Items</span>
                 </div>
-                <a class="vedi-history-link" href="#">
-                  View Full History Log
-                  <i class="ki-filled ki-arrow-right text-sm"></i>
-                </a>
+                <div class="vedi-prog-bar">
+                  <div class="vedi-prog-bar-fill" style="width: 44%"></div>
+                </div>
+                <div class="vedi-checklist-body">
+                  <div class="vedi-check-item">
+                    <input type="checkbox" id="chk1" checked>
+                    <label for="chk1">Raw .CRD file uploaded</label>
+                  </div>
+                  <div class="vedi-check-item">
+                    <input type="checkbox" id="chk2" checked>
+                    <label for="chk2">Field notes digitized &amp; attached</label>
+                  </div>
+                  <div class="vedi-check-item">
+                    <input type="checkbox" id="chk3" checked>
+                    <label for="chk3">Legal description cross-referenced</label>
+                  </div>
+                  <div class="vedi-check-item">
+                    <input type="checkbox" id="chk4" checked>
+                    <label for="chk4">Plat boundary line verification</label>
+                  </div>
+                  <div class="vedi-check-item">
+                    <input type="checkbox" id="chk5">
+                    <label for="chk5">Adjoining parcel easement check</label>
+                  </div>
+                  <div class="vedi-check-item">
+                    <input type="checkbox" id="chk6">
+                    <label for="chk6">Zoning setback validation</label>
+                  </div>
+                  <div class="vedi-check-item">
+                    <input type="checkbox" id="chk7">
+                    <label for="chk7">Monumentation confirmation</label>
+                  </div>
+                  <div class="vedi-check-item">
+                    <input type="checkbox" id="chk8">
+                    <label for="chk8">Peer review: Drafting dept</label>
+                  </div>
+                  <div class="vedi-check-item">
+                    <input type="checkbox" id="chk9">
+                    <label for="chk9">Final seal application</label>
+                  </div>
+                </div>
               </div>
+              <!-- End Validation Checklist -->
 
-              <!-- Need Clarification -->
-              <div class="vedi-clarify-card">
-                <h4>Need Clarification?</h4>
-                <p>Quickly message the field team or the client account manager regarding document discrepancies.</p>
-                <button class="btn-open-chat" onclick="openChat()">
-                  <i class="ki-filled ki-arrow-right" style="font-size:0.75rem;"></i>
-                  Open Chat
-                </button>
+              <!-- Communications -->
+              <div class="vedi-comms-card">
+                <div class="vedi-comms-header">
+                  <div class="vedi-comms-title">
+                    <i class="ki-filled ki-messages text-primary text-lg"></i>
+                    Communications
+                  </div>
+                </div>
+
+                <div class="vedi-comms-messages" id="comms_messages">
+                  <!-- Client message -->
+                  <div class="vedi-msg">
+                    <div class="vedi-msg-meta">
+                      <span class="vedi-msg-name">James Wilson</span>
+                      <span class="vedi-msg-badge badge-client">CLIENT</span>
+                      <span class="vedi-msg-time">2 days ago</span>
+                    </div>
+                    <div class="vedi-msg-bubble">
+                      Are we on track for the Wednesday deadline? The mortgage company is asking for the final plat.
+                    </div>
+                  </div>
+
+                  <!-- Operator reply -->
+                  <div class="vedi-msg is-self">
+                    <div class="vedi-msg-meta">
+                      <span class="vedi-msg-name">You</span>
+                      <span class="vedi-msg-badge badge-operator">OPERATOR</span>
+                      <span class="vedi-msg-time">Yesterday, 10:42 AM</span>
+                    </div>
+                    <div class="vedi-msg-bubble">
+                      Hi James, we are currently waiting for the raw field data files from the survey crew. As soon as those are uploaded, drafting should have it finished in 24 hours.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="vedi-comms-input">
+                  <input type="text" class="kt-input" id="comms_input" placeholder="Write a message..."/>
+                  <button class="btn-attach" title="Attach file">
+                    <i class="ki-filled ki-paper-clip text-sm"></i>
+                  </button>
+                  <button class="btn-send" onclick="sendCommsMessage()" title="Send">
+                    <i class="ki-filled ki-send text-sm"></i>
+                  </button>
+                </div>
               </div>
+              <!-- End Communications -->
 
             </div>
-            <!-- End Col 3 -->
+            <!-- End Right Column -->
 
           </div>
           <!-- End Workspace -->
@@ -929,12 +1133,31 @@
       if (e.key === 'Enter') sendMessage();
     });
 
-    /* ---- Notify Team Lead ---- */
-    function notifyTeamLead() {
+    /* ---- Inline Communications send ---- */
+    function sendCommsMessage() {
+      const input = document.getElementById('comms_input');
+      const text = input.value.trim();
+      if (!text) return;
+      const container = document.getElementById('comms_messages');
+      const msg = document.createElement('div');
+      msg.className = 'vedi-msg is-self';
+      msg.innerHTML = `
+        <div class="vedi-msg-meta">
+          <span class="vedi-msg-name">You</span>
+          <span class="vedi-msg-badge badge-operator">OPERATOR</span>
+          <span class="vedi-msg-time">Just now</span>
+        </div>
+        <div class="vedi-msg-bubble">${text}</div>`;
+      container.appendChild(msg);
+      input.value = '';
+      container.scrollTop = container.scrollHeight;
+    }
+    document.getElementById('comms_input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendCommsMessage();
+    });
       const toast = document.getElementById('notify_toast');
       toast.style.display = 'flex';
       setTimeout(() => { toast.style.display = 'none'; }, 3000);
-    }
   </script>
 </body>
 </html>
