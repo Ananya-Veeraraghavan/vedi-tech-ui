@@ -19,64 +19,89 @@ Version: v9.4.14
        ========================================= */
 
     /* ---- SIDEBAR ---- */
+    .vt-global-search {
+    width: 650px;
+    height: 42px;
+ 
+    display: flex;
+    align-items: center;
+ 
+    position: relative;
+}
+ 
+.vt-global-search i {
+    position: absolute;
+    left: 16px;
+ 
+    color: #99A1B7;
+    font-size: 18px;
+    z-index: 2;
+}
+ 
+.vt-global-search .kt-input {
+    width: 100%;
+    height: 100%;
+    padding-left: 48px;
+    border-radius: 10px;
+}
     .kt-sidebar {
-      width: 260px;
-      transition: width 0.25s ease, transform 0.25s ease;
+      transition: width 0.2s ease;
     }
-    /* Collapsed sidebar */
-    body.kt-sidebar-collapse .kt-sidebar {
-      width: 72px;
+    .kt-wrapper {
+      padding-inline-start: 0;
+      transition: padding-inline-start 0.2s ease;
     }
+    .kt-header {
+      inset-inline-start: 0;
+      transition: inset-inline-start 0.2s ease;
+    }
+    .kt-sidebar .small-logo {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .kt-sidebar {
+        width: 260px;
+      }
+      .kt-wrapper {
+        padding-inline-start: 260px;
+      }
+      .kt-header {
+        inset-inline-start: 260px;
+      }
+
+      body.kt-sidebar-collapse .kt-sidebar {
+        width: 72px;
+      }
+      body.kt-sidebar-collapse .kt-wrapper {
+        padding-inline-start: 72px;
+      }
+      body.kt-sidebar-collapse .kt-header {
+        inset-inline-start: 72px;
+      }
+    }
+
     body.kt-sidebar-collapse .kt-sidebar .default-logo {
-      display: none !important;
+      display: none;
     }
-    body.kt-sidebar-collapse .kt-sidebar .kt-menu-title,
-    body.kt-sidebar-collapse .kt-sidebar .kt-sidebar-logo span.default-logo {
+    body.kt-sidebar-collapse .kt-sidebar .small-logo {
+      display: flex;
+    }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-title {
       display: none;
     }
     body.kt-sidebar-collapse .kt-sidebar .kt-menu-icon {
       width: auto;
     }
-    body.kt-sidebar-collapse .kt-wrapper {
-      padding-left: 72px;
-    }
-
-    /* ---- WRAPPER OFFSET FOR FIXED SIDEBAR ---- */
-    @media (min-width: 1024px) {
-      .kt-wrapper {
-        padding-left: 260px;
-        transition: padding-left 0.25s ease;
-      }
-      body.kt-sidebar-collapse .kt-wrapper {
-        padding-left: 72px;
-      }
-    }
-    @media (max-width: 1023px) {
-      .kt-wrapper {
-        padding-left: 0;
-      }
-    }
-
-    /* ---- HEADER OFFSET ---- */
-    @media (min-width: 1024px) {
-      #header {
-        left: 260px;
-        transition: left 0.25s ease;
-      }
-      body.kt-sidebar-collapse #header {
-        left: 72px;
-      }
-    }
-    @media (max-width: 1023px) {
-      #header {
-        left: 0 !important;
-      }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-link {
+      justify-content: center;
     }
 
     /* ---- CONTENT TOP PADDING (accounts for fixed header ~64px) ---- */
    /* TEMP TEST */
         main#content {
-        padding-top: 0 !important;
+        margin-top: 24!important;
+        /* background-color: aqua; */
         }
 
     /* ---- CONTAINER FIXED ---- */
@@ -439,7 +464,7 @@ Version: v9.4.14
               </a>
             </div>
             <div class="kt-menu-item">
-              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="users.html">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="../users.html">
                 <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
                   <i class="ki-filled ki-people text-lg"></i>
                 </span>
@@ -447,7 +472,7 @@ Version: v9.4.14
               </a>
             </div>
             <div class="kt-menu-item">
-              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="config.html">
+              <a class="kt-menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px] pe-[10px] py-[8px] kt-menu-item-active:bg-accent/60 kt-menu-item-active:rounded-lg hover:bg-accent/60 hover:rounded-lg" href="../config.html">
                 <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
                   <i class="ki-filled ki-setting-2 text-lg"></i>
                 </span>
@@ -469,11 +494,7 @@ Version: v9.4.14
     <!-- Wrapper -->
     <div class="kt-wrapper flex grow flex-col">
       <!-- Header -->
-      <header class="kt-header fixed top-0 z-10 start-0 end-0 flex items-stretch shrink-0 bg-background"
-              data-kt-sticky="true"
-              data-kt-sticky-class="border-b border-border"
-              data-kt-sticky-name="header"
-              id="header">
+     <header class="kt-header fixed top-0 z-10 end-0 flex items-stretch shrink-0 bg-background border-b border-border">
         <div class="kt-container-fixed flex justify-between items-stretch lg:gap-4" id="headerContainer">
           <!-- Mobile Logo + Hamburger -->
           <div class="flex gap-2.5 lg:hidden items-center -ms-1">
@@ -488,27 +509,23 @@ Version: v9.4.14
               </button>
             </div>
           </div>
-          <!-- Desktop brand text -->
-          <div class="hidden lg:flex items-center">
-            <span class="text-sm font-semibold text-mono">Executive Dashboard</span>
-          </div>
 
           <!-- Topbar -->
-          <div class="flex items-center gap-1.5 sm:gap-2.5">
-            <!-- Search -->
-            <button class="group kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-modal-toggle="#search_modal">
-              <i class="ki-filled ki-magnifier text-lg group-hover:text-primary"></i>
-            </button>
-            <!-- Notifications -->
-            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-drawer-toggle="#notifications_drawer">
-              <i class="ki-filled ki-notification-status text-lg"></i>
-            </button>
-            <!-- Chat -->
-            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-drawer-toggle="#chat_drawer">
-              <i class="ki-filled ki-messages text-lg"></i>
-            </button>
+          <div class="flex items-cente justify-between grow gap-4">
+            <div class="flex items-center">
+              <div class="vt-global-search">
+                  <i class="ki-filled ki-magnifier"></i>
+
+                  <input
+                      type="text"
+                      class="kt-input"
+                      placeholder="Global Search"
+                  />
+              </div>
+          </div>
+            
             <!-- User -->
-            <div class="shrink-0 flex items-center gap-2" data-kt-dropdown="true" data-kt-dropdown-offset="10px, 10px" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+            <div class="shrink-0 flex items-center gap-2 ms-auto" data-kt-dropdown="true" data-kt-dropdown-offset="10px, 10px" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
               <div class="hidden sm:flex flex-col items-end leading-none">
                 <span class="text-sm font-semibold text-mono">Executive User</span>
                 <span class="text-xs text-secondary-foreground">Application Owner</span>
@@ -620,7 +637,6 @@ Version: v9.4.14
               </div>
             </div>
             <div class="vedi-actions">
-              <a class="kt-btn kt-btn-outline" href="#">Export Report</a>
               <a class="kt-btn kt-btn-primary" href="#">New Job</a>
             </div>
           </div>
@@ -1110,43 +1126,6 @@ Version: v9.4.14
   <script src="../assets/js/layouts/demo1.js"></script>
 
   <script>
-    // Sidebar collapse: update header and wrapper offsets
-    (function () {
-      const observer = new MutationObserver(function () {
-        const collapsed = document.body.classList.contains('kt-sidebar-collapse');
-        const header = document.getElementById('header');
-        const wrapper = document.querySelector('.kt-wrapper');
-        if (window.innerWidth >= 1024) {
-          if (collapsed) {
-            if (header) header.style.left = '72px';
-            if (wrapper) wrapper.style.paddingLeft = '72px';
-          } else {
-            if (header) header.style.left = '260px';
-            if (wrapper) wrapper.style.paddingLeft = '260px';
-          }
-        } else {
-          if (header) header.style.left = '0';
-          if (wrapper) wrapper.style.paddingLeft = '0';
-        }
-      });
-      observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-
-      // Initial setup
-      function applyOffsets() {
-        const header = document.getElementById('header');
-        const wrapper = document.querySelector('.kt-wrapper');
-        if (window.innerWidth >= 1024) {
-          if (header) header.style.left = '260px';
-          if (wrapper) wrapper.style.paddingLeft = '260px';
-        } else {
-          if (header) header.style.left = '0';
-          if (wrapper) wrapper.style.paddingLeft = '0';
-        }
-      }
-      applyOffsets();
-      window.addEventListener('resize', applyOffsets);
-    })();
-
     // ApexCharts: responsive chart
     document.addEventListener('DOMContentLoaded', function () {
       if (typeof ApexCharts === 'undefined') return;

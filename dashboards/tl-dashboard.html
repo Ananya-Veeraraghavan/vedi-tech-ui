@@ -11,7 +11,7 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
 <html class="h-full" data-kt-theme="true" data-kt-theme-mode="light" dir="ltr" lang="en">
 <head>
   <base href="./">
-  <title>VediTech - Team Lead Dashboard</title>
+  <title>VediTech - Dashboard</title>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
   <link href="../assets/media/app/favicon.ico" rel="shortcut icon"/>
@@ -19,6 +19,122 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
   <link href="../assets/vendors/apexcharts/apexcharts.css" rel="stylesheet"/>
   <link href="../assets/vendors/keenicons/styles.bundle.css" rel="stylesheet"/>
   <link href="../assets/css/styles.css" rel="stylesheet"/>
+
+  <style>
+    .vt-global-search {
+      width: 650px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .vt-global-search i {
+      position: absolute;
+      left: 16px;
+      color: #99A1B7;
+      font-size: 18px;
+      z-index: 2;
+    }
+    .vt-global-search .kt-input {
+      width: 100%;
+      height: 100%;
+      padding-left: 48px;
+      border-radius: 10px;
+    }
+
+    /* ---- SIDEBAR COLLAPSE ---- */
+    .kt-sidebar {
+      transition: width 0.2s ease;
+    }
+    .kt-wrapper {
+      padding-inline-start: 0;
+      transition: padding-inline-start 0.2s ease;
+    }
+    .kt-header {
+      inset-inline-start: 0;
+      transition: inset-inline-start 0.2s ease;
+    }
+    .kt-sidebar .small-logo {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .kt-sidebar {
+        width: 280px;
+      }
+      .kt-wrapper {
+        padding-inline-start: 280px;
+      }
+      .kt-header {
+        inset-inline-start: 280px;
+      }
+
+      body.kt-sidebar-collapse .kt-sidebar {
+        width: 72px;
+      }
+      body.kt-sidebar-collapse .kt-wrapper {
+        padding-inline-start: 72px;
+      }
+      body.kt-sidebar-collapse .kt-header {
+        inset-inline-start: 72px;
+      }
+    }
+
+    body.kt-sidebar-collapse .kt-sidebar .default-logo {
+      display: none;
+    }
+    body.kt-sidebar-collapse .kt-sidebar .small-logo {
+      display: flex;
+    }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-title {
+      display: none;
+    }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-icon {
+      width: auto;
+    }
+    body.kt-sidebar-collapse .kt-sidebar .kt-menu-link {
+      justify-content: center;
+    }
+
+    /* ---- STAT GRID ---- */
+    .vedi-stat-grid {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(2, 1fr);
+      transition: grid-template-columns 0.2s ease;
+    }
+    @media (min-width: 480px) {
+      .vedi-stat-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (min-width: 768px) {
+      .vedi-stat-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+    .vedi-stat-grid .kt-card {
+      padding: 0.625rem 0.75rem;
+    }
+    .vedi-stat-grid .kt-card span.text-xl {
+      font-size: 1.125rem;
+    }
+
+    /* Sidebar collapse frees up width, so the stat grid can fit more columns sooner */
+    body.kt-sidebar-collapse .vedi-stat-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    @media (max-width: 767px) {
+      body.kt-sidebar-collapse .vedi-stat-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 479px) {
+      body.kt-sidebar-collapse .vedi-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
 </head>
 <body class="antialiased flex h-full text-base text-foreground bg-background demo1 kt-sidebar-fixed kt-header-fixed">
   <!-- Theme Mode -->
@@ -43,16 +159,26 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
   <div class="flex grow">
     <!-- Sidebar -->
     <div class="kt-sidebar bg-background border-e border-e-border fixed top-0 bottom-0 z-20 hidden lg:flex flex-col items-stretch shrink-0" id="sidebar">
-      <div class="kt-sidebar-header hidden lg:flex items-center px-3 lg:px-6 shrink-0 h-[70px]" id="sidebar_header">
+      <div class="kt-sidebar-header hidden lg:flex items-center relative px-3 lg:px-6 shrink-0 h-[70px]" id="sidebar_header">
         <a class="flex items-center gap-2.5 min-w-0" href="dashboard.html">
-          <span class="flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+          <span class="default-logo flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
             <i class="ki-filled ki-abstract-26 text-white text-base"></i>
           </span>
-          <span class="flex flex-col leading-none min-w-0">
+          <span class="default-logo flex flex-col leading-none min-w-0">
             <span class="text-sm font-bold text-mono truncate">VediTech</span>
             <span class="text-[10px] tracking-[1.5px] text-muted-foreground uppercase truncate">Survey Jobs</span>
           </span>
+          <span class="small-logo flex items-center justify-center size-8 rounded-lg bg-primary shrink-0">
+            <i class="ki-filled ki-abstract-26 text-white text-base"></i>
+          </span>
         </a>
+        <div data-kt-toggle="body" data-kt-toggle-class="kt-sidebar-collapse" id="sidebar_toggle">
+          <div class="dark:hidden light">
+            <button class="kt-btn kt-btn-outline kt-btn-icon size-[30px] rounded-lg absolute start-full top-2/4 z-40 -translate-x-2/4 -translate-y-2/4 rtl:translate-x-2/4">
+              <i class="ki-filled ki-black-left-line kt-toggle-active:rotate-180 transition-all duration-300 rtl:translate rtl:rotate-180 rtl:kt-toggle-active:rotate-0"></i>
+            </button>
+          </div>
+        </div>
       </div>
       <div class="kt-sidebar-content flex grow shrink-0 py-5 pe-2" id="sidebar_content">
         <div class="kt-menu flex flex-col grow gap-1 ps-2 lg:ps-5 pe-1 lg:pe-3" data-kt-menu="true" id="sidebar_menu">
@@ -62,22 +188,21 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
               <span class="kt-menu-title text-sm font-medium text-foreground kt-menu-item-active:text-primary kt-menu-item-active:font-semibold">Dashboard</span>
             </a>
           </div>
+         <div class="kt-menu-item">
+            <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] hover:bg-accent/60 hover:rounded-lg"
+              href="../jobs/job-creation.html">
+                <span class="kt-menu-icon items-start text-muted-foreground w-[20px]">
+                    <i class="ki-filled ki-add-notepad text-lg"></i>
+                </span>
+                <span class="kt-menu-title text-sm font-medium text-foreground">
+                    Job Creation
+                </span>
+            </a>
+        </div>
           <div class="kt-menu-item">
             <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] hover:bg-accent/60 hover:rounded-lg" href="dashboard.html#job-pool">
               <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-briefcase text-lg"></i></span>
               <span class="kt-menu-title text-sm font-medium text-foreground">Job Pool</span>
-            </a>
-          </div>
-          <div class="kt-menu-item">
-            <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] hover:bg-accent/60 hover:rounded-lg" href="users.html">
-              <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-people text-lg"></i></span>
-              <span class="kt-menu-title text-sm font-medium text-foreground">User Management</span>
-            </a>
-          </div>
-          <div class="kt-menu-item">
-            <a class="kt-menu-link flex items-center grow gap-[10px] ps-[10px] pe-[10px] py-[8px] hover:bg-accent/60 hover:rounded-lg" href="config.html">
-              <span class="kt-menu-icon items-start text-muted-foreground w-[20px]"><i class="ki-filled ki-setting-2 text-lg"></i></span>
-              <span class="kt-menu-title text-sm font-medium text-foreground">Configuration</span>
             </a>
           </div>
         </div>
@@ -85,178 +210,91 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
       <div class="shrink-0 px-5 py-4 border-t border-border/20">
         <a class="flex items-center gap-[10px] text-sm font-medium text-muted-foreground hover:text-primary" href="sign-in.html">
           <i class="ki-filled ki-exit-up text-lg"></i>
-          <span>Logout</span>
+          <span class="default-logo">Logout</span>
         </a>
       </div>
     </div>
     <!-- End of Sidebar -->
 
-    <div class="kt-wrapper flex grow flex-col lg:ps-[280px]">
+    <div class="kt-wrapper flex grow flex-col">
       <!-- Header -->
-      <header class="kt-header fixed top-0 z-10 start-0 end-0 lg:start-[280px] flex items-stretch shrink-0 bg-background border-b border-border" id="header">
-        <div class="kt-container-fixed flex justify-between items-stretch h-[70px]">
-          <div class="flex items-center gap-2.5 lg:hidden">
-            <button class="kt-btn kt-btn-icon kt-btn-ghost" data-kt-drawer-toggle="#sidebar">
-              <i class="ki-filled ki-menu"></i>
-            </button>
-            <span class="text-sm font-bold text-mono">VediTech</span>
+      <header class="kt-header fixed top-0 z-10 end-0 flex items-stretch shrink-0 bg-background border-b border-border" id="header">
+  <div class="kt-container-fixed flex justify-between items-stretch h-[70px]">
+    
+    <!-- Mobile Logo + Hamburger -->
+    <div class="flex items-center gap-2.5 lg:hidden">
+      <button class="kt-btn kt-btn-icon kt-btn-ghost" data-kt-drawer-toggle="#sidebar">
+        <i class="ki-filled ki-menu"></i>
+      </button>
+      <span class="text-sm font-bold text-mono">VediTech</span>
+    </div>
+
+    <!-- Topbar: Search + Profile only -->
+    <div class="flex items-center justify-between grow gap-4">
+      <div class="flex items-center">
+        <div class="vt-global-search">
+          <i class="ki-filled ki-magnifier"></i>
+          <input
+            type="text"
+            class="kt-input"
+            placeholder="Global Search"
+          />
+        </div>
+      </div>
+
+      <!-- User -->
+      <div class="shrink-0 flex items-center gap-2.5 ms-auto" data-kt-dropdown="true" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
+        <div class="hidden sm:flex flex-col items-end leading-none">
+          <span class="text-sm font-semibold text-mono">Team Lead User</span>
+          <span class="text-xs text-secondary-foreground">Team Lead</span>
+        </div>
+        <div class="cursor-pointer shrink-0" data-kt-dropdown-toggle="true">
+          <img alt="" class="size-9 rounded-full border-2 border-green-500 shrink-0" src="../assets/media/avatars/300-2.png"/>
+        </div>
+        <div class="kt-dropdown-menu w-[230px]" data-kt-dropdown-menu="true">
+          <div class="flex items-center gap-2 px-2.5 py-2">
+            <img alt="" class="size-9 shrink-0 rounded-full border-2 border-green-500" src="../assets/media/avatars/300-2.png"/>
+            <div class="flex flex-col gap-0.5">
+              <span class="text-sm text-foreground font-semibold leading-none">Team Lead User</span>
+              <span class="text-xs text-secondary-foreground leading-none">tl@veditech.com</span>
+            </div>
           </div>
-
-          <div class="flex items-center gap-2.5 ms-auto">
-            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-modal-toggle="#search_modal">
-              <i class="ki-filled ki-magnifier text-lg"></i>
-            </button>
-
-            <!-- Notifications -->
-            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary relative" data-kt-drawer-toggle="#notifications_drawer">
-              <i class="ki-filled ki-notification-status text-lg"></i>
-              <span class="absolute top-1.5 end-1.5 size-2 rounded-full bg-red-500"></span>
-            </button>
-            <div class="hidden kt-drawer kt-drawer-end card flex-col max-w-[90%] w-[400px] top-5 bottom-5 end-5 rounded-xl border border-border" data-kt-drawer="true" data-kt-drawer-container="body" id="notifications_drawer">
-              <div class="flex items-center justify-between gap-2.5 text-sm text-mono font-semibold px-5 py-3.5 border-b border-b-border">
-                Team Lead Alerts
-                <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-dim shrink-0" data-kt-drawer-dismiss="true"><i class="ki-filled ki-cross"></i></button>
-              </div>
-              <div class="px-5 py-4 border-b border-b-border bg-muted/30">
-                <div class="grid gap-2.5">
-                  <div class="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2.5">
-                    <div class="flex items-center gap-2.5">
-                      <span class="flex items-center justify-center size-7 rounded-full bg-red-50 dark:bg-red-950/40"><i class="ki-filled ki-shield-cross text-red-500 text-base"></i></span>
-                      <div class="flex flex-col"><span class="text-sm font-semibold text-mono">5 blocked jobs</span><span class="text-xs text-secondary-foreground">Require team lead review today</span></div>
-                    </div>
-                    <a class="kt-btn kt-btn-sm kt-btn-outline" href="dashboard.html#job-pool">View</a>
-                  </div>
-                  <div class="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2.5">
-                    <div class="flex items-center gap-2.5">
-                      <span class="flex items-center justify-center size-7 rounded-full bg-yellow-50 dark:bg-yellow-950/40"><i class="ki-filled ki-notepad-edit text-yellow-500 text-base"></i></span>
-                      <div class="flex flex-col"><span class="text-sm font-semibold text-mono">3 jobs waiting assignment</span><span class="text-xs text-secondary-foreground">No operator mapped yet</span></div>
-                    </div>
-                    <a class="kt-btn kt-btn-sm kt-btn-outline" href="dashboard.html#job-pool">Assign</a>
-                  </div>
-                </div>
-              </div>
-              <div class="grow kt-scrollable-y-auto" data-kt-scrollable="true" data-kt-scrollable-dependencies="#header" data-kt-scrollable-max-height="auto" data-kt-scrollable-offset="220px">
-                <div class="flex flex-col gap-5 py-4">
-                  <div class="flex grow gap-2.5 px-5">
-                    <img alt="" class="rounded-full size-8" src="../assets/media/avatars/300-5.png"/>
-                    <div class="flex flex-col gap-1">
-                      <div class="text-sm"><a class="hover:text-primary text-mono font-semibold" href="job-details.html">Emily Chen</a> <span class="text-secondary-foreground">uploaded the final report for</span> <a class="hover:text-primary text-primary font-semibold" href="job-details.html">#SR-2036</a></div>
-                      <span class="text-xs font-medium text-muted-foreground">28 mins ago · Ready for your approval</span>
-                    </div>
-                  </div>
-                  <div class="border-b border-b-border"></div>
-                  <div class="flex grow gap-2.5 px-5">
-                    <img alt="" class="rounded-full size-8" src="../assets/media/avatars/300-1.png"/>
-                    <div class="flex flex-col gap-1">
-                      <div class="text-sm"><a class="hover:text-primary text-mono font-semibold" href="job-details.html">Mark Taylor</a> <span class="text-secondary-foreground">flagged a missing document on</span> <a class="hover:text-primary text-primary font-semibold" href="job-details.html">#SR-2032</a></div>
-                      <span class="text-xs font-medium text-muted-foreground">1 hr ago · Needs client clarification</span>
-                    </div>
-                  </div>
-                  <div class="border-b border-b-border"></div>
-                  <div class="flex grow gap-2.5 px-5">
-                    <span class="flex items-center justify-center size-8 rounded-full bg-blue-50 dark:bg-blue-950/40 shrink-0"><i class="ki-filled ki-arrow-down-left text-blue-500"></i></span>
-                    <div class="flex flex-col gap-1">
-                      <div class="text-sm"><span class="text-mono font-semibold">New job received</span> <span class="text-secondary-foreground">from Nexus Property Group</span></div>
-                      <span class="text-xs font-medium text-muted-foreground">2 hrs ago · Unassigned</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <ul class="kt-dropdown-menu-sub">
+            <li><div class="kt-dropdown-menu-separator"></div></li>
+            <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-profile-circle"></i> My Profile</a></li>
+            <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-setting-2"></i> Account Settings</a></li>
+            <li><div class="kt-dropdown-menu-separator"></div></li>
+          </ul>
+          <div class="px-2.5 pt-1.5 pb-2.5 flex flex-col gap-3.5">
+            <div class="flex items-center gap-2 justify-between">
+              <span class="flex items-center gap-2">
+                <i class="ki-filled ki-moon text-base text-muted-foreground"></i>
+                <span class="font-medium text-2sm">Dark Mode</span>
+              </span>
+              <input class="kt-switch" data-kt-theme-switch-state="dark" data-kt-theme-switch-toggle="true" type="checkbox" value="1"/>
             </div>
-            <!-- End of Notifications -->
-
-            <!-- Team Channel (general chat — not job-specific) -->
-            <button class="kt-btn kt-btn-ghost kt-btn-icon size-9 rounded-full hover:bg-primary/10 hover:[&_i]:text-primary" data-kt-drawer-toggle="#chat_drawer">
-              <i class="ki-filled ki-messages text-lg"></i>
-            </button>
-            <div class="hidden kt-drawer kt-drawer-end card flex-col max-w-[90%] w-[400px] top-5 bottom-5 end-5 rounded-xl border border-border" data-kt-drawer="true" data-kt-drawer-container="body" id="chat_drawer">
-              <div class="flex items-center justify-between gap-2.5 px-5 py-3.5 border-b border-b-border">
-                <div class="flex flex-col">
-                  <span class="text-sm text-mono font-semibold">Team Channel</span>
-                  <span class="text-xs text-secondary-foreground">General — not tied to a specific job</span>
-                </div>
-                <button class="kt-btn kt-btn-sm kt-btn-icon kt-btn-dim shrink-0" data-kt-drawer-dismiss="true"><i class="ki-filled ki-cross"></i></button>
-              </div>
-              <div class="kt-scrollable-y-auto grow" data-kt-scrollable="true" data-kt-scrollable-dependencies="#header" data-kt-scrollable-max-height="auto" data-kt-scrollable-offset="230px">
-                <div class="flex flex-col gap-5 py-5">
-                  <div class="flex items-end gap-3.5 px-5">
-                    <img alt="" class="rounded-full size-8" src="../assets/media/avatars/300-1.png"/>
-                    <div class="flex flex-col gap-1.5">
-                      <div class="kt-card shadow-none flex flex-col bg-accent/60 gap-2.5 p-3 rounded-bs-none text-2sm">Heads up — City Council wants all reports as PDF going forward, not docx.</div>
-                      <span class="text-xs font-medium text-muted-foreground">9:14 AM</span>
-                    </div>
-                  </div>
-                  <div class="flex items-end justify-end gap-3.5 px-5">
-                    <div class="flex flex-col gap-1.5">
-                      <div class="kt-card shadow-none flex bg-primary flex-col gap-2.5 p-3 rounded-be-none">
-                        <p class="text-2sm font-medium text-primary-foreground">Got it, I'll mention it on the next job for them.</p>
-                      </div>
-                      <span class="text-xs font-medium text-secondary-foreground text-end">9:16 AM</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="m-5 rounded-lg bg-muted/40 border border-border px-3 py-2.5 text-xs text-secondary-foreground">
-                Looking for a conversation about a specific job? Open that job from the Job Pool — each job has its own chat thread.
-              </div>
-              <div class="px-5 pb-5">
-                <div class="relative">
-                  <input class="kt-input h-auto py-3" placeholder="Message the team..." type="text"/>
-                  <a class="kt-btn kt-btn-mono kt-btn-sm absolute end-1.5 top-1/2 -translate-y-1/2" href="#">Send</a>
-                </div>
-              </div>
-            </div>
-            <!-- End of Team Channel -->
-
-            <!-- User -->
-            <div class="shrink-0 flex items-center gap-2.5" data-kt-dropdown="true" data-kt-dropdown-placement="bottom-end" data-kt-dropdown-trigger="click">
-              <div class="hidden sm:flex flex-col items-end leading-none">
-                <span class="text-sm font-semibold text-mono">Team Lead User</span>
-                <span class="text-xs text-secondary-foreground">Team Lead</span>
-              </div>
-              <div class="cursor-pointer shrink-0" data-kt-dropdown-toggle="true">
-                <img alt="" class="size-9 rounded-full border-2 border-green-500 shrink-0" src="../assets/media/avatars/300-2.png"/>
-              </div>
-              <div class="kt-dropdown-menu w-[230px]" data-kt-dropdown-menu="true">
-                <div class="flex items-center gap-2 px-2.5 py-2">
-                  <img alt="" class="size-9 shrink-0 rounded-full border-2 border-green-500" src="../assets/media/avatars/300-2.png"/>
-                  <div class="flex flex-col gap-0.5">
-                    <span class="text-sm text-foreground font-semibold leading-none">Team Lead User</span>
-                    <span class="text-xs text-secondary-foreground leading-none">tl@veditech.com</span>
-                  </div>
-                </div>
-                <ul class="kt-dropdown-menu-sub">
-                  <li><div class="kt-dropdown-menu-separator"></div></li>
-                  <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-profile-circle"></i> My Profile</a></li>
-                  <li><a class="kt-dropdown-menu-link" href="#"><i class="ki-filled ki-setting-2"></i> Account Settings</a></li>
-                  <li><div class="kt-dropdown-menu-separator"></div></li>
-                </ul>
-                <div class="px-2.5 pt-1.5 pb-2.5 flex flex-col gap-3.5">
-                  <div class="flex items-center gap-2 justify-between">
-                    <span class="flex items-center gap-2"><i class="ki-filled ki-moon text-base text-muted-foreground"></i><span class="font-medium text-2sm">Dark Mode</span></span>
-                    <input class="kt-switch" data-kt-theme-switch-state="dark" data-kt-theme-switch-toggle="true" type="checkbox" value="1"/>
-                  </div>
-                  <a class="kt-btn kt-btn-outline justify-center w-full" href="sign-in.html">Log out</a>
-                </div>
-              </div>
-            </div>
-            <!-- End of User -->
+            <a class="kt-btn kt-btn-outline justify-center w-full" href="sign-in.html">Log out</a>
           </div>
         </div>
-      </header>
+      </div>
+      <!-- End of User -->
+    </div>
+  </div>
+</header>
+<!-- End of Header -->
       <!-- End of Header -->
 
       <main class="grow pt-[90px] pb-10" id="content" role="content">
         <div class="kt-container-fixed">
           <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
             <div class="flex flex-col justify-center gap-2">
-              <h1 class="text-xl font-medium leading-none text-mono">Team Lead Dashboard</h1>
+              <h1 class="text-xl font-medium leading-none text-mono">Dashboard</h1>
               <div class="flex items-center gap-2 text-sm font-normal text-secondary-foreground">
                 Manage configured client jobs, team workload, approvals, chats, email intake, and client clarifications
               </div>
             </div>
             <div class="flex items-center gap-2.5 flex-wrap">
-              <a class="kt-btn kt-btn-outline" href="#email-intake">Create from Email</a>
+              <a class="kt-btn kt-btn-outline" href="../jobs/job-creation.html">Create Job</a>
               <a class="kt-btn kt-btn-outline" href="#assignment-control">Assignment Settings</a>
               <a class="kt-btn kt-btn-primary" href="#job-pool">View Job Pool</a>
             </div>
@@ -267,30 +305,60 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
           <div class="grid gap-5 lg:gap-7.5">
 
             <!-- TL Overview -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-7.5">
-              <div class="kt-card flex-col gap-3 p-5">
-                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Pool Jobs</span>
-                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">42</span><span class="flex items-center justify-center size-8 rounded-lg bg-accent"><i class="ki-filled ki-element-11 text-foreground text-base"></i></span></div>
+            <div class="vedi-stat-grid">
+              <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">Pool Jobs</span>
+                  <span class="text-xl font-semibold text-mono">42</span>
+                </div>
+                <span class="flex items-center justify-center size-7 rounded-lg bg-accent shrink-0">
+                  <i class="ki-filled ki-element-11 text-foreground text-sm"></i>
+                </span>
               </div>
-              <div class="kt-card flex-col gap-3 p-5">
-                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Received</span>
-                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">6</span><span class="flex items-center justify-center size-8 rounded-lg bg-blue-50 dark:bg-blue-950/40"><i class="ki-filled ki-arrow-down-left text-blue-500 text-base"></i></span></div>
+              <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">Received</span>
+                  <span class="text-xl font-semibold text-mono">6</span>
+                </div>
+                <span class="flex items-center justify-center size-7 rounded-lg bg-blue-50 dark:bg-blue-950/40 shrink-0">
+                  <i class="ki-filled ki-arrow-down-left text-blue-500 text-sm"></i>
+                </span>
               </div>
-              <div class="kt-card flex-col gap-3 p-5">
-                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">In Progress</span>
-                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">16</span><span class="flex items-center justify-center size-8 rounded-lg bg-primary/10"><i class="ki-filled ki-time text-primary text-base"></i></span></div>
+              <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">In Progress</span>
+                  <span class="text-xl font-semibold text-mono">16</span>
+                </div>
+                <span class="flex items-center justify-center size-7 rounded-lg bg-primary/10 shrink-0">
+                  <i class="ki-filled ki-time text-primary text-sm"></i>
+                </span>
               </div>
-              <div class="kt-card flex-col gap-3 p-5">
-                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Pending Review</span>
-                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">7</span><span class="flex items-center justify-center size-8 rounded-lg bg-yellow-50 dark:bg-yellow-950/40"><i class="ki-filled ki-file-up text-yellow-500 text-base"></i></span></div>
+              <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">Pending Review</span>
+                  <span class="text-xl font-semibold text-mono">7</span>
+                </div>
+                <span class="flex items-center justify-center size-7 rounded-lg bg-yellow-50 dark:bg-yellow-950/40 shrink-0">
+                  <i class="ki-filled ki-file-up text-yellow-500 text-sm"></i>
+                </span>
               </div>
-              <div class="kt-card flex-col gap-3 p-5">
-                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Clarifications</span>
-                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">4</span><span class="flex items-center justify-center size-8 rounded-lg bg-red-50 dark:bg-red-950/40"><i class="ki-filled ki-message-question text-red-500 text-base"></i></span></div>
+              <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">Clarifications</span>
+                  <span class="text-xl font-semibold text-mono">4</span>
+                </div>
+                <span class="flex items-center justify-center size-7 rounded-lg bg-red-50 dark:bg-red-950/40 shrink-0">
+                  <i class="ki-filled ki-message-question text-red-500 text-sm"></i>
+                </span>
               </div>
-              <div class="kt-card flex-col gap-3 p-5">
-                <span class="text-xs font-medium text-secondary-foreground uppercase tracking-wide">Completed</span>
-                <div class="flex items-center justify-between"><span class="text-2xl font-semibold text-mono">13</span><span class="flex items-center justify-center size-8 rounded-lg bg-green-50 dark:bg-green-950/40"><i class="ki-filled ki-check-circle text-green-500 text-base"></i></span></div>
+              <div class="kt-card flex-row items-center justify-between gap-2 p-3">
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-[11px] font-medium text-secondary-foreground uppercase tracking-wide">Completed</span>
+                  <span class="text-xl font-semibold text-mono">13</span>
+                </div>
+                <span class="flex items-center justify-center size-7 rounded-lg bg-green-50 dark:bg-green-950/40 shrink-0">
+                  <i class="ki-filled ki-check-circle text-green-500 text-sm"></i>
+                </span>
               </div>
             </div>
             <!-- End TL Overview -->
@@ -369,10 +437,15 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
             <!-- End Assignment Control + Workload -->
 
             <!-- Jobs from Configured Clients -->
-            <div class="kt-card" id="job-pool">
+            <div class="kt-card" id="../jobs/jobpool">
               <div class="kt-card-header flex-wrap gap-3">
                 <div class="flex flex-col gap-1">
-                  <h3 class="kt-card-title">Jobs from Configured Clients</h3>
+                  <h3 class="kt-card-title">Jobs from Configured Clients
+                    <a class="kt-btn kt-btn-sm kt-btn-primary"
+                    href="../jobs/job-creation.html">
+                    New Job
+                  </a>
+                  </h3>
                   <span class="text-xs text-secondary-foreground">Team Lead pool with current status and assignment controls. Open a job number to view its details, documents, and chat thread.</span>
                 </div>
                 <div class="flex items-center gap-2 flex-wrap">
@@ -392,7 +465,7 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
                     </thead>
                     <tbody>
                       <tr>
-                        <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2042">#SR-2042</a></td>
+                        <td><a class="text-sm font-semibold text-primary hover:underline" href="../jobs/job-details.html?job=SR-2042">#SR-2042</a></td>
                         <td><span class="text-sm text-mono">Nexus Property Group</span></td>
                         <td><span class="text-sm text-secondary-foreground">4822 Magnolia Dr, Austin</span></td>
                         <td><span class="kt-badge kt-badge-sm kt-badge-info kt-badge-outline">Received</span></td>
@@ -401,31 +474,31 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
                         <td><a class="kt-btn kt-btn-sm kt-btn-primary" href="#assignment-control">Assign</a></td>
                       </tr>
                       <tr>
-                        <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2039">#SR-2039</a></td>
+                        <td><a class="text-sm font-semibold text-primary hover:underline" href="../jobs/job-details.html?job=SR-2039">#SR-2039</a></td>
                         <td><span class="text-sm text-mono">Northwood Dev</span></td>
                         <td><span class="text-sm text-secondary-foreground">123 Maple St, Northwood</span></td>
                         <td><span class="kt-badge kt-badge-sm kt-badge-primary kt-badge-outline">In Progress</span></td>
                         <td><span class="text-sm text-mono">Sarah Jenkins</span></td>
                         <td><span class="text-sm text-mono">Tomorrow</span></td>
-                        <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2039">Open Chat</a></td>
+                        <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="../jobs/job-details.html?job=SR-2039">Open Chat</a></td>
                       </tr>
                       <tr>
-                        <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2036">#SR-2036</a></td>
+                        <td><a class="text-sm font-semibold text-primary hover:underline" href="../jobs/job-details.html?job=SR-2036">#SR-2036</a></td>
                         <td><span class="text-sm text-mono">City Council</span></td>
                         <td><span class="text-sm text-secondary-foreground">789 Pine Rd inspection pack</span></td>
                         <td><span class="kt-badge kt-badge-sm kt-badge-warning kt-badge-outline">Pending Review</span></td>
                         <td><span class="text-sm text-mono">Emily Chen</span></td>
                         <td><span class="text-sm text-mono">Today</span></td>
-                        <td><a class="kt-btn kt-btn-sm kt-btn-primary" href="job-details.html?job=SR-2036#review">Review</a></td>
+                        <td><a class="kt-btn kt-btn-sm kt-btn-primary" href="../jobs/job-details.html?job=SR-2036#review">Review</a></td>
                       </tr>
                       <tr>
-                        <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2032">#SR-2032</a></td>
+                        <td><a class="text-sm font-semibold text-primary hover:underline" href="../jobs/job-details.html?job=SR-2032">#SR-2032</a></td>
                         <td><span class="text-sm text-mono">Green Acres</span></td>
                         <td><span class="text-sm text-secondary-foreground">101 Birch Ln survey update</span></td>
                         <td><span class="kt-badge kt-badge-sm kt-badge-destructive kt-badge-outline">Clarification Needed</span></td>
                         <td><span class="text-sm text-mono">Mark Taylor</span></td>
                         <td><span class="text-sm text-mono">Overdue</span></td>
-                        <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2032#client">Contact Client</a></td>
+                        <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="../jobs/job-details.html?job=SR-2032#client">Contact Client</a></td>
                       </tr>
                     </tbody>
                   </table>
@@ -445,21 +518,21 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
                     <div class="flex items-center gap-3 min-w-0">
                       <span class="flex items-center justify-center size-9 rounded-lg bg-yellow-50 dark:bg-yellow-950/40 shrink-0"><i class="ki-filled ki-document text-yellow-500"></i></span>
                       <div class="flex flex-col min-w-0">
-                        <a class="text-sm font-medium text-mono truncate hover:text-primary" href="job-details.html?job=SR-2036#documents">#SR-2036 Final survey report.pdf</a>
+                        <a class="text-sm font-medium text-mono truncate hover:text-primary" href="../jobs/job-details.html?job=SR-2036#documents">#SR-2036 Final survey report.pdf</a>
                         <span class="text-xs text-secondary-foreground">City Council · Emily Chen · Submitted 28 mins ago</span>
                       </div>
                     </div>
-                    <div class="flex gap-2 shrink-0"><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2036">Reject</a><a class="kt-btn kt-btn-sm kt-btn-primary" href="job-details.html?job=SR-2036">Approve</a></div>
+                    <div class="flex gap-2 shrink-0"><a class="kt-btn kt-btn-sm kt-btn-outline" href="../jobs/job-details.html?job=SR-2036">Reject</a><a class="kt-btn kt-btn-sm kt-btn-primary" href="../jobs/job-details.html?job=SR-2036">Approve</a></div>
                   </div>
                   <div class="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
                     <div class="flex items-center gap-3 min-w-0">
                       <span class="flex items-center justify-center size-9 rounded-lg bg-yellow-50 dark:bg-yellow-950/40 shrink-0"><i class="ki-filled ki-document text-yellow-500"></i></span>
                       <div class="flex flex-col min-w-0">
-                        <a class="text-sm font-medium text-mono truncate hover:text-primary" href="job-details.html?job=SR-2035">#SR-2035 Boundary notes.docx</a>
+                        <a class="text-sm font-medium text-mono truncate hover:text-primary" href="../jobs/job-details.html?job=SR-2035">#SR-2035 Boundary notes.docx</a>
                         <span class="text-xs text-secondary-foreground">Nexus Property Group · Priya Nair · Submitted 1 hr ago</span>
                       </div>
                     </div>
-                    <div class="flex gap-2 shrink-0"><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2035">Reject</a><a class="kt-btn kt-btn-sm kt-btn-primary" href="job-details.html?job=SR-2035">Approve</a></div>
+                    <div class="flex gap-2 shrink-0"><a class="kt-btn kt-btn-sm kt-btn-outline" href="../jobs/job-details.html?job=SR-2035">Reject</a><a class="kt-btn kt-btn-sm kt-btn-primary" href="../jobs/job-details.html?job=SR-2035">Approve</a></div>
                   </div>
                 </div>
               </div>
@@ -473,12 +546,12 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
                   <div class="rounded-lg border border-border p-3 flex flex-col gap-2">
                     <div class="flex items-center justify-between gap-2"><span class="text-sm font-medium text-mono">New survey request - Magnolia Dr</span><span class="text-xs text-secondary-foreground">client@nexus.com</span></div>
                     <p class="text-xs text-secondary-foreground">Detected client, address, attachments, and requested due date.</p>
-                    <div class="flex gap-2"><a class="kt-btn kt-btn-sm kt-btn-primary" href="#">Create Job</a><a class="kt-btn kt-btn-sm kt-btn-outline" href="#">Preview</a></div>
+                    <div class="flex gap-2"><a class="kt-btn kt-btn-sm kt-btn-primary" href="../jobs/job-creation.html">Create Job</a><a class="kt-btn kt-btn-sm kt-btn-outline" href="#">Preview</a></div>
                   </div>
                   <div class="rounded-lg border border-border p-3 flex flex-col gap-2">
                     <div class="flex items-center justify-between gap-2"><span class="text-sm font-medium text-mono">Additional plots for Green Acres</span><span class="text-xs text-secondary-foreground">ops@greenacres.com</span></div>
                     <p class="text-xs text-secondary-foreground">Missing site plan attachment. Flagged for clarification before creating job.</p>
-                    <div class="flex gap-2"><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2032#client">Ask Client</a><a class="kt-btn kt-btn-sm kt-btn-outline" href="#">Link to Existing</a></div>
+                    <div class="flex gap-2"><a class="kt-btn kt-btn-sm kt-btn-outline" href="../jobs/job-details.html?job=SR-2032#client">Ask Client</a><a class="kt-btn kt-btn-sm kt-btn-outline" href="#">Link to Existing</a></div>
                   </div>
                 </div>
               </div>
@@ -498,27 +571,27 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
                   <div class="flex gap-3">
                     <span class="flex items-center justify-center size-8 rounded-full bg-primary/10 shrink-0"><i class="ki-filled ki-messages text-primary"></i></span>
                     <div class="flex flex-col gap-1 min-w-0">
-                      <span class="text-sm font-medium text-mono">Sarah commented on <a class="text-primary hover:underline" href="job-details.html?job=SR-2039#chat">#SR-2039</a></span>
+                      <span class="text-sm font-medium text-mono">Sarah commented on <a class="text-primary hover:underline" href="../jobs/job-details.html?job=SR-2039#chat">#SR-2039</a></span>
                       <span class="text-xs text-secondary-foreground">"Client asked for updated boundary dimensions." · 12 mins ago</span>
-                      <a class="text-xs font-medium text-primary hover:underline w-fit" href="job-details.html?job=SR-2039#chat">Open job chat →</a>
+                      <a class="text-xs font-medium text-primary hover:underline w-fit" href="../jobs/job-details.html?job=SR-2039#chat">Open job chat →</a>
                     </div>
                   </div>
                   <div class="border-b border-border"></div>
                   <div class="flex gap-3">
                     <span class="flex items-center justify-center size-8 rounded-full bg-green-50 dark:bg-green-950/40 shrink-0"><i class="ki-filled ki-check-circle text-green-500"></i></span>
                     <div class="flex flex-col gap-1 min-w-0">
-                      <span class="text-sm font-medium text-mono">Emily uploaded final document for <a class="text-primary hover:underline" href="job-details.html?job=SR-2036#documents">#SR-2036</a></span>
+                      <span class="text-sm font-medium text-mono">Emily uploaded final document for <a class="text-primary hover:underline" href="../jobs/job-details.html?job=SR-2036#documents">#SR-2036</a></span>
                       <span class="text-xs text-secondary-foreground">Ready for Team Lead approval · 28 mins ago</span>
-                      <a class="text-xs font-medium text-primary hover:underline w-fit" href="job-details.html?job=SR-2036#chat">Open job chat →</a>
+                      <a class="text-xs font-medium text-primary hover:underline w-fit" href="../jobs/job-details.html?job=SR-2036#chat">Open job chat →</a>
                     </div>
                   </div>
                   <div class="border-b border-border"></div>
                   <div class="flex gap-3">
                     <span class="flex items-center justify-center size-8 rounded-full bg-red-50 dark:bg-red-950/40 shrink-0"><i class="ki-filled ki-message-question text-red-500"></i></span>
                     <div class="flex flex-col gap-1 min-w-0">
-                      <span class="text-sm font-medium text-mono">Mark flagged missing document on <a class="text-primary hover:underline" href="job-details.html?job=SR-2032#documents">#SR-2032</a></span>
+                      <span class="text-sm font-medium text-mono">Mark flagged missing document on <a class="text-primary hover:underline" href="../jobs/job-details.html?job=SR-2032#documents">#SR-2032</a></span>
                       <span class="text-xs text-secondary-foreground">Requires client clarification · 1 hr ago</span>
-                      <a class="text-xs font-medium text-primary hover:underline w-fit" href="job-details.html?job=SR-2032#chat">Open job chat →</a>
+                      <a class="text-xs font-medium text-primary hover:underline w-fit" href="../jobs/job-details.html?job=SR-2032#chat">Open job chat →</a>
                     </div>
                   </div>
                 </div>
@@ -534,22 +607,22 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
                       <thead><tr><th class="min-w-[120px]">Job</th><th class="min-w-[170px]">Client</th><th class="min-w-[200px]">Need</th><th class="w-[140px]">Action</th></tr></thead>
                       <tbody>
                         <tr>
-                          <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2032#client">#SR-2032</a></td>
+                          <td><a class="text-sm font-semibold text-primary hover:underline" href="../jobs/job-details.html?job=SR-2032#client">#SR-2032</a></td>
                           <td><span class="text-sm text-mono">Green Acres</span></td>
                           <td><span class="text-sm text-secondary-foreground">Missing site plan and latest plot map</span></td>
-                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2032#client">Open Thread</a></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="../jobs/job-details.html?job=SR-2032#client">Open Thread</a></td>
                         </tr>
                         <tr>
-                          <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2028#client">#SR-2028</a></td>
+                          <td><a class="text-sm font-semibold text-primary hover:underline" href="../jobs/job-details.html?job=SR-2028#client">#SR-2028</a></td>
                           <td><span class="text-sm text-mono">City Council</span></td>
                           <td><span class="text-sm text-secondary-foreground">Clarify document submission format</span></td>
-                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2028#client">Open Thread</a></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="../jobs/job-details.html?job=SR-2028#client">Open Thread</a></td>
                         </tr>
                         <tr>
-                          <td><a class="text-sm font-semibold text-primary hover:underline" href="job-details.html?job=SR-2024#client">#SR-2024</a></td>
+                          <td><a class="text-sm font-semibold text-primary hover:underline" href="../jobs/job-details.html?job=SR-2024#client">#SR-2024</a></td>
                           <td><span class="text-sm text-mono">Nexus Property Group</span></td>
                           <td><span class="text-sm text-secondary-foreground">Confirm revised due date</span></td>
-                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="job-details.html?job=SR-2024#client">Open Thread</a></td>
+                          <td><a class="kt-btn kt-btn-sm kt-btn-outline" href="../jobs/job-details.html?job=SR-2024#client">Open Thread</a></td>
                         </tr>
                       </tbody>
                     </table>
@@ -587,8 +660,8 @@ Notes: Trimmed the stock Metronic demo mega-menu, multi-tab search modal, and
       <div class="kt-modal-body p-0 pb-5">
         <div class="kt-menu kt-menu-default px-2 flex-col">
           <div class="text-xs text-secondary-foreground font-medium pt-2.5 pb-1.5 ps-3">Jobs</div>
-          <div class="kt-menu-item"><a class="kt-menu-link" href="job-details.html?job=SR-2036"><span class="kt-menu-title">#SR-2036 — City Council, 789 Pine Rd</span></a></div>
-          <div class="kt-menu-item"><a class="kt-menu-link" href="job-details.html?job=SR-2042"><span class="kt-menu-title">#SR-2042 — Nexus Property Group, 4822 Magnolia Dr</span></a></div>
+          <div class="kt-menu-item"><a class="kt-menu-link" href="../jobs/job-details.html?job=SR-2036"><span class="kt-menu-title">#SR-2036 — City Council, 789 Pine Rd</span></a></div>
+          <div class="kt-menu-item"><a class="kt-menu-link" href="../jobs/job-details.html?job=SR-2042"><span class="kt-menu-title">#SR-2042 — Nexus Property Group, 4822 Magnolia Dr</span></a></div>
         </div>
       </div>
     </div>
